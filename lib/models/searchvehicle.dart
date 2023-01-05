@@ -6,37 +6,25 @@ class SearchRequestModel {
 
 class SearchResponseModel {
   SearchResponseModel({
-    this.status,
-    this.message,
-    this.statusCode,
     this.data,
   });
 
-  bool? status;
-  String? message;
-  int? statusCode;
   Data? data;
 
   factory SearchResponseModel.fromJson(Map<String, dynamic> json) => SearchResponseModel(
-    status: json["status"],
-    message: json["message"],
-    statusCode: json["status_code"],
     data: Data.fromJson(json["data"]),
   );
+
 }
 
 class Data {
   Data({
     this.vehicle,
-    this.imageBaseUrl,
   });
 
   Vehicle? vehicle;
-  String? imageBaseUrl;
-
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     vehicle: Vehicle.fromJson(json["vehicle"]),
-    imageBaseUrl: json["image_base_url"],
   );
 
 }
@@ -89,7 +77,7 @@ class Vehicle {
   String? billBookMainPage;
   String? billBookRenewalPage;
   String? billBookTaxRenewedDatePage;
-  String? brand;
+  Brand? brand;
   VehicleName? vehicleName;
 
   factory Vehicle.fromJson(Map<String, dynamic> json) => Vehicle(
@@ -114,11 +102,25 @@ class Vehicle {
     billBookMainPage: json["bill_book_main_page"],
     billBookRenewalPage: json["bill_book_renewal_page"],
     billBookTaxRenewedDatePage: json["bill_book_tax_renewed_date_page"],
-    brand: json["brand"],
+    brand: Brand.fromJson(json["brand"]),
     vehicleName: VehicleName.fromJson(json["vehicle_name"]),
   );
+}
 
-  }
+class Brand {
+  Brand({
+    this.id,
+    this.name,
+  });
+
+  int? id;
+  String? name;
+
+  factory Brand.fromJson(Map<String, dynamic> json) => Brand(
+    id: json["id"],
+    name: json["name"],
+  );
+}
 
 class VehicleName {
   VehicleName({
@@ -136,4 +138,5 @@ class VehicleName {
     brandId: json["brand_id"],
     vehicleName: json["vehicle_name"],
   );
+
 }

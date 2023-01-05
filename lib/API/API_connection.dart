@@ -33,7 +33,7 @@ class APIService{
     final String url = 'https://aavissmotors.creatudevelopers.com.np/api/v1/search-vehicle?engine_no=${requestModel.vehicle_number}';
     final response = await http.get(Uri.parse(url));
     if(response.statusCode == 200 ){
-      print(response.body);
+
       SearchResponseModel responseModel = SearchResponseModel.fromJson(json.decode(response.body));
 
       if(responseModel.data!.vehicle! !=null) {return responseModel;}

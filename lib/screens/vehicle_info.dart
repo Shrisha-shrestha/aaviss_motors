@@ -151,11 +151,9 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                 );
                               }).toList(),
                               onChanged: (String? newValue) {
-                                setState(() {
                                   dropdownvalue1 = newValue!;
-                                  dropdownvalue2=null;
                                  // brandbasedvehicle(brands.indexOf(newValue));
-                                });
+
                               },
                               onSaved: (String? value) {
                                 //widget.store.brand_id = brands.indexOf(value!).toString();
@@ -184,9 +182,10 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                 );
                               }).toList(),
                               onChanged: (String? newValue) {
-                                setState(() {
-                                  dropdownvalue2 = newValue!;
-                                });
+                                dropdownvalue2 = newValue!;
+                                // setState(() {
+                                //   dropdownvalue2 = newValue!;
+                                // });
                               },
                               onSaved: (String? value) {
                                 //widget.store.vehicle_name_id = vehicles.indexOf(value!).toString();

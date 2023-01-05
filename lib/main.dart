@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Aaviss Motors',
       debugShowCheckedModeBanner: false,
-       home:  SearchDetail(title: 'Aaviss Motors'),
+       home:  MyHomePage(title: 'Aaviss Motors'),
        //home:Test(),
       theme: ThemeData(
         brightness: Brightness.light,
