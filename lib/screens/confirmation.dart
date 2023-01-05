@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:aaviss_motors/models/getbrand.dart';
+import 'package:aaviss_motors/models/getvehiclename.dart';
 import 'package:aaviss_motors/screens/search_detail.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import '../models/confirmation_response.dart';
 import 'finish_screen.dart';
+import 'package:flutter/foundation.dart';
 class Confirmation extends StatefulWidget {
   const Confirmation({super.key, required this.title,required this.store,required this.bvinfoAPI});
   final String title;
@@ -20,9 +23,9 @@ class Confirmation extends StatefulWidget {
 
 class _ConfirmationState extends State<Confirmation> {
   int? brandid;
-  var brands=['Brand 1','Brand 2',];
   List<String> years=[];
-  List<String> vehicles=[];
+  List<Innerdata> brands=[];
+  List<innerdata> vehicles=[];
   List<List<String>> vehicle= [['v1','v2'],['v3','v4']];
   String? dropdownvalue3,dropdownvalue4;
   bool _isvisible1 = false,_isvisible2 =false;
@@ -37,7 +40,9 @@ class _ConfirmationState extends State<Confirmation> {
     if(pickedFile!= null ){
       return  File(pickedFile.path);
     }else {
-      print('no image selected');
+      if (kDebugMode) {
+        print('no image selected');
+      }
       return null;
     }
   }
@@ -57,8 +62,10 @@ class _ConfirmationState extends State<Confirmation> {
     // vehicles = brandbasedvehicle(int.parse(widget.store.brand_id!));
     brands=widget.bvinfoAPI.brandlist!;
     vehicles=widget.bvinfoAPI.vehiclelist!;
+
     if(widget.store.number_plate_radio == 1){_isvisible1 = true;}
-    else if(widget.store.number_plate_radio == 2){_isvisible2 = true;};
+    else if(widget.store.number_plate_radio == 2){_isvisible2 = true;}
+
     if(widget.store.card_type_radio == 1){
       _isvisible3 = true;
       widget.store.nid_no = widget.store.citizenship_no ;
@@ -66,8 +73,7 @@ class _ConfirmationState extends State<Confirmation> {
     else if(widget.store.card_type_radio == 2){
       _isvisible4 = true;
       widget.store.nid_no = widget.store.pan_no ;
-
-    };
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title,
@@ -125,6 +131,9 @@ class _ConfirmationState extends State<Confirmation> {
                             Text('Personnel Data',
                               style:Theme.of(context).textTheme.bodyText2 ,),
                             TextFormField(
+                              onChanged: (String? value) {
+                                widget.store.full_name = value;
+                              },
                               onSaved: (String? value) {
                                 widget.store.full_name = value;
                               },
@@ -141,6 +150,9 @@ class _ConfirmationState extends State<Confirmation> {
                             ),
                             const SizedBox(height: 15.0,),
                             TextFormField(
+                              onChanged: (String? value) {
+                                widget.store.address = value;
+                              },
                               onSaved: (String? value) {
                                 widget.store.address = value;
                               },
@@ -157,6 +169,9 @@ class _ConfirmationState extends State<Confirmation> {
                             ),
                             const SizedBox(height: 15.0,),
                             TextFormField(
+                              onChanged: (String? value) {
+                                widget.store.phone_no = value;
+                              },
                               onSaved: (String? value) {
                                 widget.store.phone_no = value;
                               },
@@ -199,20 +214,18 @@ class _ConfirmationState extends State<Confirmation> {
                                       borderSide: BorderSide(color: Colors.grey), //<-- SEE HERE
                                     ),
                                   ),
-                                  value: widget.store.brand_value,
+                                  value: int.parse(widget.store.brand_id!),
                                   icon: const Icon(Icons.arrow_drop_down,color:Colors.grey ,),
-                                  items: brands.map((String val) {
+                                  items: brands.map((e) {
                                     return DropdownMenuItem(
-                                      alignment: Alignment.center,
-                                      value: val,
-                                      child: Text(val,style: Theme.of(context).textTheme.subtitle2!.copyWith(fontSize:18.0),),
-                                    );
+                                        value: e.id,
+                                        child: Text(
+                                            style: Theme.of(context).textTheme.caption!.copyWith(fontSize:18.0),
+                                            textAlign: TextAlign.start,
+                                            e.name ?? ''));
                                   }).toList(),
-                                  onChanged: (String? newValue) {
-                                    setState(() {
-                                      widget.store.brand_value = newValue!;
-                                      widget.store.brand_id= widget.bvinfoAPI.id_name_map1?.keys.firstWhere((k) => widget.bvinfoAPI.id_name_map1?[k] == '${newValue}').toString();
-                                    });
+                                  onChanged: (int? newValue) {
+                                    widget.store.brand_id= newValue.toString();
                                   },
                                 ),
                                 const SizedBox(height: 10.0,),
@@ -226,24 +239,27 @@ class _ConfirmationState extends State<Confirmation> {
                                       borderSide: BorderSide(color: Colors.grey), //<-- SEE HERE
                                     ),
                                   ),
-                                   value: widget.store.vehicle_value,
                                   icon: const Icon(Icons.arrow_drop_down,color:Colors.grey,),
-                                  items: vehicles.map((String val) {
+                                  value: int.parse(widget.store.vehicle_name_id!),
+                                  items: vehicles.map((e) {
                                     return DropdownMenuItem(
-                                      alignment: Alignment.center,
-                                      value: val,
-                                      child: Text(val,style: Theme.of(context).textTheme.subtitle2!.copyWith(fontSize:18.0),),
-                                    );
+                                        value: e.id,
+                                        child: Text(
+                                            style: Theme.of(context).textTheme.caption!.copyWith(fontSize:18.0),
+                                            textAlign: TextAlign.start,
+                                            e.vehicleName ?? ''));
                                   }).toList(),
-                                  onChanged: (String? newValue) {
-                                    setState(() {
-                                      widget.store.vehicle_name_id= widget.bvinfoAPI.id_name_map2?.keys.firstWhere((k) => widget.bvinfoAPI.id_name_map2?[k] == '${newValue}').toString();
-                                      widget.store.vehicle_value = newValue!;
-                                    });
+                                  onChanged: (int? newValue) {
+                                      widget.store.vehicle_name_id = newValue.toString();
+
                                   },
                                 ),
                                 const SizedBox(height: 10.0,),
                                 TextFormField(
+                                  keyboardType: TextInputType.number,
+                                  onChanged: (String? value) {
+                                    widget.store.engine_no = value;
+                                  },
                                   onSaved: (String? value) {
                                     widget.store.engine_no = value;
                                   },
@@ -287,6 +303,9 @@ class _ConfirmationState extends State<Confirmation> {
                                 ),
                                 const SizedBox(height: 10.0,),
                                 TextFormField(
+                                  onChanged: (String? value) {
+                                    widget.store.color = value;
+                                  },
                                   onSaved: (String? value) {
                                     widget.store.color = value;
                                   },
@@ -303,6 +322,10 @@ class _ConfirmationState extends State<Confirmation> {
                                 ),
                                 const SizedBox(height: 10.0,),
                                 TextFormField(
+                                  keyboardType: TextInputType.number,
+                                  onChanged: (String? value) {
+                                    widget.store.no_of_seats = value;
+                                  },
                                   onSaved: (String? value) {
                                     widget.store.no_of_seats = value;
                                   },
@@ -346,6 +369,10 @@ class _ConfirmationState extends State<Confirmation> {
                                 ),
                                 const SizedBox(height: 10.0,),
                                 TextFormField(
+                                  keyboardType: TextInputType.number,
+                                  onChanged: (String? value) {
+                                    widget.store.no_of_transfer = value;
+                                  },
                                   onSaved: (String? value) {
                                     widget.store.no_of_transfer = value;
                                   },
@@ -373,6 +400,7 @@ class _ConfirmationState extends State<Confirmation> {
                                         onChanged: (int? value){
                                           setState(() {
                                             widget.store.vehicle_type_radio = value;
+                                            widget.store.vehicle_type='private';
                                           });
                                         }),
                                     Text("Private",
@@ -385,6 +413,7 @@ class _ConfirmationState extends State<Confirmation> {
                                         activeColor: Theme.of(context).colorScheme.secondary,
                                         onChanged: (int? value){
                                           setState(() {
+                                            widget.store.vehicle_type='public';
                                             widget.store.vehicle_type_radio = value;
                                           });
                                         }),
@@ -394,7 +423,7 @@ class _ConfirmationState extends State<Confirmation> {
                                 ),
                                 SizedBox(height: 20.0,
                                     child: widget.store.vehicle_type_radio == null ? Text('Please Select one.',style: Theme.of(context).textTheme.caption!.copyWith(color: Colors.red),):const Text('')),
-                                Text('Number PLate',
+                                Text('Number Plate',
                                   style: Theme.of(context).textTheme.caption,),
                                 Row(
                                   children: <Widget>[
@@ -419,11 +448,12 @@ class _ConfirmationState extends State<Confirmation> {
                                         toggleable: true,
                                         activeColor: Theme.of(context).colorScheme.secondary,
                                         onChanged: (int? value){
-                                          setState(() {
-                                            widget.store.number_plate_radio = value;
-                                            _isvisible1 =false;
-                                            _isvisible2=true;
-                                          });
+                                            setState(() {
+                                              widget.store.number_plate_radio = value;
+                                              _isvisible1 =false;
+                                              _isvisible2=true;
+                                            });
+
                                         }),
                                     Text("New",
                                         style: Theme.of(context).textTheme.caption),
@@ -441,6 +471,9 @@ class _ConfirmationState extends State<Confirmation> {
                                             width: 91.0,
                                             child: TextFormField(
                                               initialValue: widget.store.zonal_code,
+                                              onChanged: (String? value) {
+                                                widget.store.zonal_code=value;
+                                              },
                                               onSaved: (String? value) {
                                                 widget.store.zonal_code=value;
                                               },
@@ -459,7 +492,11 @@ class _ConfirmationState extends State<Confirmation> {
                                           SizedBox(
                                             width: 91.0,
                                             child: TextFormField(
+                                              keyboardType: TextInputType.number,
                                               initialValue: widget.store.lot_number,
+                                              onChanged: (String? value) {
+                                                widget.store.lot_number=value;
+                                              },
                                               onSaved: (String? value) {
                                                 widget.store.lot_number=value;
                                               },
@@ -479,6 +516,9 @@ class _ConfirmationState extends State<Confirmation> {
                                             width: 91.0,
                                             child: TextFormField(
                                               initialValue: widget.store.v_type,
+                                              onChanged: (String? value) {
+                                                widget.store.v_type=value;
+                                              },
                                               onSaved: (String? value) {
                                                 widget.store.v_type=value;
                                               },
@@ -500,7 +540,11 @@ class _ConfirmationState extends State<Confirmation> {
                                       SizedBox(
                                         width: 91.0,
                                         child: TextFormField(
+                                          keyboardType: TextInputType.number,
                                           initialValue: widget.store.v_no,
+                                          onChanged: (String? value) {
+                                            widget.store.v_no=value;
+                                          },
                                           onSaved: (String? value) {
                                             widget.store.v_no=value;
                                           },
@@ -532,6 +576,9 @@ class _ConfirmationState extends State<Confirmation> {
                                             width: 91.0,
                                             child: TextFormField(
                                               initialValue: widget.store.province,
+                                              onChanged: (String? value) {
+                                                widget.store.province=value;
+                                              },
                                               onSaved: (String? value) {
                                                 widget.store.province=value;
                                               },
@@ -550,7 +597,11 @@ class _ConfirmationState extends State<Confirmation> {
                                           SizedBox(
                                             width: 91.0,
                                             child: TextFormField(
+                                              keyboardType: TextInputType.number,
                                               initialValue: widget.store.office_code,
+                                              onChanged: (String? value) {
+                                                widget.store.office_code=value;
+                                              },
                                               onSaved: (String? value) {
                                                 widget.store.office_code=value;
                                               },
@@ -569,7 +620,11 @@ class _ConfirmationState extends State<Confirmation> {
                                           SizedBox(
                                             width: 91.0,
                                             child: TextFormField(
+                                              keyboardType: TextInputType.number,
                                               initialValue: widget.store.lot_number,
+                                              onChanged: (String? value) {
+                                                widget.store.lot_number=value;
+                                              },
                                               onSaved: (String? value) {
                                                 widget.store.lot_number=value;
                                               },
@@ -594,6 +649,9 @@ class _ConfirmationState extends State<Confirmation> {
                                             width: 91.0,
                                             child: TextFormField(
                                               initialValue: widget.store.symbol,
+                                              onChanged: (String? value) {
+                                                widget.store.symbol=value;
+                                              },
                                               onSaved: (String? value) {
                                                 widget.store.symbol=value;
                                               },
@@ -613,7 +671,11 @@ class _ConfirmationState extends State<Confirmation> {
                                           SizedBox(
                                             width: 91.0,
                                             child: TextFormField(
+                                              keyboardType: TextInputType.number,
                                               initialValue: widget.store.v_no,
+                                              onChanged: (String? value) {
+                                                widget.store.v_no=value;
+                                              },
                                               onSaved: (String? value) {
                                                 widget.store.v_no=value;
                                               },
@@ -648,12 +710,13 @@ class _ConfirmationState extends State<Confirmation> {
                                     value: 1,
                                     groupValue: widget.store.card_type_radio,
                                     onChanged: (value){
-                                      setState(() {
-                                        widget.store.card_type_radio = value ;
-                                        widget.store.nid_type = 'citizenship';
-                                        _isvisible3 =true;
-                                        _isvisible4=false;
-                                      });
+                                        setState(() {
+                                          widget.store.card_type_radio = value ;
+                                          widget.store.nid_type = 'citizenship';
+                                          _isvisible3 =true;
+                                          _isvisible4=false;
+                                        });
+
                                     }),
                                 Text('Citizenship', style: Theme.of(context).textTheme.caption,),
 
@@ -663,12 +726,12 @@ class _ConfirmationState extends State<Confirmation> {
                                     value: 2,
                                     groupValue: widget.store.card_type_radio,
                                     onChanged: (value){
-                                      setState(() {
-                                        widget.store.nid_type = 'pan';
-                                        widget.store.card_type_radio = value ;
-                                        _isvisible3 =false;
-                                        _isvisible4=true;
-                                      });
+                                        setState(() {
+                                          widget.store.nid_type = 'pan';
+                                          widget.store.card_type_radio = value ;
+                                          _isvisible3 =false;
+                                          _isvisible4=true;
+                                        });
                                     }),
                                 Text('Pan', style: Theme.of(context).textTheme.caption,),
 
@@ -682,6 +745,10 @@ class _ConfirmationState extends State<Confirmation> {
                                   visible: _isvisible3,
                                   child: TextFormField(
                                     keyboardType: TextInputType.number,
+                                    onChanged: (String? value) {
+                                      widget.store.citizenship_no=value;
+                                      widget.store.nid_no=widget.store.citizenship_no;
+                                    },
                                     onSaved: (String? value) {
                                       widget.store.citizenship_no=value;
                                       widget.store.nid_no=widget.store.citizenship_no;
@@ -702,6 +769,10 @@ class _ConfirmationState extends State<Confirmation> {
                                   visible: _isvisible4,
                                   child: TextFormField(
                                     keyboardType: TextInputType.number,
+                                    onChanged: (String? value) {
+                                      widget.store.pan_no=value;
+                                      widget.store.nid_no=widget.store.pan_no;
+                                    },
                                     onSaved: (String? value) {
                                       widget.store.pan_no=value;
                                       widget.store.nid_no=widget.store.pan_no;
@@ -1024,41 +1095,45 @@ class _ConfirmationState extends State<Confirmation> {
                                     const SizedBox(width: 10.0,),
                                     TextButton(
                                         onPressed: ()async{
+                                          // if(widget.store.number_plate_radio == 1)
+                                          // {widget.store.vehicle_no ='${widget.store.zonal_code}-${widget.store.lot_number}-${widget.store.v_type} ${widget.store.v_no} ';}
+                                          //
+                                          // else if(widget.store.number_plate_radio == 2)
+                                          // {widget.store.vehicle_no ='${widget.store.province}-${widget.store.office_code}-${widget.store.lot_number} ${widget.store.symbol} ${widget.store.v_no} ';}
+                                          //
+                                          // print(widget.store.nid_no);
+                                          //     print(widget.store.no_of_transfer);
+                                          //   print(widget.store.purchase_year);
+                                          //   print(widget.store.no_of_seats);
+                                          //   print(widget.store.img1);
+                                          //   print(widget.store.engine_no);
+                                          //   print(widget.store.vehicle_name_id);
+                                          //   print(widget.store.brand_id);
+                                          //   print(widget.store.nid_type);
+                                          //   print(widget.store.vehicle_no);
+                                          //   print(widget.store.vehicle_type);
+                                          //   print(widget.store.color);
+                                          //   print(widget.store.phone_no);
+                                          //   print(widget.store.address);
+                                          //   print(widget.store.manufacture_year);
+                                          //
+
                                           if(_formkey.currentState!.validate()){
                                             _formkey.currentState!.save();
-                                            print(widget.store.img1);
-                                            print(widget.store.img2);
-                                            print(widget.store.img3);
-                                            print(widget.store.img4);
-                                            print(widget.store.img5);
-                                           print(widget.store.nid_no);
-                                            print(widget.store.no_of_transfer);
-                                            print(widget.store.purchase_year);
-                                            print(widget.store.no_of_seats);
-                                            print(widget.store.manufacture_year);
-                                            print(widget.store.engine_no);
-                                            print(widget.store.vehicle_name_id);
-                                            print(widget.store.brand_id);
-                                            print(widget.store.nid_type);
-                                            print(widget.store.vehicle_no);
-                                            print(widget.store.vehicle_type);
-                                            print(widget.store.color);
-                                            print(widget.store.phone_no);
-                                            print(widget.store.address);
-                                            print(widget.store.full_name);
+                                           if(widget.store.number_plate_radio == 1)
+                                           {widget.store.vehicle_no ='${widget.store.zonal_code}-${widget.store.lot_number}-${widget.store.v_type} ${widget.store.v_no} ';}
+
+                                           else if(widget.store.number_plate_radio == 2)
+                                           {widget.store.vehicle_no ='${widget.store.province}-${widget.store.office_code}-${widget.store.lot_number} ${widget.store.symbol} ${widget.store.v_no} ';}
 
                                             print('Client Side Validated');
 
                                             var uri = Uri.parse('https://aavissmotors.creatudevelopers.com.np/api/v1/save-vehicle');
-
                                             var request = http.MultipartRequest('POST', uri);
-
                                             request.headers.addAll({
                                               "Content-Type":"multipart/form-data",
                                               "Accept":"application/json",
-
                                             });
-
                                             request.fields.addAll({
                                               'full_name': '${widget.store.full_name}',
                                               'address':'${widget.store.address}',
@@ -1076,26 +1151,45 @@ class _ConfirmationState extends State<Confirmation> {
                                               'nid_type': '${widget.store.nid_type}',
                                               'nid_no': '${widget.store.nid_no}',
                                             });
-                                            request.files.add(await http.MultipartFile.fromPath("nid_front", "${widget.store.img1!.path}"));
-                                          request.files.add(await http.MultipartFile.fromPath("nid_back", "${widget.store.img2!.path}"));
-                                          request.files.add(await http.MultipartFile.fromPath("bill_book_main_page", "${widget.store.img3!.path}"));
-                                          request.files.add(await http.MultipartFile.fromPath("bill_book_renewal_page", "${widget.store.img4!.path}"));
-                                          request.files.add(await http.MultipartFile.fromPath("bill_book_tax_renewed_date_page", "${widget.store.img5!.path}"));
+                                            request.files.add(await http.MultipartFile.fromPath("nid_front", widget.store.img1!.path));
+                                          request.files.add(await http.MultipartFile.fromPath("nid_back", widget.store.img2!.path));
+                                          request.files.add(await http.MultipartFile.fromPath("bill_book_main_page", widget.store.img3!.path));
+                                          request.files.add(await http.MultipartFile.fromPath("bill_book_renewal_page", widget.store.img4!.path));
+                                          request.files.add(await http.MultipartFile.fromPath("bill_book_tax_renewed_date_page", widget.store.img5!.path));
 
                                           var response = await request.send() ;
+
                                           print(await response.stream.bytesToString());
-                                          if(response.statusCode == 200){
-                                            print('Sent');
+
+                                            final snackBar = SnackBar(
+                                                backgroundColor: Theme.of(context).colorScheme.primary,
+                                                content:Text('Checking entred data'));
+                                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                                            if(response.statusCode == 200){
+                                              print('Sent');
+                                            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>FinishScreen(title: widget.title,)));
+
                                             Map<String,dynamic> valueMap = json.decode( await response.stream.bytesToString());
                                             StoreResponseModel responseModel = StoreResponseModel.fromJson(valueMap);
                                             print(responseModel.message);
+
                                             final snackBar = SnackBar(
                                                 backgroundColor: Theme.of(context).colorScheme.primary,
                                                 content:Text('{$responseModel.message}'));
                                             ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                                    if(responseModel.status == true)
-                                                    { Navigator.of(context).push(MaterialPageRoute(builder: (context)=>FinishScreen(title: widget.title,store: widget.store,bvinfoAPI: widget.bvinfoAPI,)));}
-                                          }else { print('failed');}
+
+                                                    if(responseModel.status == true )
+                                                    {
+                                                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>FinishScreen(title: widget.title,)));
+                                                    }
+                                          }
+                                          else {
+                                              final snackBar = SnackBar(
+                                                  backgroundColor: Theme.of(context).colorScheme.primary,
+                                                  content:Text('Failed');
+                                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                            print('failed');}
 
                                           }
 

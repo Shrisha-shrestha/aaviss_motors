@@ -1,6 +1,7 @@
 import 'package:aaviss_motors/screens/confirmation.dart';
 import 'package:aaviss_motors/screens/search_detail.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,16 +19,20 @@ class LegalInfo extends StatefulWidget {
 
 class _LegalInfoState extends State<LegalInfo> {
   int? groupval;
-  bool _isvisible1 =true, _isvisible2 =false;
+  bool _isvisible1 =false, _isvisible2 =false;
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   File?  image1,image2,image3,image4,image5;
+  String errortxt='';
+
   final _picker = ImagePicker();
     Future<File?> getImage()async{
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery , imageQuality: 80);
     if(pickedFile!= null ){
       return  File(pickedFile.path);
     }else {
-      print('no image selected');
+      if (kDebugMode) {
+        print('no image selected');
+      }
       return null;
     }
   }
@@ -147,7 +152,7 @@ class _LegalInfoState extends State<LegalInfo> {
                               ],
                             ),
                             SizedBox(
-                                child: groupval == null ? Text('Please Select one.',style: Theme.of(context).textTheme.caption!.copyWith(color: Colors.red),):const Text('')),
+                                child: Text(errortxt,style: Theme.of(context).textTheme.caption!.copyWith(color: Colors.red),)),
 
                             Visibility(
                               visible: _isvisible1,
@@ -503,34 +508,57 @@ class _LegalInfoState extends State<LegalInfo> {
                                 const SizedBox(width: 10.0,),
                                 TextButton(
                                     onPressed: (){
-                                      print(widget.store.img1);
-                                      print(widget.store.img2);
-                                      print(widget.store.img3);
-                                      print(widget.store.img4);
-                                      print(widget.store.img5);
-                                      print(widget.store.nid_no);
-                                      print(widget.store.no_of_transfer);
-                                      print(widget.store.purchase_year);
-                                      print(widget.store.no_of_seats);
-                                      print(widget.store.manufacture_year);
-                                      print(widget.store.engine_no);
-                                      print(widget.store.vehicle_name_id);
-                                      print(widget.store.brand_id);
-                                      print(widget.store.nid_type);
-                                      print(widget.store.vehicle_no);
-                                      print(widget.store.vehicle_type);
-                                      print(widget.store.color);
-                                      print(widget.store.phone_no);
-                                      print(widget.store.address);
-                                      print(widget.store.full_name);
-                                      if(_formkey.currentState!.validate() && image1!=null && image2!=null
-                                          && image3!=null && image4!=null && image5!=null){
-                                        _formkey.currentState!.save();
-                                        print('Client Side Validated');
-                                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
-                                              Confirmation(title: widget.title,store: widget.store,bvinfoAPI: widget.bvinfoAPI,)));
+                                      if (kDebugMode) {
+                                  print(widget.store.img1);
+                                  print(widget.store.img2);
+                                  print(widget.store.img3);
+                                  print(widget.store.img4);
+                                  print(widget.store.img5);
+                                  print(widget.store.nid_no);
+                                  print(widget.store.no_of_transfer);
+                                  print(widget.store.purchase_year);
+                                  print(widget.store.no_of_seats);
+                                  print(widget.store.manufacture_year);
+                                  print(widget.store.engine_no);
+                                  print(widget.store.vehicle_name_id);
+                                  print(widget.store.brand_id);
+                                  print(widget.store.nid_type);
+                                  print(widget.store.vehicle_no);
+                                  print(widget.store.vehicle_type);
+                                  print(widget.store.color);
+                                  print(widget.store.phone_no);
+                                  print(widget.store.address);
+                                  print(widget.store.full_name);
+                                }
+                                      if(groupval!=null){
+                                        setState(() {
+                                          errortxt='';
+                                        });
+                                  if (_formkey.currentState!.validate() &&
+                                      image1 != null &&
+                                      image2 != null &&
+                                      image3 != null &&
+                                      image4 != null &&
+                                      image5 != null) {
+                                    _formkey.currentState!.save();
+                                    if (kDebugMode) {
+                                      print('Client Side Validated');
+                                    }
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                            builder: (context) => Confirmation(
+                                                  title: widget.title,
+                                                  store: widget.store,
+                                                  bvinfoAPI: widget.bvinfoAPI,
+                                                )));
+                                  }
+                                }
+                                      else{
+                                        setState(() {
+                                          errortxt='Please Select one';
+                                        });
                                       }
-                                    },
+                              },
                                     style: ButtonStyle(
                                         backgroundColor: MaterialStateProperty.all(Colors.white),
                                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(

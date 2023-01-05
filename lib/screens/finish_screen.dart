@@ -6,10 +6,8 @@ import 'package:flutter_svg/svg.dart';
 import '../models/storevehicleinfo.dart';
 
 class FinishScreen extends StatefulWidget {
-  const FinishScreen({super.key, required this.title,required this.store,required this.bvinfoAPI});
+  const FinishScreen({super.key, required this.title});
   final String title;
-  final Store store;
-  final B_V_fromAPI bvinfoAPI;
   @override
   State<FinishScreen> createState() => _FinishScreenState();
 }

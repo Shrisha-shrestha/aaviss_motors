@@ -1,5 +1,6 @@
 import 'package:aaviss_motors/screens/search_detail.dart';
 import 'package:aaviss_motors/screens/vehicle_info.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import'package:aaviss_motors/models/storevehicleinfo.dart';
@@ -162,41 +163,43 @@ class _MyHomePageState extends State<MyHomePage> {
                                   onPressed: ()async{
                                     if (_formkey.currentState!.validate()) {
                                       _formkey.currentState!.save();
-                                        print('Client Side Validated');
+                                        if (kDebugMode) {
+                                          print('Client Side Validated');
+                                        }
                                       final snackBar = SnackBar(
                                           backgroundColor: Theme.of(context).colorScheme.primary,
-                                          content:Text('Please Wait.....'));
+                                          content:const Text('Please Wait........(fetching data from API)'));
                                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
-                                      dynamic Val1,Val2;
-                                      int? len1,len2;
-                                      List<String> brands=[];
-                                      List<String> vehicles=[];
-                                      List<int> brandsId=[];
-                                      List<int> vehiclesId=[];
+                                      dynamic val1,val2;
+                                       //int? len1,len2;
+                                      // List<String> brands=[];
+                                      // List<String> vehicles=[];
+                                      // List<int> brandsId=[];
+                                      // List<int> vehiclesId=[];
                                       APIService  apiService = APIService();
                                       await apiService.getbrand().then((value){
-                                        len1 = value!.outerdata!.brands!.total;
-                                        Val1 =   value.outerdata!.brands!.innerdata!;
+                                        //len1 = value!.outerdata!.brands!.innerdata!.length;
+                                        val1 =   value!.outerdata!.brands!.innerdata!;
+
                                       });
 
                                       await apiService.getvehicle().then((value){
-                                        len2 = value.data!.vehicleNames!.total;
-                                        Val2 =   value.data!.vehicleNames!.data!;
+                                       // len2 = value.data!.vehicleNames!.data!.length;
+                                        val2 =   value.data!.vehicleNames!.data!;
                                       });
-                                      for(int i=0;i<len1!;i++){
-                                        brands.add("${Val1[i].name}");
-                                        brandsId.add(Val1[i].id);
-                                      }
-                                      for(int i=0;i<len2!;i++){
-                                        vehicles.add("${Val2[i].vehicleName}");
-                                        vehiclesId.add(Val2[i].id);
-                                      }
-                                      final theMap1 = Map.fromIterables(brandsId, brands);
-                                      final theMap2 = Map.fromIterables(vehiclesId, vehicles);
+                                      // for(int i=0;i<len1!;i++){
+                                      //   brands.add(Val1[i].name);
+                                      //   brandsId.add(Val1[i].id);
+                                      // }
+                                      // for(int i=0;i<len2!;i++){
+                                      //   vehicles.add(Val2[i].vehicleName);
+                                      //   vehiclesId.add(Val2[i].id);
+                                      // }
+                                      // final theMap1 = Map.fromIterables(brandsId, brands);
+                                      // final theMap2 = Map.fromIterables(vehiclesId, vehicles);
 
-                                      bfa.brandlist = brands;  bfa.vehiclelist = vehicles;
-                                      bfa.id_name_map1=theMap1;  bfa.id_name_map2=theMap2;
+                                      bfa.brandlist = val1;  bfa.vehiclelist = val2;
 
                                       Navigator.of(context).push(MaterialPageRoute(builder:(context)=>
                                          VehicleInfo(title: widget.title,store: store, bvinfoAPI:bfa)));

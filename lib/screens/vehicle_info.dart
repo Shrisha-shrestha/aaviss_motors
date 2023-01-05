@@ -1,10 +1,10 @@
+import 'package:aaviss_motors/models/getvehiclename.dart';
 import 'package:aaviss_motors/screens/legal_info.dart';
 import 'package:aaviss_motors/screens/search_detail.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../models/storevehicleinfo.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import '../models/getbrand.dart';
 
 class VehicleInfo extends StatefulWidget {
@@ -19,19 +19,20 @@ class VehicleInfo extends StatefulWidget {
 
 class _VehicleInfoState extends State<VehicleInfo> {
  // int? brandid;
-  int? val1,val2 ;
-  var brands1=['Brand 1','Brand 2',];
-  List<String> brands=[];
+  // List<List<String>> vehicle= [['v1','v2'],['v3','v4']];
   //int? len;
-  dynamic Val;
+
+  int? val1,val2 ;
+  List<Innerdata> brands=[];
+  List<innerdata> vehicles=[];
+  dynamic val;
   late Future<List<String>> futurewidget;
   List<String> years=[];
-  List<String> vehicles=[''];
-  List<List<String>> vehicle= [['v1','v2'],['v3','v4']];
-  String? dropdownvalue1,dropdownvalue2,dropdownvalue3,dropdownvalue4;
+  int? dropdownvalue1,dropdownvalue2;
+  String? dropdownvalue3,dropdownvalue4;
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   bool _isvisible1=false,_isvisible2=false;
-
+String? errorinpurchase='',errorinvehicletype='',errorinnumbreplate='';
   // void  brandbasedvehicle(int brandId){
   //       setState(() {
   //      vehicles = vehicle[brandId];
@@ -142,23 +143,21 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                 ),
                               ),
                               value: dropdownvalue1,
-                              icon: const Icon(Icons.arrow_drop_down,color:Colors.grey ,),
-                              items: brands.map((String val) {
+                              items: brands.map((e) {
                                 return DropdownMenuItem(
-                                  alignment: Alignment.center,
-                                  value: val,
-                                  child: Text(val,style: Theme.of(context).textTheme.subtitle2!.copyWith(fontSize:18.0),),
-                                );
+                                    value: e.id,
+                                    child: Text(
+                                        style: Theme.of(context).textTheme.caption!.copyWith(fontSize:18.0),
+                                        textAlign: TextAlign.start,
+                                        e.name ?? ''));
                               }).toList(),
-                              onChanged: (String? newValue) {
+                              icon: const Icon(Icons.arrow_drop_down,color:Colors.grey ,),
+                              onChanged: (int? newValue) {
                                   dropdownvalue1 = newValue!;
-                                 // brandbasedvehicle(brands.indexOf(newValue));
-
                               },
-                              onSaved: (String? value) {
+                              onSaved: (int? value) {
                                 //widget.store.brand_id = brands.indexOf(value!).toString();
-                                widget.store.brand_id= widget.bvinfoAPI.id_name_map1?.keys.firstWhere((k) => widget.bvinfoAPI.id_name_map1?[k] == '${value}').toString();
-                                widget.store.brand_value=value;
+                                widget.store.brand_id= value.toString();
                               },
                             ),
                             const SizedBox(height: 10.0,),
@@ -174,23 +173,20 @@ class _VehicleInfoState extends State<VehicleInfo> {
                               ),
                               value: dropdownvalue2,
                               icon: const Icon(Icons.arrow_drop_down,color:Colors.grey,),
-                              items: vehicles.map((String val) {
+                              items: vehicles.map((e) {
                                 return DropdownMenuItem(
-                                  alignment: Alignment.center,
-                                  value: val,
-                                  child: Text(val,style: Theme.of(context).textTheme.subtitle2!.copyWith(fontSize:18.0),),
-                                );
+                                    value: e.id,
+                                    child: Text(
+                                      style: Theme.of(context).textTheme.caption!.copyWith(fontSize:18.0),
+                                        textAlign: TextAlign.start,
+                                        e.vehicleName ?? ''));
                               }).toList(),
-                              onChanged: (String? newValue) {
+                              onChanged: (int? newValue) {
                                 dropdownvalue2 = newValue!;
-                                // setState(() {
-                                //   dropdownvalue2 = newValue!;
-                                // });
-                              },
-                              onSaved: (String? value) {
-                                //widget.store.vehicle_name_id = vehicles.indexOf(value!).toString();
-                                widget.store.vehicle_name_id= widget.bvinfoAPI.id_name_map2?.keys.firstWhere((k) => widget.bvinfoAPI.id_name_map2?[k] == '${value}').toString();
-                                widget.store.vehicle_value =value;
+                                },
+                              onSaved: (int? value) {
+                                widget.store.vehicle_name_id= value.toString();
+                               // widget.store.vehicle_value =value;
 
                               },
                             ),
@@ -231,10 +227,8 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                 );
                               }).toList(),
                               onChanged: (String? newValue) {
-                                setState(() {
-                                  dropdownvalue3 = newValue!;
-                                });
-                              },
+                                dropdownvalue3 = newValue!;
+                                },
                               onSaved: (String? value) {
                                 widget.store.manufacture_year = value;
                               },
@@ -291,15 +285,18 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                 );
                               }).toList(),
                               onChanged: (String? newValue) {
-                                setState(() {
-                                  dropdownvalue4 = newValue!;
-                                });
-                              },
+                                dropdownvalue4 = newValue!;
+                                                              },
                               onSaved: (String? value) {
                                 widget.store.purchase_year = value;
                               },
                             ),
-                            const SizedBox(height: 10.0,),
+                             Padding(
+                               padding: const EdgeInsets.only(top: 3.0),
+                               child: SizedBox(height: 10.0,
+                                  child:Text('$errorinpurchase',style: Theme.of(context).textTheme.caption!.copyWith(color: Colors.red))),
+                             ),
+
                             TextFormField(
                               keyboardType: TextInputType.number,
                               onSaved: (String? value) {
@@ -351,7 +348,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                               ],
                             ),
                             SizedBox(height: 20.0,
-                                child: val1 == null ? Text('Please Select one.',style: Theme.of(context).textTheme.caption!.copyWith(color: Colors.red),):const Text('')),
+                                child:Text('$errorinvehicletype',style: Theme.of(context).textTheme.caption!.copyWith(color: Colors.red),)),
                             Text('Number PLate',
                               style: Theme.of(context).textTheme.caption,),
                             Row(
@@ -388,7 +385,8 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                     style: Theme.of(context).textTheme.caption),
                               ],
                             ),
-                            if(val2 == null) ...{ Text('Please Select one.',style: Theme.of(context).textTheme.caption!.copyWith(color: Colors.red))},
+                            SizedBox(height: 20.0,
+                                child:Text('$errorinnumbreplate',style: Theme.of(context).textTheme.caption!.copyWith(color: Colors.red),)),
                             Visibility(
                               visible: _isvisible1,
                               child: Column(
@@ -713,23 +711,50 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                 TextButton(
                                     onPressed: (){
                                       if(_formkey.currentState!.validate()){
-                                        if(val1!=null && val2!=null){
-                                          _formkey.currentState!.save();
-                                          print('Client Side Validated');
-                                          if(widget.store.number_plate_radio == 1)
-                                          {widget.store.vehicle_no ='${widget.store.zonal_code}-${widget.store.lot_number}-${widget.store.v_type} ${widget.store.v_no} ';}
+                                        if(val1!=null ) {
+                                          setState(() {
+                                            errorinvehicletype='';
+                                          });
+                                          if(val2!=null){
+                                            setState(() {
+                                              errorinnumbreplate='';
+                                            });
+                                            if(int.parse(dropdownvalue3!) <= int.parse(dropdownvalue4!)){
+                                              errorinpurchase='';
+                                              _formkey.currentState!.save();
+                                              if (kDebugMode) {
+                                                print('Client Side Validated');
+                                              }
+                                              if(widget.store.number_plate_radio == 1)
+                                              {widget.store.vehicle_no ='${widget.store.zonal_code}-${widget.store.lot_number}-${widget.store.v_type} ${widget.store.v_no} ';}
 
-                                          else if(widget.store.number_plate_radio == 2)
-                                          {widget.store.vehicle_no ='${widget.store.province}-${widget.store.office_code}-${widget.store.lot_number} ${widget.store.symbol} ${widget.store.v_no} ';}
+                                              else if(widget.store.number_plate_radio == 2)
+                                              {widget.store.vehicle_no ='${widget.store.province}-${widget.store.office_code}-${widget.store.lot_number} ${widget.store.symbol} ${widget.store.v_no} ';}
 
-                                          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
-                                              LegalInfo(title: widget.title,store: widget.store,bvinfoAPI:widget.bvinfoAPI)));
+                                              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
+                                                  LegalInfo(title: widget.title,store: widget.store,bvinfoAPI:widget.bvinfoAPI)));
+
+                                            }
+                                            else{
+                                              setState(() {
+                                                errorinpurchase = 'Purchase Year cannot be before Manufacture Year';
+                                              });
+                                            }
+                                          }
+                                          else{
+                                                setState(() {
+                                                errorinnumbreplate = 'Please select one';
+                                                        });
+                                                  }
+                                          }
                                         }
-                                      }
-
-
-                                    },
-                                    style: ButtonStyle(
+                                        else{
+                                          setState(() {
+                                             errorinvehicletype = 'Please select one';
+                                                });
+                                            }
+                                        },
+                                        style: ButtonStyle(
                                         backgroundColor: MaterialStateProperty.all(Colors.white),
                                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                             RoundedRectangleBorder(
