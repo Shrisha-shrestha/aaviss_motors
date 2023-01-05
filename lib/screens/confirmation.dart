@@ -1187,7 +1187,7 @@ class _ConfirmationState extends State<Confirmation> {
                                           else {
                                               final snackBar = SnackBar(
                                                   backgroundColor: Theme.of(context).colorScheme.primary,
-                                                  content:Text('Failed');
+                                                  content:Text('Failed'));
                                               ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                             print('failed');}
 
