@@ -144,37 +144,43 @@ class _SearchDetailState extends State<SearchDetail> {
                        return Center(child: CircularProgressIndicator());}
                   else {
                       if (snapshot.hasError) {
-                        return Center(
-                          child: Column(
-                            children: [
-                              Text('Vehicle Not Found.',
-                                  style: Theme.of(context).textTheme.subtitle2),
-                              SizedBox(
-                                height: 10.0,
+                        return Expanded(
+                          child: SingleChildScrollView(
+                            child: Container(
+                              child: Center(
+                                child: Column(
+                                  children: [
+                                    Text('Vehicle Not Found.',
+                                        style: Theme.of(context).textTheme.subtitle2),
+                                    SizedBox(
+                                      height: 10.0,
+                                    ),
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) => MyHomePage(
+                                                      title: widget.title)));
+                                        },
+                                        style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    Colors.white),
+                                            shape: MaterialStateProperty.all<
+                                                    RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.zero,
+                                                    side: BorderSide(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .secondary)))),
+                                        child: Text('Go Home',
+                                            style:
+                                                Theme.of(context).textTheme.button)),
+                                  ],
+                                ),
                               ),
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) => MyHomePage(
-                                                title: widget.title)));
-                                  },
-                                  style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              Colors.white),
-                                      shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.zero,
-                                              side: BorderSide(
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .secondary)))),
-                                  child: Text('Go Home',
-                                      style:
-                                          Theme.of(context).textTheme.button)),
-                            ],
+                            ),
                           ),
                         );
                       }

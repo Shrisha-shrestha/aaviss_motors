@@ -36,7 +36,7 @@ class _ConfirmationState extends State<Confirmation> {
   // File?  image1,image2,image3,image4,image5;
   final _picker = ImagePicker();
   Future<File?> getImage()async{
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery , imageQuality: 80);
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery , imageQuality: 20);
     if(pickedFile!= null ){
       return  File(pickedFile.path);
     }else {
@@ -1127,7 +1127,10 @@ class _ConfirmationState extends State<Confirmation> {
                                            {widget.store.vehicle_no ='${widget.store.province}-${widget.store.office_code}-${widget.store.lot_number} ${widget.store.symbol} ${widget.store.v_no} ';}
 
                                             print('Client Side Validated');
-
+                                            final snackBar = SnackBar(
+                                                backgroundColor: Theme.of(context).colorScheme.primary,
+                                                content:Text('Please Wait.....(Sending data to API)'));
+                                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                             var uri = Uri.parse('https://aavissmotors.creatudevelopers.com.np/api/v1/save-vehicle');
                                             var request = http.MultipartRequest('POST', uri);
                                             request.headers.addAll({
@@ -1159,37 +1162,38 @@ class _ConfirmationState extends State<Confirmation> {
 
                                           var response = await request.send() ;
 
-                                          print(await response.stream.bytesToString());
+                                            Map<String,dynamic> valueMap = json.decode( await response.stream.bytesToString());
+                                            StoreResponseModel responseModel = StoreResponseModel.fromJson(valueMap);
 
-                                            final snackBar = SnackBar(
+                                            final snackBar1 = SnackBar(
                                                 backgroundColor: Theme.of(context).colorScheme.primary,
-                                                content:Text('Checking entred data'));
-                                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                                content:Text('${responseModel.message}'));
+                                            ScaffoldMessenger.of(context).showSnackBar(snackBar1);
 
                                             if(response.statusCode == 200){
                                               print('Sent');
-                                            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>FinishScreen(title: widget.title,)));
-
-                                            Map<String,dynamic> valueMap = json.decode( await response.stream.bytesToString());
-                                            StoreResponseModel responseModel = StoreResponseModel.fromJson(valueMap);
-                                            print(responseModel.message);
-
-                                            final snackBar = SnackBar(
-                                                backgroundColor: Theme.of(context).colorScheme.primary,
-                                                content:Text('{$responseModel.message}'));
-                                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-                                                    if(responseModel.status == true )
+                                            if(responseModel.status == true )
                                                     {
                                                       Navigator.of(context).push(MaterialPageRoute(builder: (context)=>FinishScreen(title: widget.title,)));
                                                     }
                                           }
                                           else {
-                                              final snackBar = SnackBar(
+                                            if(response.statusCode == 500){
+                                              final snackBar2 = SnackBar(
                                                   backgroundColor: Theme.of(context).colorScheme.primary,
-                                                  content:Text('Failed'));
-                                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                            print('failed');}
+                                                  content:Text('${responseModel.message}'));
+                                              ScaffoldMessenger.of(context).showSnackBar(snackBar2);}
+
+                                            else {
+                                              String error = await response.stream.bytesToString();
+                                              final snackBar = SnackBar(
+                                                  backgroundColor:Theme.of(context).colorScheme.primary,
+                                                  content: Text(error));
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(snackBar);
+                                            }
+                                            print('failed');
+                                          }
 
                                           }
 

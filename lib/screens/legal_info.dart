@@ -26,7 +26,7 @@ class _LegalInfoState extends State<LegalInfo> {
 
   final _picker = ImagePicker();
     Future<File?> getImage()async{
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery , imageQuality: 80);
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery , imageQuality: 20);
     if(pickedFile!= null ){
       return  File(pickedFile.path);
     }else {
@@ -428,65 +428,67 @@ class _LegalInfoState extends State<LegalInfo> {
                               ],
                             ),
                             const SizedBox(height: 23.0,),
-                            Column(
-                                  children: [
-                                    DottedBorder(
-                                      dashPattern: const [4, 4],
-                                      strokeWidth: 2,
-                                      child: SizedBox(
-                                        height: 130,
-                                        width: MediaQuery.of(context).size.width*0.4,
-                                        child:  Center(
-                                          child: image5 == null ?IconButton(
-                                            onPressed:()async{
-                                              image5 =  await getImage() ;
-                                              if(image5!=null){
-                                                setState(() {
-                                                  widget.store.img5 =image5;
-                                                });
-                                              }
-                                            } ,
-                                            icon: const Icon(Icons.upload,
-                                              color: Colors.grey,
-                                              size: 30.0,
-                                            ),):
-                                          Stack(
-                                            children: <Widget>[
-                                              Image.file(File(image5!.path).absolute,
-                                                height: 130,
-                                                width: MediaQuery.of(context).size.width*0.4,
-                                                fit: BoxFit.cover,
-                                              ),
-                                              Container(height: 130,
-                                                width: MediaQuery.of(context).size.width*0.4,
-                                                color: Colors.grey.withOpacity(0.5),
-                                                child: IconButton(
-                                                  onPressed:()async {
-                                                    image5 = await getImage();
-                                                    if (image5 != null) {
-                                                      setState(() {
-                                                        widget.store.img5 =image5;
-                                                      });}
-                                                    },
-                                                  icon: const Icon(Icons.upload,
-                                                    color: Colors.black54,
-                                                    size: 30.0,
-                                                  ),),
-                                              ),
-                                            ],
+                            Center(
+                              child: Column(
+                                    children: [
+                                      DottedBorder(
+                                        dashPattern: const [4, 4],
+                                        strokeWidth: 2,
+                                        child: SizedBox(
+                                          height: 130,
+                                          width: MediaQuery.of(context).size.width*0.4,
+                                          child:  Center(
+                                            child: image5 == null ?IconButton(
+                                              onPressed:()async{
+                                                image5 =  await getImage() ;
+                                                if(image5!=null){
+                                                  setState(() {
+                                                    widget.store.img5 =image5;
+                                                  });
+                                                }
+                                              } ,
+                                              icon: const Icon(Icons.upload,
+                                                color: Colors.grey,
+                                                size: 30.0,
+                                              ),):
+                                            Stack(
+                                              children: <Widget>[
+                                                Image.file(File(image5!.path).absolute,
+                                                  height: 130,
+                                                  width: MediaQuery.of(context).size.width*0.4,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                                Container(height: 130,
+                                                  width: MediaQuery.of(context).size.width*0.4,
+                                                  color: Colors.grey.withOpacity(0.5),
+                                                  child: IconButton(
+                                                    onPressed:()async {
+                                                      image5 = await getImage();
+                                                      if (image5 != null) {
+                                                        setState(() {
+                                                          widget.store.img5 =image5;
+                                                        });}
+                                                      },
+                                                    icon: const Icon(Icons.upload,
+                                                      color: Colors.black54,
+                                                      size: 30.0,
+                                                    ),),
+                                                ),
+                                              ],
 
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 8.0),
-                                      child: Text('Billbook tax last renewal date page' ,
-                                        style: Theme.of(context).textTheme.caption,
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 8.0),
+                                        child: Text('Billbook tax last renewal date page' ,
+                                          style: Theme.of(context).textTheme.caption,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
+                                    ],
+                                  ),
+                            ),
                             const SizedBox(height:25.0 ,),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,

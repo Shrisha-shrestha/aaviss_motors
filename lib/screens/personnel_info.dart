@@ -183,7 +183,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                         val1 =   value!.outerdata!.brands!.innerdata!;
 
                                       });
-
                                       await apiService.getvehicle().then((value){
                                        // len2 = value.data!.vehicleNames!.data!.length;
                                         val2 =   value.data!.vehicleNames!.data!;
@@ -200,7 +199,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                       // final theMap2 = Map.fromIterables(vehiclesId, vehicles);
 
                                       bfa.brandlist = val1;  bfa.vehiclelist = val2;
-
                                       Navigator.of(context).push(MaterialPageRoute(builder:(context)=>
                                          VehicleInfo(title: widget.title,store: store, bvinfoAPI:bfa)));
 
