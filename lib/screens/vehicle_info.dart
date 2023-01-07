@@ -293,7 +293,7 @@ String? errorinpurchase='',errorinvehicletype='',errorinnumbreplate='';
                             ),
                              Padding(
                                padding: const EdgeInsets.only(top: 3.0),
-                               child: SizedBox(height: 10.0,
+                               child: SizedBox(height: 15.0,
                                   child:Text('$errorinpurchase',style: Theme.of(context).textTheme.caption!.copyWith(color: Colors.red))),
                              ),
 
@@ -347,7 +347,7 @@ String? errorinpurchase='',errorinvehicletype='',errorinnumbreplate='';
                                     style: Theme.of(context).textTheme.caption),
                               ],
                             ),
-                            SizedBox(height: 20.0,
+                            SizedBox(
                                 child:Text('$errorinvehicletype',style: Theme.of(context).textTheme.caption!.copyWith(color: Colors.red),)),
                             Text('Number PLate',
                               style: Theme.of(context).textTheme.caption,),
@@ -385,8 +385,7 @@ String? errorinpurchase='',errorinvehicletype='',errorinnumbreplate='';
                                     style: Theme.of(context).textTheme.caption),
                               ],
                             ),
-                            SizedBox(height: 20.0,
-                                child:Text('$errorinnumbreplate',style: Theme.of(context).textTheme.caption!.copyWith(color: Colors.red),)),
+                            SizedBox(child:Text('$errorinnumbreplate',style: Theme.of(context).textTheme.caption!.copyWith(color: Colors.red),)),
                             Visibility(
                               visible: _isvisible1,
                               child: Column(

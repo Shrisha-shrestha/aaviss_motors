@@ -70,23 +70,27 @@ class _SearchDetailState extends State<SearchDetail> {
                 'Search Your Detail ',
                 style: Theme.of(context).textTheme.headline6,
               ),
-              Form(
-                key: _formkey,
-                  child:  TextFormField(
-                    onSaved: (String? value) {
-                      searchrequestModel.vehicle_number = value;
-                    },
-                      keyboardType: TextInputType.number,
-                         style: Theme.of(context).textTheme.caption!.copyWith(fontSize:18.0),
-                    validator:(val)=> val!.isEmpty ? 'Enter Your Vehicle Number please.': null,
-                    decoration: InputDecoration(
-                      labelText: 'Enter Your Vehicle Number',
-                      labelStyle: Theme.of(context).textTheme.caption,
-                      focusedBorder: const UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey), //<-- SEE HERE
-                      ),
-                    ),
-                  ),),
+              SingleChildScrollView(
+                child: Container(
+                  child: Form(
+                    key: _formkey,
+                      child:  TextFormField(
+                        onSaved: (String? value) {
+                          searchrequestModel.vehicle_number = value;
+                        },
+                          keyboardType: TextInputType.number,
+                             style: Theme.of(context).textTheme.caption!.copyWith(fontSize:18.0),
+                        validator:(val)=> val!.isEmpty ? 'Enter Your Vehicle Number please.': null,
+                        decoration: InputDecoration(
+                          labelText: 'Enter Your Vehicle Number',
+                          labelStyle: Theme.of(context).textTheme.caption,
+                          focusedBorder: const UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey), //<-- SEE HERE
+                          ),
+                        ),
+                      ),),
+                ),
+              ),
               SizedBox(height: 15.0,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,

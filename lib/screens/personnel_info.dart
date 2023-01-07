@@ -138,16 +138,17 @@ class _MyHomePageState extends State<MyHomePage> {
                               },
                               style: Theme.of(context).textTheme.caption!.copyWith(fontSize:18.0),
                               validator:(val){
+                                RegExp regExp = RegExp(r'(?:\(?\+977\)?)?[9][6-9]\d{8}|01[-]?[0-9]{7}');
                                 if(val!.isEmpty) {
-                                  val = 'Enter your contact number please.';
+                                  return 'Enter your contact number please.';
                                 }
-                                else if(val.length<10 || val.length>10){
-                                  val = 'Enter a correct contact number please.';
+                                else if (regExp.hasMatch(val)) {
+                                  return null;
                                 }
-                                else
-                                {val = null;}
-                                return val;
-                              },
+                                else {
+                                   return 'Phone No. is not valid';
+                            }
+                          },
                               decoration: InputDecoration(
                                 labelText: 'Contact Number',
                                 labelStyle: Theme.of(context).textTheme.caption,
