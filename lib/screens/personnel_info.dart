@@ -173,13 +173,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
                                       dynamic val1,val2;
-                                       //int? len1,len2;
-                                      // List<String> brands=[];
-                                      // List<String> vehicles=[];
-                                      // List<int> brandsId=[];
-                                      // List<int> vehiclesId=[];
                                       APIService  apiService = APIService();
+
                                       await apiService.getbrand().then((value){
+
                                         //len1 = value!.outerdata!.brands!.innerdata!.length;
                                         val1 =   value!.outerdata!.brands!.innerdata!;
 
