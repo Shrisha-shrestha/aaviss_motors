@@ -177,7 +177,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
                                       await apiService.getbrand().then((value){
 
-                                        //len1 = value!.outerdata!.brands!.innerdata!.length;
                                         val1 =   value!.outerdata!.brands!.innerdata!;
 
                                       });
@@ -185,17 +184,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                        // len2 = value.data!.vehicleNames!.data!.length;
                                         val2 =   value.data!.vehicleNames!.data!;
                                       });
-                                      // for(int i=0;i<len1!;i++){
-                                      //   brands.add(Val1[i].name);
-                                      //   brandsId.add(Val1[i].id);
-                                      // }
-                                      // for(int i=0;i<len2!;i++){
-                                      //   vehicles.add(Val2[i].vehicleName);
-                                      //   vehiclesId.add(Val2[i].id);
-                                      // }
-                                      // final theMap1 = Map.fromIterables(brandsId, brands);
-                                      // final theMap2 = Map.fromIterables(vehiclesId, vehicles);
-
                                       bfa.brandlist = val1;  bfa.vehiclelist = val2;
                                       Navigator.of(context).push(MaterialPageRoute(builder:(context)=>
                                          VehicleInfo(title: widget.title,store: store, bvinfoAPI:bfa)));
