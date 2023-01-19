@@ -35,7 +35,6 @@ class _ConfirmationState extends State<Confirmation> {
   List<inner_data> variants = [];
   int? dropdownvalue1, dropdownvalue2, dropdownvalue3;
   String? dropdownvalue4, dropdownvalue5;
-  String? d1, d2, d3, d4;
   bool _isvisible1 = false, _isvisible2 = false;
   bool _isvisible3 = false, _isvisible4 = false;
 
@@ -798,10 +797,10 @@ class _ConfirmationState extends State<Confirmation> {
                                             dropdownvalue:
                                             widget.store.zonal_code,
                                             onSaved: (String? value) {
-                                              widget.store.zonal_code = d1;
+                                              widget.store.zonal_code = value;
                                             },
                                             onChanged: (String? value) {
-                                              d1 = value;
+                                              widget.store.zonal_code = value;
                                               },
                                           ),
                                         ),
@@ -864,10 +863,10 @@ class _ConfirmationState extends State<Confirmation> {
                                               'BA',
                                             ],
                                             onSaved: (String? value) {
-                                              widget.store.v_type = d2;
+                                              widget.store.v_type = value;
                                             },
                                             onChanged: (String? value) {
-                                              d2 = value;
+                                              widget.store.v_type = value;
                                             },
                                           ),
                                         ),
@@ -939,10 +938,10 @@ class _ConfirmationState extends State<Confirmation> {
                                             ],
                                             dropdownvalue: widget.store.province,
                                             onSaved: (String? value) {
-                                              widget.store.province = d3;
+                                              widget.store.province = value;
                                             },
                                             onChanged: (String? value) {
-                                              d3 = value;
+                                              widget.store.province = value;
                                             },
                                           ),
                                         ),
@@ -1045,10 +1044,10 @@ class _ConfirmationState extends State<Confirmation> {
                                             ],
                                             dropdownvalue: widget.store.symbol,
                                             onSaved: (String? value) {
-                                              widget.store.symbol = d4;
+                                              widget.store.symbol = value;
                                             },
                                             onChanged: (String? value) {
-                                              d4 = value;
+                                              widget.store.symbol = value;
                                             },
                                           ),
                                         ),
