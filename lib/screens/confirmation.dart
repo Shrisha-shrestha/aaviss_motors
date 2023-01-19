@@ -11,6 +11,7 @@ import 'package:aaviss_motors/models/storevehicleinfo.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import '../models/confirmation_response.dart';
+import '../widgets/dropdown.dart';
 import 'finish_screen.dart';
 import 'package:flutter/foundation.dart';
 
@@ -34,6 +35,7 @@ class _ConfirmationState extends State<Confirmation> {
   List<inner_data> variants = [];
   int? dropdownvalue1, dropdownvalue2, dropdownvalue3;
   String? dropdownvalue4, dropdownvalue5;
+  String? d1, d2, d3, d4;
   bool _isvisible1 = false, _isvisible2 = false;
   bool _isvisible3 = false, _isvisible4 = false;
 
@@ -772,37 +774,38 @@ class _ConfirmationState extends State<Confirmation> {
                                       children: <Widget>[
                                         SizedBox(
                                           width: 91.0,
-                                          child: TextFormField(
-                                            initialValue:
-                                                widget.store.zonal_code,
-                                            onChanged: (String? value) {
-                                              widget.store.zonal_code = value;
-                                            },
-                                            onSaved: (String? value) {
-                                              widget.store.zonal_code = value;
-                                            },
-                                            textAlign: TextAlign.center,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .caption!
-                                                .copyWith(fontSize: 18.0),
-                                            validator: (val) => val!.isEmpty
+                                          child: CustomDropdownwidget(
+                                            validator: (val) => val?.isEmpty==true || val==null
                                                 ? 'Required!'
                                                 : null,
-                                            decoration: InputDecoration(
-                                              labelText: 'Zonal Code',
-                                              labelStyle: Theme.of(context)
-                                                  .textTheme
-                                                  .caption,
-                                              focusedBorder:
-                                                  const UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors
-                                                        .grey), //<-- SEE HERE
-                                              ),
-                                            ),
+                                            droplabel: 'Zonal Code',
+                                            list: const [
+                                              'ME',
+                                              'KO',
+                                              'SA',
+                                              'JA',
+                                              'BA',
+                                              'NA',
+                                              'GA',
+                                              'LU',
+                                              'DH',
+                                              'RA',
+                                              'BHE',
+                                              'KA',
+                                              'SE',
+                                              'MA',
+                                            ],
+                                            dropdownvalue:
+                                            widget.store.zonal_code,
+                                            onSaved: (String? value) {
+                                              widget.store.zonal_code = d1;
+                                            },
+                                            onChanged: (String? value) {
+                                              d1 = value;
+                                              },
                                           ),
                                         ),
+
                                         SizedBox(
                                           width: 91.0,
                                           child: TextFormField(
@@ -832,41 +835,40 @@ class _ConfirmationState extends State<Confirmation> {
                                                   const UnderlineInputBorder(
                                                 borderSide: BorderSide(
                                                     color: Colors
-                                                        .grey), //<-- SEE HERE
+                                                        .grey),
                                               ),
                                             ),
                                           ),
                                         ),
                                         SizedBox(
                                           width: 91.0,
-                                          child: TextFormField(
-                                            initialValue: widget.store.v_type,
-                                            onChanged: (String? value) {
-                                              widget.store.v_type = value;
-                                            },
-                                            onSaved: (String? value) {
-                                              widget.store.v_type = value;
-                                            },
-                                            textAlign: TextAlign.center,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .caption!
-                                                .copyWith(fontSize: 18.0),
-                                            validator: (val) => val!.isEmpty
+                                          child: CustomDropdownwidget(
+                                            validator:(val) => val?.isEmpty==true || val==null
                                                 ? 'Required!'
                                                 : null,
-                                            decoration: InputDecoration(
-                                              labelText: 'Vehicle Type',
-                                              labelStyle: Theme.of(context)
-                                                  .textTheme
-                                                  .caption,
-                                              focusedBorder:
-                                                  const UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors
-                                                        .grey), //<-- SEE HERE
-                                              ),
-                                            ),
+                                            droplabel: 'Vehicle Type',
+                                            dropdownvalue: widget.store.v_type,
+                                            list: const [
+                                              'KA',
+                                              'KHA',
+                                              'GA',
+                                              'C.D.',
+                                              'YA',
+                                              'GHA',
+                                              'CA',
+                                              'JA',
+                                              'JHA',
+                                              'ÑA',
+                                              'PA',
+                                              'PHA',
+                                              'BA',
+                                            ],
+                                            onSaved: (String? value) {
+                                              widget.store.v_type = d2;
+                                            },
+                                            onChanged: (String? value) {
+                                              d2 = value;
+                                            },
                                           ),
                                         ),
                                       ],
@@ -921,34 +923,27 @@ class _ConfirmationState extends State<Confirmation> {
                                       children: <Widget>[
                                         SizedBox(
                                           width: 91.0,
-                                          child: TextFormField(
-                                            initialValue: widget.store.province,
-                                            onChanged: (String? value) {
-                                              widget.store.province = value;
-                                            },
-                                            onSaved: (String? value) {
-                                              widget.store.province = value;
-                                            },
-                                            textAlign: TextAlign.center,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .caption!
-                                                .copyWith(fontSize: 18.0),
-                                            validator: (val) => val!.isEmpty
+                                          child: CustomDropdownwidget(
+                                            validator: (val) => val?.isEmpty==true || val==null
                                                 ? 'Required!'
                                                 : null,
-                                            decoration: InputDecoration(
-                                              labelText: 'Province',
-                                              labelStyle: Theme.of(context)
-                                                  .textTheme
-                                                  .caption,
-                                              focusedBorder:
-                                                  const UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors
-                                                        .grey), //<-- SEE HERE
-                                              ),
-                                            ),
+                                            droplabel: 'Province',
+                                            list: const [
+                                              '1',
+                                              '2',
+                                              '3',
+                                              '4',
+                                              '5',
+                                              '6',
+                                              '7'
+                                            ],
+                                            dropdownvalue: widget.store.province,
+                                            onSaved: (String? value) {
+                                              widget.store.province = d3;
+                                            },
+                                            onChanged: (String? value) {
+                                              d3 = value;
+                                            },
                                           ),
                                         ),
                                         SizedBox(
@@ -1028,34 +1023,33 @@ class _ConfirmationState extends State<Confirmation> {
                                       children: <Widget>[
                                         SizedBox(
                                           width: 91.0,
-                                          child: TextFormField(
-                                            initialValue: widget.store.symbol,
-                                            onChanged: (String? value) {
-                                              widget.store.symbol = value;
-                                            },
-                                            onSaved: (String? value) {
-                                              widget.store.symbol = value;
-                                            },
-                                            textAlign: TextAlign.center,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .caption!
-                                                .copyWith(fontSize: 18.0),
-                                            validator: (val) => val!.isEmpty
+                                          child: CustomDropdownwidget(
+                                            validator: (val) => val?.isEmpty==true || val==null
                                                 ? 'Required!'
                                                 : null,
-                                            decoration: InputDecoration(
-                                              labelText: 'Symbol',
-                                              labelStyle: Theme.of(context)
-                                                  .textTheme
-                                                  .caption,
-                                              focusedBorder:
-                                                  const UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors
-                                                        .grey), //<-- SEE HERE
-                                              ),
-                                            ),
+                                            droplabel: 'Symbol',
+                                            list: const [
+                                              'KA',
+                                              'KHA',
+                                              'GA',
+                                              'C.D.',
+                                              'YA',
+                                              'GHA',
+                                              'CA',
+                                              'JA',
+                                              'JHA',
+                                              'ÑA',
+                                              'PA',
+                                              'PHA',
+                                              'BA',
+                                            ],
+                                            dropdownvalue: widget.store.symbol,
+                                            onSaved: (String? value) {
+                                              widget.store.symbol = d4;
+                                            },
+                                            onChanged: (String? value) {
+                                              d4 = value;
+                                            },
                                           ),
                                         ),
                                         SizedBox(
