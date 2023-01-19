@@ -7,7 +7,7 @@ import '../models/searchvehicle.dart';
 
 class APIService {
   Future<BrandResponseModel?> getbrand() async {
-    final String url1 =
+    const String url1 =
         'https://aavissmotors.creatudevelopers.com.np/api/v1/get-brands';
     final response = await http.get(
       Uri.parse(url1),
@@ -23,7 +23,7 @@ class APIService {
   }
 
   Future<VehicleResponseModel> getvehicle() async {
-    final String url =
+    const String url =
         'https://aavissmotors.creatudevelopers.com.np/api/v1/get-vehicle-names';
     final response = await http.get(
       Uri.parse(url),
@@ -38,7 +38,7 @@ class APIService {
   }
 
   Future<VariantResponseModel> getvariant() async {
-    final String url =
+    const String url =
         'https://aavissmotors.creatudevelopers.com.np/api/v1/get-variants';
     final response = await http.get(
       Uri.parse(url),

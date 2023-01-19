@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../API/API_connection.dart';
 import '../models/storevehicleinfo.dart';
+import '../widgets/dropdown.dart';
 
 class VehicleInfo extends StatefulWidget {
   const VehicleInfo({super.key, required this.title, required this.store});
@@ -20,6 +21,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
   List<String> years = [], test = [''];
   int? dropdownvalue1, dropdownvalue2, dropdownvalue3;
   String? dropdownvalue, dropdownvalue4, dropdownvalue5;
+  String? d1, d2, d3, d4, d5, d6, d7, d8, d9;
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   bool _isvisible1 = false, _isvisible2 = false;
   String? errorinaccident = '',
@@ -165,130 +167,25 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                       if (snapshot.connectionState ==
                                           ConnectionState.waiting) {
                                         return Column(
-                                          children: [
-                                            DropdownButtonFormField(
-                                              validator: (val) => val == null
-                                                  ? 'Select a brand name please'
-                                                  : null,
-                                              menuMaxHeight: 250.0,
-                                              decoration: InputDecoration(
-                                                labelText: 'Name of Brand',
-                                                labelStyle: Theme.of(context)
-                                                    .textTheme
-                                                    .caption,
-                                                focusedBorder:
-                                                    const UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors
-                                                          .grey), //<-- SEE HERE
-                                                ),
-                                              ),
-                                              value: dropdownvalue,
-                                              items: test.map((e) {
-                                                return DropdownMenuItem(
-                                                    value: '',
-                                                    child: Text(
-                                                      e,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .caption!
-                                                          .copyWith(
-                                                              fontSize: 15.0),
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                    ));
-                                              }).toList(),
-                                              icon: const Icon(
-                                                Icons.arrow_drop_down,
-                                                color: Colors.grey,
-                                              ),
-                                              onChanged: (String? newValue) {},
-                                              onSaved: (String? value) {},
-                                            ),
+                                          children: const [
+                                            CustomDropdownwidget(
+                                                onChanged: null,
+                                                droplabel: 'Name of Brand',
+                                                list: []),
                                             SizedBox(
                                               height: 10.0,
                                             ),
-                                            DropdownButtonFormField(
-                                              validator: (val) => val == null
-                                                  ? 'Select a vehicle name please'
-                                                  : null,
-                                              menuMaxHeight: 250.0,
-                                              decoration: InputDecoration(
-                                                labelText: 'Name of Vehicle',
-                                                labelStyle: Theme.of(context)
-                                                    .textTheme
-                                                    .caption,
-                                                focusedBorder:
-                                                    const UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors
-                                                          .grey), //<-- SEE HERE
-                                                ),
-                                              ),
-                                              value: dropdownvalue,
-                                              items: test.map((e) {
-                                                return DropdownMenuItem(
-                                                    value: '',
-                                                    child: Text(
-                                                      e,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .caption!
-                                                          .copyWith(
-                                                              fontSize: 15.0),
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                    ));
-                                              }).toList(),
-                                              icon: const Icon(
-                                                Icons.arrow_drop_down,
-                                                color: Colors.grey,
-                                              ),
-                                              onChanged: (String? newValue) {},
-                                              onSaved: (String? value) {},
-                                            ),
+                                            CustomDropdownwidget(
+                                                onChanged: null,
+                                                droplabel: 'Name of Vehicle',
+                                                list: []),
                                             SizedBox(
                                               height: 10.0,
                                             ),
-                                            DropdownButtonFormField(
-                                              validator: (val) => val == null
-                                                  ? 'Select a variant name please'
-                                                  : null,
-                                              menuMaxHeight: 250.0,
-                                              decoration: InputDecoration(
-                                                labelText: 'Name of Variant',
-                                                labelStyle: Theme.of(context)
-                                                    .textTheme
-                                                    .caption,
-                                                focusedBorder:
-                                                    const UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors
-                                                          .grey), //<-- SEE HERE
-                                                ),
-                                              ),
-                                              value: dropdownvalue,
-                                              items: test.map((e) {
-                                                return DropdownMenuItem(
-                                                    value: '',
-                                                    child: Text(
-                                                      e,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .caption!
-                                                          .copyWith(
-                                                              fontSize: 15.0),
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                    ));
-                                              }).toList(),
-                                              icon: const Icon(
-                                                Icons.arrow_drop_down,
-                                                color: Colors.grey,
-                                              ),
-                                              onChanged: (String? newValue) {},
-                                              onSaved: (String? value) {},
-                                            ),
+                                            CustomDropdownwidget(
+                                                onChanged: null,
+                                                droplabel: 'Name of Variant',
+                                                list: []),
                                           ],
                                         );
                                       } else if (snapshot.connectionState ==
@@ -298,7 +195,13 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text(snapshot.error.toString()),
+                                              SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.5,
+                                                  child: Text(snapshot.error
+                                                      .toString())),
                                               OutlinedButton(
                                                   onPressed: () {
                                                     setState(() {
@@ -321,7 +224,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                                                           context)
                                                                       .colorScheme
                                                                       .secondary)))),
-                                                  child: Text('Retry'))
+                                                  child: const Text('Retry'))
                                             ],
                                           );
                                         } else if (snapshot.hasData) {
@@ -478,7 +381,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                           );
                                         }
                                       }
-                                      return Text('No future');
+                                      return const Text('No future');
                                     }),
                                 const SizedBox(
                                   height: 10.0,
@@ -778,7 +681,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                         style: Theme.of(context)
                                             .textTheme
                                             .caption),
-                                    SizedBox(width: 88.0),
+                                    const SizedBox(width: 88.0),
                                     Radio<int>(
                                         value: 2,
                                         groupValue: val2,
@@ -927,31 +830,32 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                             MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
                                           SizedBox(
+                                            height: 56.0,
                                             width: 91.0,
-                                            child: TextFormField(
+                                            child: CustomDropdownwidget(
+                                              droplabel: 'Zonal Code',
+                                              list: const [
+                                                'ME',
+                                                'KO',
+                                                'SA',
+                                                'JA',
+                                                'BA',
+                                                'NA',
+                                                'GA',
+                                                'LU',
+                                                'DH',
+                                                'RA',
+                                                'BHE',
+                                                'KA',
+                                                'SE',
+                                                'MA',
+                                              ],
                                               onSaved: (String? value) {
-                                                widget.store.zonal_code = value;
+                                                widget.store.zonal_code = d1;
                                               },
-                                              textAlign: TextAlign.center,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .caption!
-                                                  .copyWith(fontSize: 18.0),
-                                              validator: (val) => val!.isEmpty
-                                                  ? 'Required!'
-                                                  : null,
-                                              decoration: InputDecoration(
-                                                labelText: 'Zonal Code',
-                                                labelStyle: Theme.of(context)
-                                                    .textTheme
-                                                    .caption,
-                                                focusedBorder:
-                                                    const UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors
-                                                          .grey), //<-- SEE HERE
-                                                ),
-                                              ),
+                                              onChanged: (String? value) {
+                                                d1 = value;
+                                              },
                                             ),
                                           ),
                                           SizedBox(
@@ -985,31 +889,31 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                             ),
                                           ),
                                           SizedBox(
+                                            height: 53.0,
                                             width: 91.0,
-                                            child: TextFormField(
+                                            child: CustomDropdownwidget(
+                                              droplabel: 'Vehicle Type',
+                                              list: const [
+                                                'KA',
+                                                'KHA',
+                                                'GA',
+                                                'C.D.',
+                                                'YA',
+                                                'GHA',
+                                                'CA',
+                                                'JA',
+                                                'JHA',
+                                                'ÑA',
+                                                'PA',
+                                                'PHA',
+                                                'BA',
+                                              ],
                                               onSaved: (String? value) {
-                                                widget.store.v_type = value;
+                                                widget.store.v_type = d2;
                                               },
-                                              textAlign: TextAlign.center,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .caption!
-                                                  .copyWith(fontSize: 18.0),
-                                              validator: (val) => val!.isEmpty
-                                                  ? 'Required!'
-                                                  : null,
-                                              decoration: InputDecoration(
-                                                labelText: 'Vehicle Type',
-                                                labelStyle: Theme.of(context)
-                                                    .textTheme
-                                                    .caption,
-                                                focusedBorder:
-                                                    const UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors
-                                                          .grey), //<-- SEE HERE
-                                                ),
-                                              ),
+                                              onChanged: (String? value) {
+                                                d2 = value;
+                                              },
                                             ),
                                           ),
                                         ],
@@ -1060,31 +964,25 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                             MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
                                           SizedBox(
+                                            height: 55.0,
                                             width: 91.0,
-                                            child: TextFormField(
+                                            child: CustomDropdownwidget(
+                                              droplabel: 'Province',
+                                              list: const [
+                                                '1',
+                                                '2',
+                                                '3',
+                                                '4',
+                                                '5',
+                                                '6',
+                                                '7'
+                                              ],
                                               onSaved: (String? value) {
-                                                widget.store.province = value;
+                                                widget.store.province = d3;
                                               },
-                                              textAlign: TextAlign.center,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .caption!
-                                                  .copyWith(fontSize: 18.0),
-                                              validator: (val) => val!.isEmpty
-                                                  ? 'Required!'
-                                                  : null,
-                                              decoration: InputDecoration(
-                                                labelText: 'Province',
-                                                labelStyle: Theme.of(context)
-                                                    .textTheme
-                                                    .caption,
-                                                focusedBorder:
-                                                    const UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors
-                                                          .grey), //<-- SEE HERE
-                                                ),
-                                              ),
+                                              onChanged: (String? value) {
+                                                d3 = value;
+                                              },
                                             ),
                                           ),
                                           SizedBox(
@@ -1154,31 +1052,31 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                       Row(
                                         children: <Widget>[
                                           SizedBox(
+                                            height: 53.0,
                                             width: 91.0,
-                                            child: TextFormField(
+                                            child: CustomDropdownwidget(
+                                              droplabel: 'Symbol',
+                                              list: const [
+                                                'KA',
+                                                'KHA',
+                                                'GA',
+                                                'C.D.',
+                                                'YA',
+                                                'GHA',
+                                                'CA',
+                                                'JA',
+                                                'JHA',
+                                                'ÑA',
+                                                'PA',
+                                                'PHA',
+                                                'BA',
+                                              ],
                                               onSaved: (String? value) {
-                                                widget.store.symbol = value;
+                                                widget.store.symbol = d4;
                                               },
-                                              textAlign: TextAlign.center,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .caption!
-                                                  .copyWith(fontSize: 18.0),
-                                              validator: (val) => val!.isEmpty
-                                                  ? 'Required!'
-                                                  : null,
-                                              decoration: InputDecoration(
-                                                labelText: 'Symbol',
-                                                labelStyle: Theme.of(context)
-                                                    .textTheme
-                                                    .caption,
-                                                focusedBorder:
-                                                    const UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors
-                                                          .grey), //<-- SEE HERE
-                                                ),
-                                              ),
+                                              onChanged: (String? value) {
+                                                d4 = value;
+                                              },
                                             ),
                                           ),
                                           SizedBox(
