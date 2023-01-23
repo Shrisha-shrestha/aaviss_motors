@@ -35,9 +35,10 @@ class _ConfirmationState extends State<Confirmation> {
   List<inner_data> variants = [];
   int? dropdownvalue1, dropdownvalue2, dropdownvalue3;
   String? dropdownvalue4, dropdownvalue5;
+  String? errorinpurchase = '';
   bool _isvisible1 = false, _isvisible2 = false;
   bool _isvisible3 = false, _isvisible4 = false;
-
+  AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   Store store = Store();
   final _picker = ImagePicker();
@@ -139,8 +140,8 @@ class _ConfirmationState extends State<Confirmation> {
                 ),
                 Expanded(
                   child: Form(
+                      autovalidateMode: _autoValidate,
                       key: _formkey,
-                      //autovalidateMode: AutovalidateMode.onUserInteraction,
                       child: SingleChildScrollView(
                           child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -524,6 +525,16 @@ class _ConfirmationState extends State<Confirmation> {
                                   });
                                 },
                               ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 3.0),
+                                child: SizedBox(
+                                    height: 15.0,
+                                    child: Text('$errorinpurchase',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .caption!
+                                            .copyWith(color: Colors.red))),
+                              ),
                               const SizedBox(
                                 height: 10.0,
                               ),
@@ -774,9 +785,11 @@ class _ConfirmationState extends State<Confirmation> {
                                         SizedBox(
                                           width: 91.0,
                                           child: CustomDropdownwidget(
-                                            validator: (val) => val?.isEmpty==true || val==null
-                                                ? 'Required!'
-                                                : null,
+                                            validator: (val) =>
+                                                val?.isEmpty == true ||
+                                                        val == null
+                                                    ? 'Required!'
+                                                    : null,
                                             droplabel: 'Zonal Code',
                                             list: const [
                                               'ME',
@@ -795,16 +808,15 @@ class _ConfirmationState extends State<Confirmation> {
                                               'MA',
                                             ],
                                             dropdownvalue:
-                                            widget.store.zonal_code,
+                                                widget.store.zonal_code,
                                             onSaved: (String? value) {
                                               widget.store.zonal_code = value;
                                             },
                                             onChanged: (String? value) {
                                               widget.store.zonal_code = value;
-                                              },
+                                            },
                                           ),
                                         ),
-
                                         SizedBox(
                                           width: 91.0,
                                           child: TextFormField(
@@ -833,8 +845,7 @@ class _ConfirmationState extends State<Confirmation> {
                                               focusedBorder:
                                                   const UnderlineInputBorder(
                                                 borderSide: BorderSide(
-                                                    color: Colors
-                                                        .grey),
+                                                    color: Colors.grey),
                                               ),
                                             ),
                                           ),
@@ -842,9 +853,11 @@ class _ConfirmationState extends State<Confirmation> {
                                         SizedBox(
                                           width: 91.0,
                                           child: CustomDropdownwidget(
-                                            validator:(val) => val?.isEmpty==true || val==null
-                                                ? 'Required!'
-                                                : null,
+                                            validator: (val) =>
+                                                val?.isEmpty == true ||
+                                                        val == null
+                                                    ? 'Required!'
+                                                    : null,
                                             droplabel: 'Vehicle Type',
                                             dropdownvalue: widget.store.v_type,
                                             list: const [
@@ -923,9 +936,11 @@ class _ConfirmationState extends State<Confirmation> {
                                         SizedBox(
                                           width: 91.0,
                                           child: CustomDropdownwidget(
-                                            validator: (val) => val?.isEmpty==true || val==null
-                                                ? 'Required!'
-                                                : null,
+                                            validator: (val) =>
+                                                val?.isEmpty == true ||
+                                                        val == null
+                                                    ? 'Required!'
+                                                    : null,
                                             droplabel: 'Province',
                                             list: const [
                                               '1',
@@ -936,7 +951,8 @@ class _ConfirmationState extends State<Confirmation> {
                                               '6',
                                               '7'
                                             ],
-                                            dropdownvalue: widget.store.province,
+                                            dropdownvalue:
+                                                widget.store.province,
                                             onSaved: (String? value) {
                                               widget.store.province = value;
                                             },
@@ -1023,9 +1039,11 @@ class _ConfirmationState extends State<Confirmation> {
                                         SizedBox(
                                           width: 91.0,
                                           child: CustomDropdownwidget(
-                                            validator: (val) => val?.isEmpty==true || val==null
-                                                ? 'Required!'
-                                                : null,
+                                            validator: (val) =>
+                                                val?.isEmpty == true ||
+                                                        val == null
+                                                    ? 'Required!'
+                                                    : null,
                                             droplabel: 'Symbol',
                                             list: const [
                                               'KA',
@@ -1713,126 +1731,124 @@ class _ConfirmationState extends State<Confirmation> {
                                         //
 
                                         if (_formkey.currentState!.validate()) {
-                                          _formkey.currentState!.save();
-                                          if (widget.store.number_plate_radio ==
-                                              1) {
-                                            widget.store.vehicle_no =
-                                                '${widget.store.zonal_code}-${widget.store.lot_number}-${widget.store.v_type} ${widget.store.v_no} ';
-                                          } else if (widget
-                                                  .store.number_plate_radio ==
-                                              2) {
-                                            widget.store.vehicle_no =
-                                                '${widget.store.province}-${widget.store.office_code}-${widget.store.lot_number} ${widget.store.symbol} ${widget.store.v_no} ';
-                                          }
+                                          if (int.parse(widget
+                                                  .store.purchase_year!) >=
+                                              int.parse(widget
+                                                  .store.manufacture_year!)) {
+                                            if (widget.store.img1 != null &&
+                                                widget.store.img2 != null &&
+                                                widget.store.img3 != null &&
+                                                widget.store.img4 != null &&
+                                                widget.store.img5 != null) {
+                                              _formkey.currentState!.save();
+                                              if (widget.store
+                                                      .number_plate_radio ==
+                                                  1) {
+                                                widget.store.vehicle_no =
+                                                    '${widget.store.zonal_code}-${widget.store.lot_number}-${widget.store.v_type} ${widget.store.v_no} ';
+                                              } else if (widget.store
+                                                      .number_plate_radio ==
+                                                  2) {
+                                                widget.store.vehicle_no =
+                                                    '${widget.store.province}-${widget.store.office_code}-${widget.store.lot_number} ${widget.store.symbol} ${widget.store.v_no} ';
+                                              }
 
-                                          print('Client Side Validated');
-                                          final snackBar = SnackBar(
-                                              backgroundColor: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                              content:
-                                                  Text('Please Wait.....'));
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(snackBar);
-                                          var uri = Uri.parse(
-                                              'https://aavissmotors.creatudevelopers.com.np/api/v1/save-vehicle');
-                                          var request = http.MultipartRequest(
-                                              'POST', uri);
-                                          request.headers.addAll({
-                                            "Content-Type":
-                                                "multipart/form-data",
-                                            "Accept": "application/json",
-                                          });
-                                          request.fields.addAll({
-                                            'full_name':
-                                                '${widget.store.full_name}',
-                                            'address':
-                                                '${widget.store.address}',
-                                            'phone_no':
-                                                '${widget.store.phone_no}',
-                                            'brand_id':
-                                                '${widget.store.brand_id}',
-                                            'vehicle_name_id':
-                                                '${widget.store.vehicle_name_id}',
-                                            'engine_no':
-                                                '${widget.store.engine_no}',
-                                            'manufacture_year':
-                                                '${widget.store.manufacture_year}',
-                                            'color': '${widget.store.color}',
-                                            'no_of_seats':
-                                                '${widget.store.no_of_seats}',
-                                            'purchase_year':
-                                                '${widget.store.purchase_year}',
-                                            'no_of_transfer':
-                                                '${widget.store.no_of_transfer}',
-                                            'vehicle_type':
-                                                '${widget.store.vehicle_type}',
-                                            'vehicle_no':
-                                                '${widget.store.vehicle_no}',
-                                            'nid_type':
-                                                '${widget.store.nid_type}',
-                                            'nid_no': '${widget.store.nid_no}',
-                                            'variant_id':
-                                                '${widget.store.variant_id}',
-                                            'kilometer':
-                                                '${widget.store.kilometer}',
-                                            'major_accident':
-                                                '${widget.store.major_accident}',
-                                            'service_history':
-                                                '${widget.store.service_history}'
-                                          });
-                                          request.files.add(
-                                              await http.MultipartFile.fromPath(
-                                                  "nid_front",
-                                                  widget.store.img1!.path));
-                                          request.files.add(
-                                              await http.MultipartFile.fromPath(
-                                                  "nid_back",
-                                                  widget.store.img2!.path));
-                                          request.files.add(
-                                              await http.MultipartFile.fromPath(
-                                                  "bill_book_main_page",
-                                                  widget.store.img3!.path));
-                                          request.files.add(
-                                              await http.MultipartFile.fromPath(
-                                                  "bill_book_renewal_page",
-                                                  widget.store.img4!.path));
-                                          request.files.add(
-                                              await http.MultipartFile.fromPath(
-                                                  "bill_book_tax_renewed_date_page",
-                                                  widget.store.img5!.path));
+                                              print('Client Side Validated');
+                                              final snackBar = SnackBar(
+                                                  backgroundColor:
+                                                      Theme.of(context)
+                                                          .colorScheme
+                                                          .primary,
+                                                  content:
+                                                      Text('Please Wait.....'));
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(snackBar);
+                                              var uri = Uri.parse(
+                                                  'https://aavissmotors.creatudevelopers.com.np/api/v1/save-vehicle');
+                                              var request =
+                                                  http.MultipartRequest(
+                                                      'POST', uri);
+                                              request.headers.addAll({
+                                                "Content-Type":
+                                                    "multipart/form-data",
+                                                "Accept": "application/json",
+                                              });
+                                              request.fields.addAll({
+                                                'full_name':
+                                                    '${widget.store.full_name}',
+                                                'address':
+                                                    '${widget.store.address}',
+                                                'phone_no':
+                                                    '${widget.store.phone_no}',
+                                                'brand_id':
+                                                    '${widget.store.brand_id}',
+                                                'vehicle_name_id':
+                                                    '${widget.store.vehicle_name_id}',
+                                                'engine_no':
+                                                    '${widget.store.engine_no}',
+                                                'manufacture_year':
+                                                    '${widget.store.manufacture_year}',
+                                                'color':
+                                                    '${widget.store.color}',
+                                                'no_of_seats':
+                                                    '${widget.store.no_of_seats}',
+                                                'purchase_year':
+                                                    '${widget.store.purchase_year}',
+                                                'no_of_transfer':
+                                                    '${widget.store.no_of_transfer}',
+                                                'vehicle_type':
+                                                    '${widget.store.vehicle_type}',
+                                                'vehicle_no':
+                                                    '${widget.store.vehicle_no}',
+                                                'nid_type':
+                                                    '${widget.store.nid_type}',
+                                                'nid_no':
+                                                    '${widget.store.nid_no}',
+                                                'variant_id':
+                                                    '${widget.store.variant_id}',
+                                                'kilometer':
+                                                    '${widget.store.kilometer}',
+                                                'major_accident':
+                                                    '${widget.store.major_accident}',
+                                                'service_history':
+                                                    '${widget.store.service_history}'
+                                              });
+                                              request.files.add(await http
+                                                      .MultipartFile
+                                                  .fromPath("nid_front",
+                                                      widget.store.img1!.path));
+                                              request.files.add(await http
+                                                      .MultipartFile
+                                                  .fromPath("nid_back",
+                                                      widget.store.img2!.path));
+                                              request.files.add(await http
+                                                      .MultipartFile
+                                                  .fromPath(
+                                                      "bill_book_main_page",
+                                                      widget.store.img3!.path));
+                                              request.files.add(await http
+                                                      .MultipartFile
+                                                  .fromPath(
+                                                      "bill_book_renewal_page",
+                                                      widget.store.img4!.path));
+                                              request.files.add(await http
+                                                      .MultipartFile
+                                                  .fromPath(
+                                                      "bill_book_tax_renewed_date_page",
+                                                      widget.store.img5!.path));
 
-                                          var response = await request.send();
+                                              var response =
+                                                  await request.send();
 
-                                          Map<String, dynamic> valueMap =
-                                              json.decode(await response.stream
-                                                  .bytesToString());
-                                          StoreResponseModel responseModel =
-                                              StoreResponseModel.fromJson(
-                                                  valueMap);
+                                              Map<String, dynamic> valueMap =
+                                                  json.decode(await response
+                                                      .stream
+                                                      .bytesToString());
+                                              StoreResponseModel responseModel =
+                                                  StoreResponseModel.fromJson(
+                                                      valueMap);
 
-                                          final snackBar1 = SnackBar(
-                                              backgroundColor: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                              content: Text(
-                                                  '${responseModel.message}'));
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(snackBar1);
-
-                                          if (response.statusCode == 200) {
-                                            print('Sent');
-                                            if (responseModel.status == true) {
-                                              Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          FinishScreen(
-                                                            title: widget.title,
-                                                          )));
-                                            }
-                                          } else {
-                                            if (response.statusCode == 500) {
-                                              final snackBar2 = SnackBar(
+                                              final snackBar1 = SnackBar(
                                                   backgroundColor:
                                                       Theme.of(context)
                                                           .colorScheme
@@ -1840,22 +1856,67 @@ class _ConfirmationState extends State<Confirmation> {
                                                   content: Text(
                                                       '${responseModel.message}'));
                                               ScaffoldMessenger.of(context)
-                                                  .showSnackBar(snackBar2);
+                                                  .showSnackBar(snackBar1);
+
+                                              if (response.statusCode == 200) {
+                                                print('Sent');
+                                                if (responseModel.status ==
+                                                    true) {
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              FinishScreen(
+                                                                title: widget
+                                                                    .title,
+                                                              )));
+                                                }
+                                              } else {
+                                                if (response.statusCode ==
+                                                    500) {
+                                                  final snackBar2 = SnackBar(
+                                                      backgroundColor:
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .primary,
+                                                      content: Text(
+                                                          '${responseModel.message}'));
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(snackBar2);
+                                                } else {
+                                                  String error = await response
+                                                      .stream
+                                                      .bytesToString();
+                                                  final snackBar = SnackBar(
+                                                      backgroundColor:
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .primary,
+                                                      content: Text(error));
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(snackBar);
+                                                }
+                                                print('failed');
+                                              }
                                             } else {
-                                              String error = await response
-                                                  .stream
-                                                  .bytesToString();
                                               final snackBar = SnackBar(
                                                   backgroundColor:
                                                       Theme.of(context)
                                                           .colorScheme
                                                           .primary,
-                                                  content: Text(error));
+                                                  content: Text(
+                                                      'Please upload all of the 5 required images.'));
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(snackBar);
                                             }
-                                            print('failed');
+                                          } else {
+                                            setState(() {
+                                              errorinpurchase =
+                                                  'Purchase Year cannot be before Manufacture Year';
+                                            });
                                           }
+                                        } else {
+                                          setState(() => _autoValidate =
+                                              AutovalidateMode.always);
                                         }
                                       },
                                       style: ButtonStyle(

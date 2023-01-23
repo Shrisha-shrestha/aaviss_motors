@@ -16,6 +16,8 @@ class _MyHomePageState extends State<MyHomePage> {
   String? fullname;
   String? address;
   int? contact;
+  AutovalidateMode _autoValidate = AutovalidateMode.disabled;
+
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   Store store = Store();
   @override
@@ -72,6 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Expanded(
                   child: SingleChildScrollView(
                     child: Form(
+                      autovalidateMode: _autoValidate,
                       key: _formkey,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -200,6 +203,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                             builder: (context) => VehicleInfo(
                                                 title: widget.title,
                                                 store: store)));
+                                  } else {
+                                    setState(() => _autoValidate =
+                                        AutovalidateMode.always);
                                   }
                                 },
                                 style: ButtonStyle(

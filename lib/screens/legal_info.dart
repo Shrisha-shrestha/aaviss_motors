@@ -28,7 +28,7 @@ class _LegalInfoState extends State<LegalInfo> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   File? image1, image2, image3, image4, image5;
   String errortxt = '';
-
+  AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final _picker = ImagePicker();
   Future<File?> getImage() async {
     final pickedFile =
@@ -92,6 +92,7 @@ class _LegalInfoState extends State<LegalInfo> {
                 ),
                 Expanded(
                   child: Form(
+                      autovalidateMode: _autoValidate,
                       key: _formkey,
                       child: SingleChildScrollView(
                           child: Column(
@@ -681,55 +682,70 @@ class _LegalInfoState extends State<LegalInfo> {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  if (kDebugMode) {
-                                    print(widget.store.img1);
-                                    print(widget.store.img2);
-                                    print(widget.store.img3);
-                                    print(widget.store.img4);
-                                    print(widget.store.img5);
-                                    print(widget.store.nid_no);
-                                    print(widget.store.no_of_transfer);
-                                    print(widget.store.purchase_year);
-                                    print(widget.store.no_of_seats);
-                                    print(widget.store.manufacture_year);
-                                    print(widget.store.engine_no);
-                                    print(widget.store.vehicle_name_id);
-                                    print(widget.store.brand_id);
-                                    print(widget.store.nid_type);
-                                    print(widget.store.vehicle_no);
-                                    print(widget.store.vehicle_type);
-                                    print(widget.store.color);
-                                    print(widget.store.phone_no);
-                                    print(widget.store.address);
-                                    print(widget.store.full_name);
-                                  }
-                                  if (groupval != null) {
-                                    setState(() {
-                                      errortxt = '';
-                                    });
-                                    if (_formkey.currentState!.validate() &&
-                                        image1 != null &&
-                                        image2 != null &&
-                                        image3 != null &&
-                                        image4 != null &&
-                                        image5 != null) {
-                                      _formkey.currentState!.save();
-                                      if (kDebugMode) {
-                                        print('Client Side Validated');
-                                      }
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  Confirmation(
-                                                    title: widget.title,
-                                                    store: widget.store,
-                                                    bvinfoAPI: widget.bvinfoAPI,
-                                                  )));
-                                    }
-                                  } else {
+                                  // if (kDebugMode) {
+                                  //   print(widget.store.img1);
+                                  //   print(widget.store.img2);
+                                  //   print(widget.store.img3);
+                                  //   print(widget.store.img4);
+                                  //   print(widget.store.img5);
+                                  //   print(widget.store.nid_no);
+                                  //   print(widget.store.no_of_transfer);
+                                  //   print(widget.store.purchase_year);
+                                  //   print(widget.store.no_of_seats);
+                                  //   print(widget.store.manufacture_year);
+                                  //   print(widget.store.engine_no);
+                                  //   print(widget.store.vehicle_name_id);
+                                  //   print(widget.store.brand_id);
+                                  //   print(widget.store.nid_type);
+                                  //   print(widget.store.vehicle_no);
+                                  //   print(widget.store.vehicle_type);
+                                  //   print(widget.store.color);
+                                  //   print(widget.store.phone_no);
+                                  //   print(widget.store.address);
+                                  //   print(widget.store.full_name);
+                                  // }
+                                  if (groupval == null) {
                                     setState(() {
                                       errortxt = 'Please Select one';
                                     });
+                                  } else {
+                                    setState(() {
+                                      errortxt = '';
+                                    });
+                                    if (_formkey.currentState!.validate()) {
+                                      if (image1 != null &&
+                                          image2 != null &&
+                                          image3 != null &&
+                                          image4 != null &&
+                                          image5 != null) {
+                                        _formkey.currentState!.save();
+                                        if (kDebugMode) {
+                                          print('Client Side Validated');
+                                        }
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Confirmation(
+                                                      title: widget.title,
+                                                      store: widget.store,
+                                                      bvinfoAPI:
+                                                          widget.bvinfoAPI,
+                                                    )));
+                                      } else {
+                                        final snackBar = SnackBar(
+                                            backgroundColor: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            content: Text(
+                                                'Please upload all of the 5 required images.'));
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                      }
+                                    } else {
+                                      setState(() {
+                                        _autoValidate = AutovalidateMode.always;
+                                      });
+                                    }
                                   }
                                 },
                                 style: ButtonStyle(

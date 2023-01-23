@@ -32,7 +32,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
   Future<B_V_fromAPI>? future;
   B_V_fromAPI bfa = B_V_fromAPI();
   bool futureresult = false;
-
+  AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   Future<B_V_fromAPI>? getbvv() async {
     dynamic brandlist, vehiclelist, variantlist;
     APIService apiService = APIService();
@@ -157,6 +157,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                           ),
                           Form(
                             key: formkey,
+                            autovalidateMode: _autoValidate,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
@@ -167,7 +168,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                       if (snapshot.connectionState ==
                                           ConnectionState.waiting) {
                                         return Column(
-                                          children:  [
+                                          children: [
                                             CustomDropdownwidget(
                                                 validator: (val) => val!.isEmpty
                                                     ? 'Required!'
@@ -841,9 +842,11 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                           SizedBox(
                                             width: 91.0,
                                             child: CustomDropdownwidget(
-                                              validator: (val) => val?.isEmpty==true || val==null
-                                                  ? 'Required!'
-                                                  : null,
+                                              validator: (val) =>
+                                                  val?.isEmpty == true ||
+                                                          val == null
+                                                      ? 'Required!'
+                                                      : null,
                                               droplabel: 'Zonal Code',
                                               list: const [
                                                 'ME',
@@ -902,9 +905,11 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                           SizedBox(
                                             width: 91.0,
                                             child: CustomDropdownwidget(
-                                              validator:(val) => val?.isEmpty==true || val==null
-                                                  ? 'Required!'
-                                                  : null,
+                                              validator: (val) =>
+                                                  val?.isEmpty == true ||
+                                                          val == null
+                                                      ? 'Required!'
+                                                      : null,
                                               droplabel: 'Vehicle Type',
                                               list: const [
                                                 'KA',
@@ -979,9 +984,11 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                           SizedBox(
                                             width: 91.0,
                                             child: CustomDropdownwidget(
-                                              validator: (val) => val?.isEmpty==true || val==null
-                                                  ? 'Required!'
-                                                  : null,
+                                              validator: (val) =>
+                                                  val?.isEmpty == true ||
+                                                          val == null
+                                                      ? 'Required!'
+                                                      : null,
                                               droplabel: 'Province',
                                               list: const [
                                                 '1',
@@ -1069,9 +1076,11 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                           SizedBox(
                                             width: 91.0,
                                             child: CustomDropdownwidget(
-                                              validator: (val) => val?.isEmpty==true || val==null
-                                                  ? 'Required!'
-                                                  : null,
+                                              validator: (val) =>
+                                                  val?.isEmpty == true ||
+                                                          val == null
+                                                      ? 'Required!'
+                                                      : null,
                                               droplabel: 'Symbol',
                                               list: const [
                                                 'KA',
@@ -1167,111 +1176,116 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                       width: 10.0,
                                     ),
                                     TextButton(
-                                        onPressed: () {
-                                          if (futureresult) {
-                                            if (formkey.currentState!
-                                                .validate()) {
-                                              if (val1 != null) {setState(() {
-                                                  errorinaccident = '';
+                                      onPressed: () {
+                                        if (futureresult) {
+                                          if (formkey.currentState!
+                                              .validate()) {
+                                            if (val1 != null) {
+                                              setState(() {
+                                                errorinaccident = '';
+                                              });
+                                              if (val2 != null) {
+                                                setState(() {
+                                                  errorinhistory = '';
                                                 });
-                                                if (val2 != null) {
+                                                if (val3 != null) {
                                                   setState(() {
-                                                    errorinhistory = '';
+                                                    errorinvehicletype = '';
                                                   });
-                                                  if (val3 != null) {
+                                                  if (val4 != null) {
                                                     setState(() {
-                                                      errorinvehicletype = '';
+                                                      errorinnumbreplate = '';
                                                     });
-                                                    if (val4 != null) {
-                                                      setState(() {
-                                                        errorinnumbreplate = '';
-                                                      });
-                                                      if (int.parse(
-                                                              dropdownvalue4!) <=
-                                                          int.parse(
-                                                              dropdownvalue5!)) {
-                                                        errorinpurchase = '';
-                                                          formkey.currentState!
-                                                              .save();
-                                                          if (kDebugMode) {
-                                                            print(
-                                                                'Client Side Validated');
-                                                          }
-                                                          if (widget.store
+                                                    if (int.parse(
+                                                            dropdownvalue4!) <=
+                                                        int.parse(
+                                                            dropdownvalue5!)) {
+                                                      errorinpurchase = '';
+                                                      formkey.currentState!
+                                                          .save();
+                                                      if (kDebugMode) {
+                                                        print(
+                                                            'Client Side Validated');
+                                                      }
+                                                      if (widget.store
                                                               .number_plate_radio ==
-                                                              1) {
-                                                            widget.store
+                                                          1) {
+                                                        widget.store
                                                                 .vehicle_no =
                                                             '${widget.store.zonal_code}-${widget.store.lot_number}-${widget.store.v_type} ${widget.store.v_no} ';
-                                                          } else if (widget.store
+                                                      } else if (widget.store
                                                               .number_plate_radio ==
-                                                              2) {
-                                                            widget.store
+                                                          2) {
+                                                        widget.store
                                                                 .vehicle_no =
                                                             '${widget.store.province}-${widget.store.office_code}-${widget.store.lot_number} ${widget.store.symbol} ${widget.store.v_no} ';
-                                                          }
-
-                                                          Navigator.of(context).push(
-                                                              MaterialPageRoute(
-                                                                  builder: (context) => LegalInfo(
-                                                                      title: widget
-                                                                          .title,
-                                                                      store: widget
-                                                                          .store,
-                                                                      bvinfoAPI:
-                                                                      bfa)));
-
-                                                      } else {
-                                                        setState(() {
-                                                          errorinpurchase =
-                                                              'Purchase Year cannot be before Manufacture Year';
-                                                        });
                                                       }
+
+                                                      Navigator.of(context).push(
+                                                          MaterialPageRoute(
+                                                              builder: (context) => LegalInfo(
+                                                                  title: widget
+                                                                      .title,
+                                                                  store: widget
+                                                                      .store,
+                                                                  bvinfoAPI:
+                                                                      bfa)));
                                                     } else {
                                                       setState(() {
-                                                        errorinnumbreplate =
-                                                            'Please Select One';
+                                                        errorinpurchase =
+                                                            'Purchase Year cannot be before Manufacture Year';
                                                       });
                                                     }
                                                   } else {
                                                     setState(() {
-                                                      errorinvehicletype =
+                                                      errorinnumbreplate =
                                                           'Please Select One';
                                                     });
                                                   }
                                                 } else {
                                                   setState(() {
-                                                    errorinhistory =
-                                                        'Please select one';
+                                                    errorinvehicletype =
+                                                        'Please Select One';
                                                   });
                                                 }
+                                              } else {
+                                                setState(() {
+                                                  errorinhistory =
+                                                      'Please select one';
+                                                });
                                               }
-                                             else {
+                                            } else {
                                               print(2);
                                               setState(() {
                                                 errorinaccident =
                                                     'Please select one';
                                               });
                                             }
+                                          } else {
+                                            setState(() => _autoValidate =
+                                                AutovalidateMode.always);
                                           }
-                                        };},
-                                        style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.white),
-                                            shape: MaterialStateProperty.all<
-                                                    RoundedRectangleBorder>(
-                                                RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.zero,
-                                                    side: BorderSide(
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .secondary)))),
-                                        child: Text('Next',
-                                            style:
-                                                Theme.of(context).textTheme.button),
-                                      ),
+                                        }
+                                        ;
+                                      },
+                                      style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  Colors.white),
+                                          shape: MaterialStateProperty.all<
+                                                  RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.zero,
+                                                  side: BorderSide(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .secondary)))),
+                                      child: Text('Next',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .button),
+                                    ),
                                   ],
                                 ),
                               ],
