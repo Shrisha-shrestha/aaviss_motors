@@ -35,7 +35,7 @@ class _LegalInfoState extends State<LegalInfo> {
   final _picker = ImagePicker();
   Future<File?> getImage() async {
     final pickedFile =
-        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 10);
+        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 20);
     if (pickedFile != null) {
       return File(pickedFile.path);
     } else {
