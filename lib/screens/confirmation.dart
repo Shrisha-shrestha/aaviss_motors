@@ -29,51 +29,26 @@ class Confirmation extends StatefulWidget {
 }
 
 class _ConfirmationState extends State<Confirmation> {
-  List<String> years = [];
-  List<Innerdata> brands = [];
-  List<innerdata> vehicles = [];
-  List<inner_data> variants = [];
-  int? dropdownvalue1, dropdownvalue2, dropdownvalue3;
-  String? dropdownvalue4, dropdownvalue5;
-  String? errorinpurchase = '';
-  bool _isvisible1 = false, _isvisible2 = false;
-  bool _isvisible3 = false, _isvisible4 = false;
-  AutovalidateMode _autoValidate = AutovalidateMode.disabled;
-  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   Store store = Store();
-  final _picker = ImagePicker();
-  Future<File?> getImage() async {
-    final pickedFile =
-        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 20);
-    if (pickedFile != null) {
-      return File(pickedFile.path);
-    } else {
-      if (kDebugMode) {
-        print('no image selected');
-      }
-      return null;
-    }
-  }
-
-  @override
-  void initState() {
-    int now = DateTime.now().year;
-    for (now; now >= 1960; now--) {
-      years.add(now.toString());
-    }
-    super.initState();
-  }
-
+  int? val1, val2, val3;
+  bool _isvisible1 = false,
+      _isvisible2 = false,
+      _isvisible3 = false,
+      _isvisible4 = false;
   @override
   Widget build(BuildContext context) {
-    brands = widget.bvinfoAPI.brandlist!;
-    vehicles = widget.bvinfoAPI.vehiclelist!;
-    variants = widget.bvinfoAPI.variantlist!;
+    val1 = widget.store.major_accident!.toLowerCase() == "yes" ? 1 : 2;
+    val2 = widget.store.service_history!.toLowerCase() == "yes" ? 1 : 2;
+    val3 = widget.store.vehicle_type!.toLowerCase() == "private" ? 1 : 2;
 
     if (widget.store.number_plate_radio == 1) {
       _isvisible1 = true;
+      widget.store.vehicle_no =
+          '${widget.store.zonal_code}-${widget.store.lot_number}-${widget.store.v_type} ${widget.store.v_no} ';
     } else if (widget.store.number_plate_radio == 2) {
       _isvisible2 = true;
+      widget.store.vehicle_no =
+          '${widget.store.province}-${widget.store.office_code}-${widget.store.lot_number} ${widget.store.symbol} ${widget.store.v_no} ';
     }
 
     if (widget.store.card_type_radio == 1) {
@@ -83,1872 +58,1021 @@ class _ConfirmationState extends State<Confirmation> {
       _isvisible4 = true;
       widget.store.nid_no = widget.store.pan_no;
     }
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title:
-              Text(widget.title, style: Theme.of(context).textTheme.headline5),
-          titleSpacing: -30,
-          toolbarHeight: 108.0,
-          elevation: 0.0,
-          backgroundColor: Colors.white,
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 32.0),
-              child: IconButton(
-                icon: SvgPicture.asset('assets/search.svg',
-                    semanticsLabel: 'Search'),
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => SearchDetail(title: widget.title)));
-                },
-              ),
+
+    String? brand = widget.bvinfoAPI.blist![int.parse(widget.store.brand_id!)];
+    String? vehicle =
+        widget.bvinfoAPI.velist![int.parse(widget.store.vehicle_name_id!)];
+    String? variant =
+        widget.bvinfoAPI.valist![int.parse(widget.store.variant_id!)];
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title, style: Theme.of(context).textTheme.headline5),
+        titleSpacing: -30,
+        toolbarHeight: 108.0,
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 32.0),
+            child: IconButton(
+              icon: SvgPicture.asset('assets/search.svg',
+                  semanticsLabel: 'Search'),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => SearchDetail(title: widget.title)));
+              },
             ),
-          ],
-        ),
-        body: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 27.0, right: 29.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  'Resale Value Calculator ',
-                  style: Theme.of(context).textTheme.headline6,
+          ),
+        ],
+      ),
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 27.0, right: 29.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Resale Value Calculator ',
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 14),
+                child: Text(
+                  'Confirmation',
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6!
+                      .copyWith(fontSize: 18.0),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 14),
-                  child: Text(
-                    'Confirmation',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6!
-                        .copyWith(fontSize: 18.0),
-                  ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 6.0, bottom: 23.0),
+                child: Text(
+                  'Confirm All the data before submitting',
+                  style: Theme.of(context).textTheme.subtitle2!,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 6.0, bottom: 23.0),
-                  child: Text(
-                    'Confirm All the data before submitting',
-                    style: Theme.of(context).textTheme.subtitle2!,
-                  ),
-                ),
-                Expanded(
-                  child: Form(
-                      autovalidateMode: _autoValidate,
-                      key: _formkey,
-                      child: SingleChildScrollView(
-                          child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'Personnel Data',
-                            style: Theme.of(context).textTheme.bodyText2,
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                    child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'Personnel Data',
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.grey),
                           ),
-                          TextFormField(
-                            onChanged: (String? value) {
-                              widget.store.full_name = value;
-                            },
-                            onSaved: (String? value) {
-                              widget.store.full_name = value;
-                            },
-                            initialValue: widget.store.full_name,
-                            style: Theme.of(context)
-                                .textTheme
-                                .caption!
-                                .copyWith(fontSize: 18.0),
-                            validator: (val) => val!.isEmpty
-                                ? 'Enter your full name please.'
-                                : null,
-                            decoration: InputDecoration(
-                              labelText: 'Full Name',
-                              labelStyle: Theme.of(context).textTheme.caption,
-                              focusedBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Colors.grey), //<-- SEE HERE
-                              ),
-                            ),
+                        ),
+                        child: Text(
+                          'Full Name : ${widget.store.full_name}',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        )),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.grey),
                           ),
-                          const SizedBox(
-                            height: 15.0,
+                        ),
+                        child: Text(
+                          'Address : ${widget.store.address}',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        )),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.grey),
                           ),
-                          TextFormField(
-                            onChanged: (String? value) {
-                              widget.store.address = value;
-                            },
-                            onSaved: (String? value) {
-                              widget.store.address = value;
-                            },
-                            initialValue: widget.store.address,
-                            style: Theme.of(context)
-                                .textTheme
-                                .caption!
-                                .copyWith(fontSize: 18.0),
-                            validator: (val) => val!.isEmpty
-                                ? 'Enter your address please.'
-                                : null,
-                            decoration: InputDecoration(
-                                labelText: 'Address',
-                                labelStyle: Theme.of(context).textTheme.caption,
-                                focusedBorder: const UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                )),
+                        ),
+                        child: Text(
+                          'Contact Number : ${widget.store.phone_no}',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        )),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 30.0, bottom: 20.0),
+                      child: Text(
+                        'Vehicle Information',
+                        style: Theme.of(context).textTheme.bodyText2,
+                      ),
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.grey),
                           ),
-                          const SizedBox(
-                            height: 15.0,
+                        ),
+                        child: Text(
+                          'Name of Brand : $brand',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        )),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.grey),
                           ),
-                          TextFormField(
-                            keyboardType: TextInputType.number,
-                            onChanged: (String? value) {
-                              widget.store.phone_no = value;
-                            },
-                            onSaved: (String? value) {
-                              widget.store.phone_no = value;
-                            },
-                            initialValue: widget.store.phone_no,
-                            style: Theme.of(context)
-                                .textTheme
-                                .caption!
-                                .copyWith(fontSize: 18.0),
-                            validator: (val) {
-                              if (val!.isEmpty) {
-                                val = 'Enter your contact number please.';
-                              } else if (val.length < 10 || val.length > 10) {
-                                val = 'Enter a correct contact number please.';
-                              } else {
-                                val = null;
-                              }
-                              return val;
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Contact Number',
-                              labelStyle: Theme.of(context).textTheme.caption,
-                              focusedBorder: const UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey)),
-                            ),
+                        ),
+                        child: Text(
+                          'Name of Vehicle : $vehicle',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        )),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.grey),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 30.0),
-                            child: Text(
-                              'Vehicle Information',
-                              style: Theme.of(context).textTheme.bodyText2,
-                            ),
+                        ),
+                        child: Text(
+                          'Name of Variant : $variant',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        )),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.grey),
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                        ),
+                        child: Text(
+                          'Engine No. : ${widget.store.engine_no}',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        )),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.grey),
+                          ),
+                        ),
+                        child: Text(
+                          'Manufacture Year : ${widget.store.manufacture_year}',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        )),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.grey),
+                          ),
+                        ),
+                        child: Text(
+                          'Color : ${widget.store.color}',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        )),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.grey),
+                          ),
+                        ),
+                        child: Text(
+                          'No. of Seat : ${widget.store.no_of_seats}',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        )),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.grey),
+                          ),
+                        ),
+                        child: Text(
+                          'Purchase Year : ${widget.store.purchase_year}',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        )),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.grey),
+                          ),
+                        ),
+                        child: Text(
+                          'No. of Transfers : ${widget.store.no_of_transfer}',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        )),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.grey),
+                          ),
+                        ),
+                        child: Text(
+                          'Mileage : ${widget.store.kilometer}',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        )),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Text(
+                      'Major Accident',
+                      style: Theme.of(context).textTheme.caption,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Radio<int>(
+                            value: 1,
+                            groupValue: val1,
+                            activeColor:
+                                Theme.of(context).colorScheme.secondary,
+                            onChanged: (int? value) {}),
+                        Text("Yes", style: Theme.of(context).textTheme.caption),
+                        const SizedBox(
+                          width: 88.0,
+                        ),
+                        Radio<int>(
+                            value: 2,
+                            groupValue: val1,
+                            activeColor:
+                                Theme.of(context).colorScheme.secondary,
+                            onChanged: (int? value) {}),
+                        Text("No", style: Theme.of(context).textTheme.caption),
+                      ],
+                    ),
+                    Text(
+                      'Service History',
+                      style: Theme.of(context).textTheme.caption,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Radio<int>(
+                            value: 1,
+                            groupValue: val2,
+                            activeColor:
+                                Theme.of(context).colorScheme.secondary,
+                            onChanged: (int? value) {}),
+                        Text("Yes", style: Theme.of(context).textTheme.caption),
+                        SizedBox(width: 88.0),
+                        Radio<int>(
+                            value: 2,
+                            groupValue: val2,
+                            activeColor:
+                                Theme.of(context).colorScheme.secondary,
+                            onChanged: (int? value) {}),
+                        Text("No", style: Theme.of(context).textTheme.caption),
+                      ],
+                    ),
+                    Text(
+                      'Vehicle Type',
+                      style: Theme.of(context).textTheme.caption,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Radio<int>(
+                            value: 1,
+                            groupValue: val3,
+                            activeColor:
+                                Theme.of(context).colorScheme.secondary,
+                            onChanged: (int? value) {}),
+                        Text("Private",
+                            style: Theme.of(context).textTheme.caption),
+                        const SizedBox(
+                          width: 70.0,
+                        ),
+                        Radio<int>(
+                            value: 2,
+                            groupValue: val3,
+                            activeColor:
+                                Theme.of(context).colorScheme.secondary,
+                            onChanged: (int? value) {}),
+                        Text("Public",
+                            style: Theme.of(context).textTheme.caption),
+                      ],
+                    ),
+                    Text(
+                      'Number Plate',
+                      style: Theme.of(context).textTheme.caption,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Radio<int>(
+                            value: 1,
+                            groupValue: widget.store.number_plate_radio,
+                            toggleable: false,
+                            activeColor:
+                                Theme.of(context).colorScheme.secondary,
+                            onChanged: (int? value) {}),
+                        Text("Old", style: Theme.of(context).textTheme.caption),
+                        const SizedBox(
+                          width: 91.0,
+                        ),
+                        Radio<int>(
+                            value: 2,
+                            groupValue: widget.store.number_plate_radio,
+                            toggleable: false,
+                            activeColor:
+                                Theme.of(context).colorScheme.secondary,
+                            onChanged: (int? value) {}),
+                        Text("New", style: Theme.of(context).textTheme.caption),
+                      ],
+                    ),
+                    Visibility(
+                      visible: _isvisible1,
+                      child: Column(
+                        //crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              DropdownButtonFormField(
-                                validator: (val) => val == null
-                                    ? 'Select a brand name please'
-                                    : null,
-                                menuMaxHeight: 250.0,
-                                decoration: InputDecoration(
-                                  labelText: 'Name of Brand',
-                                  labelStyle:
-                                      Theme.of(context).textTheme.caption,
-                                  focusedBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.grey), //<-- SEE HERE
+                              SizedBox(
+                                width: 91.0,
+                                child: CustomDropdownwidget(
+                                  validator: (val) =>
+                                      val?.isEmpty == true || val == null
+                                          ? 'Required!'
+                                          : null,
+                                  droplabel: 'Zonal Code',
+                                  list: const [],
+                                  dropdownvalue: widget.store.zonal_code,
+                                  onChanged: (String? value) {},
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(top: 14.0),
+                                width: 91.0,
+                                height: 45.0,
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                        width: 1, color: Colors.grey),
                                   ),
                                 ),
-                                value: int.parse(widget.store.brand_id!),
-                                icon: const Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Colors.grey,
-                                ),
-                                items: brands.map((e) {
-                                  return DropdownMenuItem(
-                                      value: e.id,
-                                      child: Text(
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .caption!
-                                              .copyWith(fontSize: 18.0),
-                                          textAlign: TextAlign.start,
-                                          e.name ?? ''));
-                                }).toList(),
-                                onChanged: (int? newValue) {
-                                  widget.store.brand_id = newValue.toString();
-                                  dropdownvalue1 = newValue!;
-                                },
-                              ),
-                              const SizedBox(
-                                height: 10.0,
-                              ),
-                              DropdownButtonFormField(
-                                validator: (val) => val == null
-                                    ? 'Select a vehicle name please'
-                                    : null,
-                                menuMaxHeight: 250.0,
-                                decoration: InputDecoration(
-                                  labelText: 'Name of Vehicle',
-                                  labelStyle:
-                                      Theme.of(context).textTheme.caption,
-                                  focusedBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.grey), //<-- SEE HERE
-                                  ),
-                                ),
-                                icon: const Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Colors.grey,
-                                ),
-                                value: int.parse(widget.store.vehicle_name_id!),
-                                items: vehicles.map((e) {
-                                  return DropdownMenuItem(
-                                      value: e.id,
-                                      child: Text(
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .caption!
-                                              .copyWith(fontSize: 18.0),
-                                          textAlign: TextAlign.start,
-                                          e.vehicleName ?? ''));
-                                }).toList(),
-                                onChanged: (int? newValue) {
-                                  dropdownvalue2 = newValue!;
-                                  widget.store.vehicle_name_id =
-                                      newValue.toString();
-                                },
-                              ),
-                              const SizedBox(
-                                height: 10.0,
-                              ),
-                              DropdownButtonFormField(
-                                validator: (val) => val == null
-                                    ? 'Select a variant name please'
-                                    : null,
-                                menuMaxHeight: 250.0,
-                                decoration: InputDecoration(
-                                  labelText: 'Variant Name',
-                                  labelStyle:
-                                      Theme.of(context).textTheme.caption,
-                                  focusedBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.grey), //<-- SEE HERE
-                                  ),
-                                ),
-                                value: int.parse(widget.store.variant_id!),
-                                icon: const Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Colors.grey,
-                                ),
-                                items: variants.map((e) {
-                                  return DropdownMenuItem(
-                                    alignment: Alignment.center,
-                                    value: e.id,
-                                    child: Text(
-                                      e.variantName!,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2!
-                                          .copyWith(fontSize: 18.0),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (int? newValue) {
-                                  dropdownvalue3 = newValue!;
-                                },
-                                onSaved: (int? value) {
-                                  widget.store.variant_id = value.toString();
-                                },
-                              ),
-                              const SizedBox(
-                                height: 10.0,
-                              ),
-                              TextFormField(
-                                keyboardType: TextInputType.number,
-                                onChanged: (String? value) {
-                                  widget.store.engine_no = value;
-                                },
-                                onSaved: (String? value) {
-                                  widget.store.engine_no = value;
-                                },
-                                initialValue: widget.store.engine_no,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .caption!
-                                    .copyWith(fontSize: 18.0),
-                                validator: (val) => val!.isEmpty
-                                    ? 'Enter the engine number please.'
-                                    : null,
-                                decoration: InputDecoration(
-                                  labelText: 'Engine Number',
-                                  labelStyle:
-                                      Theme.of(context).textTheme.caption,
-                                  focusedBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.grey), //<-- SEE HERE
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10.0,
-                              ),
-                              DropdownButtonFormField(
-                                validator: (val) =>
-                                    val == null ? 'Select a year please' : null,
-                                menuMaxHeight: 250.0,
-                                decoration: InputDecoration(
-                                  labelText: 'Manufacture Year',
-                                  labelStyle:
-                                      Theme.of(context).textTheme.caption,
-                                  focusedBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.grey), //<-- SEE HERE
-                                  ),
-                                ),
-                                value: widget.store.manufacture_year,
-                                icon: const Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Colors.grey,
-                                ),
-                                items: years.map((String val) {
-                                  return DropdownMenuItem(
-                                    alignment: Alignment.center,
-                                    value: val,
-                                    child: Text(
-                                      val,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2!
-                                          .copyWith(fontSize: 18.0),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    dropdownvalue4 = newValue!;
-                                    widget.store.manufacture_year = newValue;
-                                  });
-                                },
-                              ),
-                              const SizedBox(
-                                height: 10.0,
-                              ),
-                              TextFormField(
-                                onChanged: (String? value) {
-                                  widget.store.color = value;
-                                },
-                                onSaved: (String? value) {
-                                  widget.store.color = value;
-                                },
-                                initialValue: widget.store.color,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .caption!
-                                    .copyWith(fontSize: 18.0),
-                                validator: (val) => val!.isEmpty
-                                    ? 'Enter the color please.'
-                                    : null,
-                                decoration: InputDecoration(
-                                  labelText: 'Color',
-                                  labelStyle:
-                                      Theme.of(context).textTheme.caption,
-                                  focusedBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.grey), //<-- SEE HERE
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10.0,
-                              ),
-                              TextFormField(
-                                keyboardType: TextInputType.number,
-                                onChanged: (String? value) {
-                                  widget.store.no_of_seats = value;
-                                },
-                                onSaved: (String? value) {
-                                  widget.store.no_of_seats = value;
-                                },
-                                initialValue: widget.store.no_of_seats,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .caption!
-                                    .copyWith(fontSize: 18.0),
-                                validator: (val) => val!.isEmpty
-                                    ? 'Enter the no. of seat please.'
-                                    : null,
-                                decoration: InputDecoration(
-                                  labelText: 'No. of Seat',
-                                  labelStyle:
-                                      Theme.of(context).textTheme.caption,
-                                  focusedBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.grey), //<-- SEE HERE
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10.0,
-                              ),
-                              DropdownButtonFormField(
-                                validator: (val) =>
-                                    val == null ? 'Select a year please' : null,
-                                menuMaxHeight: 250.0,
-                                decoration: InputDecoration(
-                                  labelText: 'Purchase Year',
-                                  labelStyle:
-                                      Theme.of(context).textTheme.caption,
-                                  focusedBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey),
-                                  ),
-                                ),
-                                value: widget.store.purchase_year,
-                                icon: const Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Colors.grey,
-                                ),
-                                items: years.map((String val) {
-                                  return DropdownMenuItem(
-                                    alignment: Alignment.center,
-                                    value: val,
-                                    child: Text(
-                                      val,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2!
-                                          .copyWith(fontSize: 18.0),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    dropdownvalue5 = newValue!;
-                                    widget.store.purchase_year = newValue;
-                                  });
-                                },
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 3.0),
-                                child: SizedBox(
-                                    height: 15.0,
-                                    child: Text('$errorinpurchase',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .caption!
-                                            .copyWith(color: Colors.red))),
-                              ),
-                              const SizedBox(
-                                height: 10.0,
-                              ),
-                              TextFormField(
-                                keyboardType: TextInputType.number,
-                                onChanged: (String? value) {
-                                  widget.store.no_of_transfer = value;
-                                },
-                                onSaved: (String? value) {
-                                  widget.store.no_of_transfer = value;
-                                },
-                                initialValue: widget.store.no_of_transfer,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .caption!
-                                    .copyWith(fontSize: 18.0),
-                                validator: (val) => val!.isEmpty
-                                    ? 'Enter the no. of transfers please.'
-                                    : null,
-                                decoration: InputDecoration(
-                                  labelText: 'No. of Transfers',
-                                  labelStyle:
-                                      Theme.of(context).textTheme.caption,
-                                  focusedBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.grey), //<-- SEE HERE
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 15.0,
-                              ),
-                              TextFormField(
-                                initialValue: widget.store.kilometer,
-                                keyboardType: TextInputType.number,
-                                onSaved: (String? value) {
-                                  widget.store.kilometer = value;
-                                },
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .caption!
-                                    .copyWith(fontSize: 18.0),
-                                validator: (val) => val!.isEmpty
-                                    ? 'Enter the mileage please.'
-                                    : null,
-                                decoration: InputDecoration(
-                                  labelText: 'Mileage',
-                                  labelStyle:
-                                      Theme.of(context).textTheme.caption,
-                                  focusedBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.grey), //<-- SEE HERE
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 35.0,
-                              ),
-                              Text(
-                                'Major Accident',
-                                style: Theme.of(context).textTheme.caption,
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Radio<int>(
-                                      toggleable: false,
-                                      value: 1,
-                                      groupValue:
-                                          widget.store.major_accident_radio,
-                                      activeColor: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                      onChanged: (int? value) {
-                                        widget.store.major_accident = 'Yes';
-                                        widget.store.major_accident_radio =
-                                            value;
-                                      }),
-                                  Text("Yes",
-                                      style:
-                                          Theme.of(context).textTheme.caption),
-                                  const SizedBox(
-                                    width: 88.0,
-                                  ),
-                                  Radio<int>(
-                                      value: 2,
-                                      toggleable: false,
-                                      groupValue:
-                                          widget.store.major_accident_radio,
-                                      activeColor: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                      onChanged: (int? value) {
-                                        widget.store.major_accident = 'no';
-                                        widget.store.major_accident_radio =
-                                            value;
-                                      }),
-                                  Text("No",
-                                      style:
-                                          Theme.of(context).textTheme.caption),
-                                ],
-                              ),
-                              Text(
-                                'Service History',
-                                style: Theme.of(context).textTheme.caption,
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Radio<int>(
-                                      value: 1,
-                                      toggleable: false,
-                                      groupValue:
-                                          widget.store.service_history_radio,
-                                      activeColor: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                      onChanged: (int? value) {
-                                        widget.store.service_history = 'Yes';
-                                        widget.store.service_history_radio =
-                                            value;
-                                      }),
-                                  Text("Yes",
-                                      style:
-                                          Theme.of(context).textTheme.caption),
-                                  SizedBox(width: 88.0),
-                                  Radio<int>(
-                                      value: 2,
-                                      toggleable: false,
-                                      groupValue:
-                                          widget.store.service_history_radio,
-                                      activeColor: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                      onChanged: (int? value) {
-                                        widget.store.service_history = 'no';
-                                        widget.store.service_history_radio =
-                                            value;
-                                      }),
-                                  Text("No",
-                                      style:
-                                          Theme.of(context).textTheme.caption),
-                                ],
-                              ),
-                              Text(
-                                'Vehicle Type',
-                                style: Theme.of(context).textTheme.caption,
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Radio<int>(
-                                      value: 1,
-                                      groupValue:
-                                          widget.store.vehicle_type_radio,
-                                      toggleable: false,
-                                      activeColor: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                      onChanged: (int? value) {
-                                        setState(() {
-                                          widget.store.vehicle_type_radio =
-                                              value;
-                                          widget.store.vehicle_type = 'private';
-                                        });
-                                      }),
-                                  Text("Private",
-                                      style:
-                                          Theme.of(context).textTheme.caption),
-                                  const SizedBox(
-                                    width: 70.0,
-                                  ),
-                                  Radio<int>(
-                                      value: 2,
-                                      groupValue:
-                                          widget.store.vehicle_type_radio,
-                                      toggleable: false,
-                                      activeColor: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                      onChanged: (int? value) {
-                                        setState(() {
-                                          widget.store.vehicle_type = 'public';
-                                          widget.store.vehicle_type_radio =
-                                              value;
-                                        });
-                                      }),
-                                  Text("Public",
-                                      style:
-                                          Theme.of(context).textTheme.caption),
-                                ],
-                              ),
-                              Text(
-                                'Number Plate',
-                                style: Theme.of(context).textTheme.caption,
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Radio<int>(
-                                      value: 1,
-                                      groupValue:
-                                          widget.store.number_plate_radio,
-                                      toggleable: false,
-                                      activeColor: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                      onChanged: (int? value) {
-                                        setState(() {
-                                          widget.store.number_plate_radio =
-                                              value;
-                                          _isvisible1 = true;
-                                          _isvisible2 = false;
-                                        });
-                                      }),
-                                  Text("Old",
-                                      style:
-                                          Theme.of(context).textTheme.caption),
-                                  const SizedBox(
-                                    width: 91.0,
-                                  ),
-                                  Radio<int>(
-                                      value: 2,
-                                      groupValue:
-                                          widget.store.number_plate_radio,
-                                      toggleable: false,
-                                      activeColor: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                      onChanged: (int? value) {
-                                        setState(() {
-                                          widget.store.number_plate_radio =
-                                              value;
-                                          _isvisible1 = false;
-                                          _isvisible2 = true;
-                                        });
-                                      }),
-                                  Text("New",
-                                      style:
-                                          Theme.of(context).textTheme.caption),
-                                ],
-                              ),
-                              Visibility(
-                                visible: _isvisible1,
                                 child: Column(
-                                  //crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        SizedBox(
-                                          width: 91.0,
-                                          child: CustomDropdownwidget(
-                                            validator: (val) =>
-                                                val?.isEmpty == true ||
-                                                        val == null
-                                                    ? 'Required!'
-                                                    : null,
-                                            droplabel: 'Zonal Code',
-                                            list: const [
-                                              'ME',
-                                              'KO',
-                                              'SA',
-                                              'JA',
-                                              'BA',
-                                              'NA',
-                                              'GA',
-                                              'LU',
-                                              'DH',
-                                              'RA',
-                                              'BHE',
-                                              'KA',
-                                              'SE',
-                                              'MA',
-                                            ],
-                                            dropdownvalue:
-                                                widget.store.zonal_code,
-                                            onSaved: (String? value) {
-                                              widget.store.zonal_code = value;
-                                            },
-                                            onChanged: (String? value) {
-                                              widget.store.zonal_code = value;
-                                            },
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 91.0,
-                                          child: TextFormField(
-                                            keyboardType: TextInputType.number,
-                                            initialValue:
-                                                widget.store.lot_number,
-                                            onChanged: (String? value) {
-                                              widget.store.lot_number = value;
-                                            },
-                                            onSaved: (String? value) {
-                                              widget.store.lot_number = value;
-                                            },
-                                            textAlign: TextAlign.center,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .caption!
-                                                .copyWith(fontSize: 18.0),
-                                            validator: (val) => val!.isEmpty
-                                                ? 'Required!'
-                                                : null,
-                                            decoration: InputDecoration(
-                                              labelText: 'Lot Number',
-                                              labelStyle: Theme.of(context)
-                                                  .textTheme
-                                                  .caption,
-                                              focusedBorder:
-                                                  const UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.grey),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 91.0,
-                                          child: CustomDropdownwidget(
-                                            validator: (val) =>
-                                                val?.isEmpty == true ||
-                                                        val == null
-                                                    ? 'Required!'
-                                                    : null,
-                                            droplabel: 'Vehicle Type',
-                                            dropdownvalue: widget.store.v_type,
-                                            list: const [
-                                              'KA',
-                                              'KHA',
-                                              'GA',
-                                              'C.D.',
-                                              'YA',
-                                              'GHA',
-                                              'CA',
-                                              'JA',
-                                              'JHA',
-                                              'ÑA',
-                                              'PA',
-                                              'PHA',
-                                              'BA',
-                                            ],
-                                            onSaved: (String? value) {
-                                              widget.store.v_type = value;
-                                            },
-                                            onChanged: (String? value) {
-                                              widget.store.v_type = value;
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 10.0,
-                                    ),
-                                    SizedBox(
-                                      width: 91.0,
-                                      child: TextFormField(
-                                        keyboardType: TextInputType.number,
-                                        initialValue: widget.store.v_no,
-                                        onChanged: (String? value) {
-                                          widget.store.v_no = value;
-                                        },
-                                        onSaved: (String? value) {
-                                          widget.store.v_no = value;
-                                        },
-                                        textAlign: TextAlign.center,
+                                    Text('Lot Number',
                                         style: Theme.of(context)
                                             .textTheme
                                             .caption!
-                                            .copyWith(fontSize: 18.0),
-                                        validator: (val) =>
-                                            val!.isEmpty ? 'Required!' : null,
-                                        decoration: InputDecoration(
-                                          labelText: 'Vehicle Number',
-                                          labelStyle: Theme.of(context)
-                                              .textTheme
-                                              .caption,
-                                          focusedBorder:
-                                              const UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color:
-                                                    Colors.grey), //<-- SEE HERE
-                                          ),
-                                        ),
-                                      ),
+                                            .copyWith(fontSize: 9.0)),
+                                    SizedBox(
+                                      height: 8.0,
                                     ),
+                                    Center(
+                                      child: Text(
+                                        widget.store.lot_number!,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .caption!
+                                            .copyWith(fontSize: 16.5),
+                                      ),
+                                    )
                                   ],
                                 ),
                               ),
-                              Visibility(
-                                visible: _isvisible2,
+                              SizedBox(
+                                width: 91.0,
+                                child: CustomDropdownwidget(
+                                  validator: (val) =>
+                                      val?.isEmpty == true || val == null
+                                          ? 'Required!'
+                                          : null,
+                                  droplabel: 'Vehicle Type',
+                                  list: const [],
+                                  dropdownvalue: widget.store.v_type,
+                                  onChanged: (String? value) {},
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 14.0),
+                            width: 91.0,
+                            height: 45.0,
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom:
+                                    BorderSide(width: 1, color: Colors.grey),
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Vehicle Number',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .caption!
+                                        .copyWith(fontSize: 9.0)),
+                                SizedBox(
+                                  height: 8.0,
+                                ),
+                                Center(
+                                  child: Text(
+                                    widget.store.v_no!,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .caption!
+                                        .copyWith(fontSize: 16.5),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Visibility(
+                      visible: _isvisible2,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              SizedBox(
+                                width: 91.0,
+                                child: CustomDropdownwidget(
+                                    validator: (val) =>
+                                        val?.isEmpty == true || val == null
+                                            ? 'Required!'
+                                            : null,
+                                    droplabel: 'Province',
+                                    list: const [],
+                                    dropdownvalue: widget.store.province,
+                                    onChanged: null),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(top: 14.0),
+                                width: 91.0,
+                                height: 45.0,
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                        width: 1, color: Colors.grey),
+                                  ),
+                                ),
                                 child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        SizedBox(
-                                          width: 91.0,
-                                          child: CustomDropdownwidget(
-                                            validator: (val) =>
-                                                val?.isEmpty == true ||
-                                                        val == null
-                                                    ? 'Required!'
-                                                    : null,
-                                            droplabel: 'Province',
-                                            list: const [
-                                              '1',
-                                              '2',
-                                              '3',
-                                              '4',
-                                              '5',
-                                              '6',
-                                              '7'
-                                            ],
-                                            dropdownvalue:
-                                                widget.store.province,
-                                            onSaved: (String? value) {
-                                              widget.store.province = value;
-                                            },
-                                            onChanged: (String? value) {
-                                              widget.store.province = value;
-                                            },
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 91.0,
-                                          child: TextFormField(
-                                            keyboardType: TextInputType.number,
-                                            initialValue:
-                                                widget.store.office_code,
-                                            onChanged: (String? value) {
-                                              widget.store.office_code = value;
-                                            },
-                                            onSaved: (String? value) {
-                                              widget.store.office_code = value;
-                                            },
-                                            textAlign: TextAlign.center,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .caption!
-                                                .copyWith(fontSize: 18.0),
-                                            validator: (val) => val!.isEmpty
-                                                ? 'Required!'
-                                                : null,
-                                            decoration: InputDecoration(
-                                              labelText: 'Office Code',
-                                              labelStyle: Theme.of(context)
-                                                  .textTheme
-                                                  .caption,
-                                              focusedBorder:
-                                                  const UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors
-                                                        .grey), //<-- SEE HERE
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 91.0,
-                                          child: TextFormField(
-                                            keyboardType: TextInputType.number,
-                                            initialValue:
-                                                widget.store.lot_number,
-                                            onChanged: (String? value) {
-                                              widget.store.lot_number = value;
-                                            },
-                                            onSaved: (String? value) {
-                                              widget.store.lot_number = value;
-                                            },
-                                            textAlign: TextAlign.center,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .caption!
-                                                .copyWith(fontSize: 18.0),
-                                            validator: (val) => val!.isEmpty
-                                                ? 'Required!'
-                                                : null,
-                                            decoration: InputDecoration(
-                                              labelText: 'Lot Number',
-                                              labelStyle: Theme.of(context)
-                                                  .textTheme
-                                                  .caption,
-                                              focusedBorder:
-                                                  const UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors
-                                                        .grey), //<-- SEE HERE
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                    Text('Office Code',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .caption!
+                                            .copyWith(fontSize: 9.0)),
+                                    SizedBox(
+                                      height: 8.0,
                                     ),
-                                    const SizedBox(
-                                      height: 10.0,
+                                    Center(
+                                      child: Text(
+                                        widget.store.office_code ?? '',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .caption!
+                                            .copyWith(fontSize: 16.5),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(top: 14.0),
+                                width: 91.0,
+                                height: 45.0,
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                        width: 1, color: Colors.grey),
+                                  ),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Lot Number',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .caption!
+                                            .copyWith(fontSize: 9.0)),
+                                    SizedBox(
+                                      height: 8.0,
                                     ),
-                                    Row(
-                                      children: <Widget>[
-                                        SizedBox(
-                                          width: 91.0,
-                                          child: CustomDropdownwidget(
-                                            validator: (val) =>
-                                                val?.isEmpty == true ||
-                                                        val == null
-                                                    ? 'Required!'
-                                                    : null,
-                                            droplabel: 'Symbol',
-                                            list: const [
-                                              'KA',
-                                              'KHA',
-                                              'GA',
-                                              'C.D.',
-                                              'YA',
-                                              'GHA',
-                                              'CA',
-                                              'JA',
-                                              'JHA',
-                                              'ÑA',
-                                              'PA',
-                                              'PHA',
-                                              'BA',
-                                            ],
-                                            dropdownvalue: widget.store.symbol,
-                                            onSaved: (String? value) {
-                                              widget.store.symbol = value;
-                                            },
-                                            onChanged: (String? value) {
-                                              widget.store.symbol = value;
-                                            },
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.1,
-                                        ),
-                                        SizedBox(
-                                          width: 91.0,
-                                          child: TextFormField(
-                                            keyboardType: TextInputType.number,
-                                            initialValue: widget.store.v_no,
-                                            onChanged: (String? value) {
-                                              widget.store.v_no = value;
-                                            },
-                                            onSaved: (String? value) {
-                                              widget.store.v_no = value;
-                                            },
-                                            textAlign: TextAlign.center,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .caption!
-                                                .copyWith(fontSize: 18.0),
-                                            validator: (val) => val!.isEmpty
-                                                ? 'Required!'
-                                                : null,
-                                            decoration: InputDecoration(
-                                              labelText: 'Vehicle Number',
-                                              labelStyle: Theme.of(context)
-                                                  .textTheme
-                                                  .caption,
-                                              focusedBorder:
-                                                  const UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors
-                                                        .grey), //<-- SEE HERE
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                    Center(
+                                      child: Text(
+                                        widget.store.lot_number!,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .caption!
+                                            .copyWith(fontSize: 16.5),
+                                      ),
+                                    )
                                   ],
                                 ),
                               ),
                             ],
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 25.0),
-                            child: Text(
-                              'Citizenship / Pan',
-                              style: Theme.of(context).textTheme.bodyText2,
-                            ),
+                          const SizedBox(
+                            height: 10.0,
                           ),
                           Row(
                             children: <Widget>[
-                              Radio(
-                                  value: 1,
-                                  toggleable: false,
-                                  groupValue: widget.store.card_type_radio,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      widget.store.card_type_radio = value;
-                                      widget.store.nid_type = 'citizenship';
-                                      _isvisible3 = true;
-                                      _isvisible4 = false;
-                                    });
-                                  }),
-                              Text(
-                                'Citizenship',
-                                style: Theme.of(context).textTheme.caption,
+                              SizedBox(
+                                width: 91.0,
+                                child: CustomDropdownwidget(
+                                    validator: (val) =>
+                                        val?.isEmpty == true || val == null
+                                            ? 'Required!'
+                                            : null,
+                                    droplabel: 'Symbol',
+                                    list: const [],
+                                    dropdownvalue: widget.store.symbol,
+                                    onChanged: null),
                               ),
-                              const SizedBox(
-                                width: 40.0,
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.1,
                               ),
-                              Radio(
-                                  value: 2,
-                                  toggleable: false,
-                                  groupValue: widget.store.card_type_radio,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      widget.store.nid_type = 'pan';
-                                      widget.store.card_type_radio = value;
-                                      _isvisible3 = false;
-                                      _isvisible4 = true;
-                                    });
-                                  }),
-                              Text(
-                                'Pan',
-                                style: Theme.of(context).textTheme.caption,
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: <Widget>[
-                              Visibility(
-                                visible: _isvisible3,
-                                child: TextFormField(
-                                  keyboardType: TextInputType.number,
-                                  onChanged: (String? value) {
-                                    widget.store.citizenship_no = value;
-                                    widget.store.nid_no =
-                                        widget.store.citizenship_no;
-                                  },
-                                  onSaved: (String? value) {
-                                    widget.store.citizenship_no = value;
-                                    widget.store.nid_no =
-                                        widget.store.citizenship_no;
-                                  },
-                                  initialValue: widget.store.citizenship_no,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .caption!
-                                      .copyWith(fontSize: 18.0),
-                                  validator: (value) => value!.isEmpty
-                                      ? 'Enter your Citizenship number please.'
-                                      : null,
-                                  decoration: InputDecoration(
-                                    labelText: 'Citizenship Number',
-                                    labelStyle:
-                                        Theme.of(context).textTheme.caption,
-                                    focusedBorder: const UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.grey),
-                                    ),
+                              Container(
+                                margin: EdgeInsets.only(top: 14.0),
+                                width: 91.0,
+                                height: 45.0,
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                        width: 1, color: Colors.grey),
                                   ),
                                 ),
-                              ),
-                              Visibility(
-                                visible: _isvisible4,
-                                child: TextFormField(
-                                  keyboardType: TextInputType.number,
-                                  onChanged: (String? value) {
-                                    widget.store.pan_no = value;
-                                    widget.store.nid_no = widget.store.pan_no;
-                                  },
-                                  onSaved: (String? value) {
-                                    widget.store.pan_no = value;
-                                    widget.store.nid_no = widget.store.pan_no;
-                                  },
-                                  initialValue: widget.store.pan_no,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .caption!
-                                      .copyWith(fontSize: 18.0),
-                                  validator: (value) => value!.isEmpty
-                                      ? 'Enter your Pan number please.'
-                                      : null,
-                                  decoration: InputDecoration(
-                                    labelText: 'Pan Number',
-                                    labelStyle:
-                                        Theme.of(context).textTheme.caption,
-                                    focusedBorder: const UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.grey),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Vehicle Number',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .caption!
+                                            .copyWith(fontSize: 9.0)),
+                                    SizedBox(
+                                      height: 8.0,
                                     ),
-                                  ),
+                                    Center(
+                                      child: Text(
+                                        widget.store.v_no!,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .caption!
+                                            .copyWith(fontSize: 16.5),
+                                      ),
+                                    )
+                                  ],
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 23.0,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Column(
-                                    children: [
-                                      DottedBorder(
-                                        dashPattern: const [4, 4],
-                                        strokeWidth: 2,
-                                        child: SizedBox(
-                                          height: 130,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.4,
-                                          child: Center(
-                                            child: widget.store.img1 == null
-                                                ? IconButton(
-                                                    onPressed: () async {
-                                                      widget.store.img1 =
-                                                          await getImage();
-                                                      if (widget.store.img1 !=
-                                                          null) {
-                                                        setState(() {});
-                                                      }
-                                                    },
-                                                    icon: const Icon(
-                                                      Icons.upload,
-                                                      color: Colors.grey,
-                                                      size: 30.0,
-                                                    ),
-                                                  )
-                                                : Stack(
-                                                    children: <Widget>[
-                                                      Image.file(
-                                                        File(widget.store.img1!
-                                                                .path)
-                                                            .absolute,
-                                                        height: 130,
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.4,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                      Container(
-                                                        height: 130,
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.4,
-                                                        color: Colors.grey
-                                                            .withOpacity(0.5),
-                                                        child: IconButton(
-                                                          onPressed: () async {
-                                                            widget.store.img1 =
-                                                                await getImage();
-                                                            if (widget.store
-                                                                    .img1 !=
-                                                                null) {
-                                                              setState(() {});
-                                                            }
-                                                          },
-                                                          icon: const Icon(
-                                                            Icons.upload,
-                                                            color:
-                                                                Colors.black54,
-                                                            size: 30.0,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 8.0),
-                                        child: Text(
-                                          widget.store.card_type_radio == 1
-                                              ? 'Citizenship front page'
-                                              : 'Pan front page',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .caption,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      DottedBorder(
-                                        dashPattern: const [4, 4],
-                                        strokeWidth: 2,
-                                        child: SizedBox(
-                                          height: 130,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.4,
-                                          child: Center(
-                                            child: widget.store.img2 == null
-                                                ? IconButton(
-                                                    onPressed: () async {
-                                                      widget.store.img2 =
-                                                          await getImage();
-                                                      if (widget.store.img2 !=
-                                                          null) {
-                                                        setState(() {});
-                                                      }
-                                                    },
-                                                    icon: const Icon(
-                                                      Icons.upload,
-                                                      color: Colors.grey,
-                                                      size: 30.0,
-                                                    ),
-                                                  )
-                                                : Stack(
-                                                    children: <Widget>[
-                                                      Image.file(
-                                                        File(widget.store.img2!
-                                                                .path)
-                                                            .absolute,
-                                                        height: 130,
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.4,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                      Container(
-                                                        height: 130,
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.4,
-                                                        color: Colors.grey
-                                                            .withOpacity(0.5),
-                                                        child: IconButton(
-                                                          onPressed: () async {
-                                                            widget.store.img2 =
-                                                                await getImage();
-                                                            if (widget.store
-                                                                    .img2 !=
-                                                                null) {
-                                                              setState(() {});
-                                                            }
-                                                          },
-                                                          icon: const Icon(
-                                                            Icons.upload,
-                                                            color:
-                                                                Colors.black54,
-                                                            size: 30.0,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 8.0),
-                                        child: Text(
-                                          widget.store.card_type_radio == 1
-                                              ? 'Citizenship back page'
-                                              : 'Pan back page',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .caption,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 23.0,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Column(
-                                    children: [
-                                      DottedBorder(
-                                        dashPattern: const [4, 4],
-                                        strokeWidth: 2,
-                                        child: SizedBox(
-                                          height: 130,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.4,
-                                          child: Center(
-                                            child: widget.store.img3 == null
-                                                ? IconButton(
-                                                    onPressed: () async {
-                                                      widget.store.img3 =
-                                                          await getImage();
-                                                      if (widget.store.img3 !=
-                                                          null) {
-                                                        setState(() {});
-                                                      }
-                                                    },
-                                                    icon: const Icon(
-                                                      Icons.upload,
-                                                      color: Colors.grey,
-                                                      size: 30.0,
-                                                    ),
-                                                  )
-                                                : Stack(
-                                                    children: <Widget>[
-                                                      Image.file(
-                                                        File(widget.store.img3!
-                                                                .path)
-                                                            .absolute,
-                                                        height: 130,
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.4,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                      Container(
-                                                        height: 130,
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.4,
-                                                        color: Colors.grey
-                                                            .withOpacity(0.5),
-                                                        child: IconButton(
-                                                          onPressed: () async {
-                                                            widget.store.img3 =
-                                                                await getImage();
-                                                            if (widget.store
-                                                                    .img3 !=
-                                                                null) {
-                                                              setState(() {});
-                                                            }
-                                                          },
-                                                          icon: const Icon(
-                                                            Icons.upload,
-                                                            color:
-                                                                Colors.black54,
-                                                            size: 30.0,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 8.0),
-                                        child: Text(
-                                          'Billbook main page',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .caption,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      DottedBorder(
-                                        dashPattern: const [4, 4],
-                                        strokeWidth: 2,
-                                        child: SizedBox(
-                                          height: 130,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.4,
-                                          child: Center(
-                                            child: widget.store.img4 == null
-                                                ? IconButton(
-                                                    onPressed: () async {
-                                                      widget.store.img4 =
-                                                          await getImage();
-                                                      if (widget.store.img4 !=
-                                                          null) {
-                                                        setState(() {});
-                                                      }
-                                                    },
-                                                    icon: const Icon(
-                                                      Icons.upload,
-                                                      color: Colors.grey,
-                                                      size: 30.0,
-                                                    ),
-                                                  )
-                                                : Stack(
-                                                    children: <Widget>[
-                                                      Image.file(
-                                                        File(widget.store.img4!
-                                                                .path)
-                                                            .absolute,
-                                                        height: 130,
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.4,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                      Container(
-                                                        height: 130,
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.4,
-                                                        color: Colors.grey
-                                                            .withOpacity(0.5),
-                                                        child: IconButton(
-                                                          onPressed: () async {
-                                                            widget.store.img4 =
-                                                                await getImage();
-                                                            if (widget.store
-                                                                    .img4 !=
-                                                                null) {
-                                                              setState(() {});
-                                                            }
-                                                          },
-                                                          icon: const Icon(
-                                                            Icons.upload,
-                                                            color:
-                                                                Colors.black54,
-                                                            size: 30.0,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 8.0),
-                                        child: Text(
-                                          'Billbook renewal page',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .caption,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 23.0,
-                              ),
-                              Column(
-                                children: [
-                                  DottedBorder(
-                                    dashPattern: const [4, 4],
-                                    strokeWidth: 2,
-                                    child: SizedBox(
-                                      height: 130,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.4,
-                                      child: Center(
-                                        child: widget.store.img5 == null
-                                            ? IconButton(
-                                                onPressed: () async {
-                                                  widget.store.img5 =
-                                                      await getImage();
-                                                  if (widget.store.img5 !=
-                                                      null) {
-                                                    setState(() {});
-                                                  }
-                                                },
-                                                icon: const Icon(
-                                                  Icons.upload,
-                                                  color: Colors.grey,
-                                                  size: 30.0,
-                                                ),
-                                              )
-                                            : Stack(
-                                                children: <Widget>[
-                                                  Image.file(
-                                                    File(widget
-                                                            .store.img5!.path)
-                                                        .absolute,
-                                                    height: 130,
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.4,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                  Container(
-                                                    height: 130,
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.4,
-                                                    color: Colors.grey
-                                                        .withOpacity(0.5),
-                                                    child: IconButton(
-                                                      onPressed: () async {
-                                                        widget.store.img5 =
-                                                            await getImage();
-                                                        if (widget.store.img5 !=
-                                                            null) {
-                                                          setState(() {});
-                                                        }
-                                                      },
-                                                      icon: const Icon(
-                                                        Icons.upload,
-                                                        color: Colors.black54,
-                                                        size: 30.0,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 8.0),
-                                    child: Text(
-                                      'Billbook tax last renewal date page',
-                                      style:
-                                          Theme.of(context).textTheme.caption,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 25.0,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      style: ButtonStyle(
-                                          backgroundColor:
-                                              MaterialStateProperty.all(
-                                                  Colors.white),
-                                          shape: MaterialStateProperty.all<
-                                                  RoundedRectangleBorder>(
-                                              const RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.zero,
-                                                  side: BorderSide(
-                                                      color: Colors.grey)))),
-                                      child: Text('Back',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .button!
-                                              .copyWith(color: Colors.grey))),
-                                  const SizedBox(
-                                    width: 10.0,
-                                  ),
-                                  TextButton(
-                                      onPressed: () async {
-                                        // if(widget.store.number_plate_radio == 1)
-                                        // {widget.store.vehicle_no ='${widget.store.zonal_code}-${widget.store.lot_number}-${widget.store.v_type} ${widget.store.v_no} ';}
-                                        //
-                                        // else if(widget.store.number_plate_radio == 2)
-                                        // {widget.store.vehicle_no ='${widget.store.province}-${widget.store.office_code}-${widget.store.lot_number} ${widget.store.symbol} ${widget.store.v_no} ';}
-                                        //
-                                        // print(widget.store.nid_no);
-                                        //     print(widget.store.no_of_transfer);
-                                        //   print(widget.store.purchase_year);
-                                        //   print(widget.store.no_of_seats);
-                                        //   print(widget.store.img1);
-                                        //   print(widget.store.engine_no);
-                                        //   print(widget.store.vehicle_name_id);
-                                        //   print(widget.store.brand_id);
-                                        //   print(widget.store.nid_type);
-                                        //   print(widget.store.vehicle_no);
-                                        //   print(widget.store.vehicle_type);
-                                        //   print(widget.store.color);
-                                        //   print(widget.store.phone_no);
-                                        //   print(widget.store.address);
-                                        //   print(widget.store.manufacture_year);
-                                        //
-
-                                        if (_formkey.currentState!.validate()) {
-                                          if (int.parse(widget
-                                                  .store.purchase_year!) >=
-                                              int.parse(widget
-                                                  .store.manufacture_year!)) {
-                                            if (widget.store.img1 != null &&
-                                                widget.store.img2 != null &&
-                                                widget.store.img3 != null &&
-                                                widget.store.img4 != null &&
-                                                widget.store.img5 != null) {
-                                              _formkey.currentState!.save();
-                                              if (widget.store
-                                                      .number_plate_radio ==
-                                                  1) {
-                                                widget.store.vehicle_no =
-                                                    '${widget.store.zonal_code}-${widget.store.lot_number}-${widget.store.v_type} ${widget.store.v_no} ';
-                                              } else if (widget.store
-                                                      .number_plate_radio ==
-                                                  2) {
-                                                widget.store.vehicle_no =
-                                                    '${widget.store.province}-${widget.store.office_code}-${widget.store.lot_number} ${widget.store.symbol} ${widget.store.v_no} ';
-                                              }
-
-                                              print('Client Side Validated');
-                                              final snackBar = SnackBar(
-                                                  backgroundColor:
-                                                      Theme.of(context)
-                                                          .colorScheme
-                                                          .primary,
-                                                  content:
-                                                      Text('Please Wait.....'));
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(snackBar);
-                                              var uri = Uri.parse(
-                                                  'https://aavissmotors.creatudevelopers.com.np/api/v1/save-vehicle');
-                                              var request =
-                                                  http.MultipartRequest(
-                                                      'POST', uri);
-                                              request.headers.addAll({
-                                                "Content-Type":
-                                                    "multipart/form-data",
-                                                "Accept": "application/json",
-                                              });
-                                              request.fields.addAll({
-                                                'full_name':
-                                                    '${widget.store.full_name}',
-                                                'address':
-                                                    '${widget.store.address}',
-                                                'phone_no':
-                                                    '${widget.store.phone_no}',
-                                                'brand_id':
-                                                    '${widget.store.brand_id}',
-                                                'vehicle_name_id':
-                                                    '${widget.store.vehicle_name_id}',
-                                                'engine_no':
-                                                    '${widget.store.engine_no}',
-                                                'manufacture_year':
-                                                    '${widget.store.manufacture_year}',
-                                                'color':
-                                                    '${widget.store.color}',
-                                                'no_of_seats':
-                                                    '${widget.store.no_of_seats}',
-                                                'purchase_year':
-                                                    '${widget.store.purchase_year}',
-                                                'no_of_transfer':
-                                                    '${widget.store.no_of_transfer}',
-                                                'vehicle_type':
-                                                    '${widget.store.vehicle_type}',
-                                                'vehicle_no':
-                                                    '${widget.store.vehicle_no}',
-                                                'nid_type':
-                                                    '${widget.store.nid_type}',
-                                                'nid_no':
-                                                    '${widget.store.nid_no}',
-                                                'variant_id':
-                                                    '${widget.store.variant_id}',
-                                                'kilometer':
-                                                    '${widget.store.kilometer}',
-                                                'major_accident':
-                                                    '${widget.store.major_accident}',
-                                                'service_history':
-                                                    '${widget.store.service_history}'
-                                              });
-                                              request.files.add(await http
-                                                      .MultipartFile
-                                                  .fromPath("nid_front",
-                                                      widget.store.img1!.path));
-                                              request.files.add(await http
-                                                      .MultipartFile
-                                                  .fromPath("nid_back",
-                                                      widget.store.img2!.path));
-                                              request.files.add(await http
-                                                      .MultipartFile
-                                                  .fromPath(
-                                                      "bill_book_main_page",
-                                                      widget.store.img3!.path));
-                                              request.files.add(await http
-                                                      .MultipartFile
-                                                  .fromPath(
-                                                      "bill_book_renewal_page",
-                                                      widget.store.img4!.path));
-                                              request.files.add(await http
-                                                      .MultipartFile
-                                                  .fromPath(
-                                                      "bill_book_tax_renewed_date_page",
-                                                      widget.store.img5!.path));
-
-                                              var response =
-                                                  await request.send();
-
-                                              Map<String, dynamic> valueMap =
-                                                  json.decode(await response
-                                                      .stream
-                                                      .bytesToString());
-                                              StoreResponseModel responseModel =
-                                                  StoreResponseModel.fromJson(
-                                                      valueMap);
-
-                                              final snackBar1 = SnackBar(
-                                                  backgroundColor:
-                                                      Theme.of(context)
-                                                          .colorScheme
-                                                          .primary,
-                                                  content: Text(
-                                                      '${responseModel.message}'));
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(snackBar1);
-
-                                              if (response.statusCode == 200) {
-                                                print('Sent');
-                                                if (responseModel.status ==
-                                                    true) {
-                                                  Navigator.of(context).push(
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              FinishScreen(
-                                                                title: widget
-                                                                    .title,
-                                                              )));
-                                                }
-                                              } else {
-                                                if (response.statusCode ==
-                                                    500) {
-                                                  final snackBar2 = SnackBar(
-                                                      backgroundColor:
-                                                          Theme.of(context)
-                                                              .colorScheme
-                                                              .primary,
-                                                      content: Text(
-                                                          '${responseModel.message}'));
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(snackBar2);
-                                                } else {
-                                                  String error = await response
-                                                      .stream
-                                                      .bytesToString();
-                                                  final snackBar = SnackBar(
-                                                      backgroundColor:
-                                                          Theme.of(context)
-                                                              .colorScheme
-                                                              .primary,
-                                                      content: Text(error));
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(snackBar);
-                                                }
-                                                print('failed');
-                                              }
-                                            } else {
-                                              final snackBar = SnackBar(
-                                                  backgroundColor:
-                                                      Theme.of(context)
-                                                          .colorScheme
-                                                          .primary,
-                                                  content: Text(
-                                                      'Please upload all of the 5 required images.'));
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(snackBar);
-                                            }
-                                          } else {
-                                            setState(() {
-                                              errorinpurchase =
-                                                  'Purchase Year cannot be before Manufacture Year';
-                                            });
-                                          }
-                                        } else {
-                                          setState(() => _autoValidate =
-                                              AutovalidateMode.always);
-                                        }
-                                      },
-                                      style: ButtonStyle(
-                                          backgroundColor:
-                                              MaterialStateProperty.all(
-                                                  Colors.white),
-                                          shape: MaterialStateProperty.all<
-                                                  RoundedRectangleBorder>(
-                                              RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.zero,
-                                                  side: BorderSide(
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .secondary)))),
-                                      child: Text('Finish',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .button)),
-                                ],
                               ),
                             ],
                           ),
                         ],
-                      ))),
-                ),
-                SizedBox(
-                  height: 34.0,
-                  width: MediaQuery.of(context).size.width,
-                ),
-              ],
-            ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 25.0),
+                      child: Text(
+                        'Citizenship / Pan',
+                        style: Theme.of(context).textTheme.bodyText2,
+                      ),
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Radio(
+                            value: 1,
+                            toggleable: false,
+                            groupValue: widget.store.card_type_radio,
+                            onChanged: (value) {}),
+                        Text(
+                          'Citizenship',
+                          style: Theme.of(context).textTheme.caption,
+                        ),
+                        const SizedBox(
+                          width: 40.0,
+                        ),
+                        Radio(
+                            value: 2,
+                            toggleable: false,
+                            groupValue: widget.store.card_type_radio,
+                            onChanged: (value) {}),
+                        Text(
+                          'Pan',
+                          style: Theme.of(context).textTheme.caption,
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: <Widget>[
+                        Visibility(
+                          visible: _isvisible3,
+                          child: Container(
+                              padding: EdgeInsets.all(8.0),
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom:
+                                      BorderSide(width: 1, color: Colors.grey),
+                                ),
+                              ),
+                              child: Text(
+                                'Citizenship Number: ${widget.store.citizenship_no}',
+                                style: Theme.of(context).textTheme.subtitle2,
+                              )),
+                        ),
+                        Visibility(
+                          visible: _isvisible4,
+                          child: Container(
+                              padding: EdgeInsets.all(8.0),
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom:
+                                      BorderSide(width: 1, color: Colors.grey),
+                                ),
+                              ),
+                              child: Text(
+                                'Pan Number : ${widget.store.pan_no}',
+                                style: Theme.of(context).textTheme.subtitle2,
+                              )),
+                        ),
+                        const SizedBox(
+                          height: 23.0,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Column(
+                              children: [
+                                DottedBorder(
+                                  dashPattern: const [4, 4],
+                                  strokeWidth: 2,
+                                  child: SizedBox(
+                                    height: 130,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.4,
+                                    child: Image.file(
+                                      File(widget.store.img1!.path).absolute,
+                                      height: 130,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.4,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: Text(
+                                    widget.store.card_type_radio == 1
+                                        ? 'Citizenship front page'
+                                        : 'Pan front page',
+                                    style: Theme.of(context).textTheme.caption,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                DottedBorder(
+                                  dashPattern: const [4, 4],
+                                  strokeWidth: 2,
+                                  child: SizedBox(
+                                    height: 130,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.4,
+                                    child: Image.file(
+                                      File(widget.store.img2!.path).absolute,
+                                      height: 130,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.4,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: Text(
+                                    widget.store.card_type_radio == 1
+                                        ? 'Citizenship back page'
+                                        : 'Pan back page',
+                                    style: Theme.of(context).textTheme.caption,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 23.0,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Column(
+                              children: [
+                                DottedBorder(
+                                  dashPattern: const [4, 4],
+                                  strokeWidth: 2,
+                                  child: SizedBox(
+                                    height: 130,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.4,
+                                    child: Image.file(
+                                      File(widget.store.img3!.path).absolute,
+                                      height: 130,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.4,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: Text(
+                                    'Billbook main page',
+                                    style: Theme.of(context).textTheme.caption,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                DottedBorder(
+                                  dashPattern: const [4, 4],
+                                  strokeWidth: 2,
+                                  child: SizedBox(
+                                    height: 130,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.4,
+                                    child: Image.file(
+                                      File(widget.store.img4!.path).absolute,
+                                      height: 130,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.4,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: Text(
+                                    'Billbook renewal page',
+                                    style: Theme.of(context).textTheme.caption,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 23.0,
+                        ),
+                        Column(
+                          children: [
+                            DottedBorder(
+                              dashPattern: const [4, 4],
+                              strokeWidth: 2,
+                              child: SizedBox(
+                                height: 130,
+                                width: MediaQuery.of(context).size.width * 0.4,
+                                child: Image.file(
+                                  File(widget.store.img5!.path).absolute,
+                                  height: 130,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.4,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Text(
+                                'Billbook tax last renewal date page',
+                                style: Theme.of(context).textTheme.caption,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 25.0,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(Colors.white),
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.zero,
+                                            side: BorderSide(
+                                                color: Colors.grey)))),
+                                child: Text('Back',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .button!
+                                        .copyWith(color: Colors.grey))),
+                            const SizedBox(
+                              width: 10.0,
+                            ),
+                            TextButton(
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(Colors.white),
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.zero,
+                                            side: BorderSide(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary)))),
+                                child: Text('Submit',
+                                    style: Theme.of(context).textTheme.button),
+                                onPressed: () async {
+                                  final snackBar = SnackBar(
+                                      backgroundColor:
+                                          Theme.of(context).colorScheme.primary,
+                                      content: Text('Please Wait.....'));
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                  if (kDebugMode) {
+                                    print(widget.store.kilometer);
+                                    print(widget.store.service_history);
+                                    print(widget.store.major_accident);
+                                    print(widget.store.variant_id);
+                                    //print(widget.store.img5);
+                                    print(widget.store.nid_no);
+                                    print(widget.store.no_of_transfer);
+                                    print(widget.store.purchase_year);
+                                    print(widget.store.no_of_seats);
+                                    print(widget.store.manufacture_year);
+                                    print(widget.store.engine_no);
+                                    print(widget.store.vehicle_name_id);
+                                    print(widget.store.brand_id);
+                                    print(widget.store.nid_type);
+                                    print(widget.store.vehicle_no);
+                                    print(widget.store.vehicle_type);
+                                    print(widget.store.color);
+                                    print(widget.store.phone_no);
+                                    print(widget.store.address);
+                                    print(widget.store.full_name);
+                                  }
+                                  var uri = Uri.parse(
+                                      'https://aavissmotors.creatudevelopers.com.np/api/v1/save-vehicle');
+                                  var request =
+                                      http.MultipartRequest('POST', uri);
+                                  request.headers.addAll({
+                                    "Content-Type": "multipart/form-data",
+                                    "Accept": "application/json",
+                                  });
+                                  request.fields.addAll({
+                                    'full_name': '${widget.store.full_name}',
+                                    'address': '${widget.store.address}',
+                                    'phone_no': '${widget.store.phone_no}',
+                                    'brand_id': '${widget.store.brand_id}',
+                                    'vehicle_name_id':
+                                        '${widget.store.vehicle_name_id}',
+                                    'engine_no': '${widget.store.engine_no}',
+                                    'manufacture_year':
+                                        '${widget.store.manufacture_year}',
+                                    'color': '${widget.store.color}',
+                                    'no_of_seats':
+                                        '${widget.store.no_of_seats}',
+                                    'purchase_year':
+                                        '${widget.store.purchase_year}',
+                                    'no_of_transfer':
+                                        '${widget.store.no_of_transfer}',
+                                    'vehicle_type':
+                                        '${widget.store.vehicle_type}',
+                                    'vehicle_no': '${widget.store.vehicle_no}',
+                                    'nid_type': '${widget.store.nid_type}',
+                                    'nid_no': '${widget.store.nid_no}',
+                                    'variant_id': '${widget.store.variant_id}',
+                                    'kilometer': '${widget.store.kilometer}',
+                                    'major_accident':
+                                        '${widget.store.major_accident}',
+                                    'service_history':
+                                        '${widget.store.service_history}'
+                                  });
+                                  request.files.add(
+                                      await http.MultipartFile.fromPath(
+                                          "nid_front",
+                                          widget.store.img1!.path));
+                                  request.files.add(
+                                      await http.MultipartFile.fromPath(
+                                          "nid_back", widget.store.img2!.path));
+                                  request.files.add(
+                                      await http.MultipartFile.fromPath(
+                                          "bill_book_main_page",
+                                          widget.store.img3!.path));
+                                  request.files.add(
+                                      await http.MultipartFile.fromPath(
+                                          "bill_book_renewal_page",
+                                          widget.store.img4!.path));
+                                  request.files.add(
+                                      await http.MultipartFile.fromPath(
+                                          "bill_book_tax_renewed_date_page",
+                                          widget.store.img5!.path));
+
+                                  var response = await request.send();
+
+                                  print(response.statusCode);
+                                  Map<String, dynamic> valueMap = json.decode(
+                                      await response.stream.bytesToString());
+                                  StoreResponseModel responseModel =
+                                      StoreResponseModel.fromJson(valueMap);
+
+                                  final snackBar1 = SnackBar(
+                                      backgroundColor:
+                                          Theme.of(context).colorScheme.primary,
+                                      content:
+                                          Text('${responseModel.message}'));
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar1);
+
+                                  if (response.statusCode == 200) {
+                                    print('Sent');
+                                    if (responseModel.status == true) {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  FinishScreen(
+                                                    title: widget.title,
+                                                  )));
+                                    }
+                                  }
+                                })
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                )),
+              ),
+              SizedBox(
+                height: 34.0,
+                width: MediaQuery.of(context).size.width,
+              ),
+            ],
           ),
         ),
       ),

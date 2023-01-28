@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 class CustomDropdownwidget extends StatelessWidget {
   final List<String> list;
   final String droplabel;
@@ -19,11 +20,14 @@ class CustomDropdownwidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String?>(
         validator: validator,
-        disabledHint: Text(
-          'Please Wait...',
-          style: Theme.of(context).textTheme.caption,
+        disabledHint: Center(
+          child: Text(
+            dropdownvalue.toString(),
+            style: Theme.of(context).textTheme.subtitle2,
+          ),
         ),
         menuMaxHeight: 160.0,
+        isExpanded: true,
         decoration: InputDecoration(
           labelText: droplabel,
           labelStyle: Theme.of(context).textTheme.caption,
@@ -35,13 +39,15 @@ class CustomDropdownwidget extends StatelessWidget {
         items: list.map((e) {
           return DropdownMenuItem(
               value: e,
-              child: Text(
-                e,
-                style: Theme.of(context)
-                    .textTheme
-                    .caption!
-                    .copyWith(fontSize: 15.0),
-                textAlign: TextAlign.start,
+              child: Center(
+                child: Text(
+                  e,
+                  style: Theme.of(context)
+                      .textTheme
+                      .caption!
+                      .copyWith(fontSize: 15.0),
+                  textAlign: TextAlign.start,
+                ),
               ));
         }).toList(),
         icon: const Icon(

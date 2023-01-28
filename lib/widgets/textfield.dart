@@ -24,7 +24,7 @@ class customDropdownwidget extends StatelessWidget {
         style: Theme.of(context).textTheme.caption!.copyWith(fontSize: 18.0),
         validator: (val) => val!.isEmpty ? 'Required!' : null,
         decoration: InputDecoration(
-          labelText: 'Zonal Code',
+          labelText: droplabel,
           labelStyle: Theme.of(context).textTheme.caption,
           focusedBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.grey), //<-- SEE HERE

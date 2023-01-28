@@ -24,7 +24,8 @@ class Data {
   Vehicle? vehicle;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        vehicle: Vehicle.fromJson(json["vehicle"]),
+        vehicle:
+            json["vehicle"] == null ? null : Vehicle.fromJson(json["vehicle"]),
       );
 }
 
@@ -89,36 +90,38 @@ class Vehicle {
   Brand? brand;
   VehicleName? vehicleName;
 
-  factory Vehicle.fromJson(Map<String, dynamic> json) => Vehicle(
-        id: json["id"],
-        fullName: json["full_name"],
-        address: json["address"],
-        phoneNo: json["phone_no"],
-        brandId: json["brand_id"],
-        vehicleNameId: json["vehicle_name_id"],
-        variantId: json["variant_id"],
-        engineNo: json["engine_no"],
-        manufactureYear: json["manufacture_year"],
-        color: json["color"],
-        noOfSeats: json["no_of_seats"],
-        purchaseYear: json["purchase_year"],
-        noOfTransfer: json["no_of_transfer"],
-        kilometer: json["kilometer"],
-        vehicleType: json["vehicle_type"],
-        vehicleNo: json["vehicle_no"],
-        majorAccident: json["major_accident"],
-        serviceHistory: json["service_history"],
-        nidType: json["nid_type"],
-        nidNo: json["nid_no"],
-        nidFront: json["nid_front"],
-        nidBack: json["nid_back"],
-        billBookMainPage: json["bill_book_main_page"],
-        billBookRenewalPage: json["bill_book_renewal_page"],
-        billBookTaxRenewedDatePage: json["bill_book_tax_renewed_date_page"],
-        status: json["status"],
-        brand: Brand.fromJson(json["brand"]),
-        vehicleName: VehicleName.fromJson(json["vehicle_name"]),
-      );
+  factory Vehicle.fromJson(Map<String, dynamic> json) {
+    return Vehicle(
+      id: json["id"],
+      fullName: json["full_name"],
+      address: json["address"],
+      phoneNo: json["phone_no"],
+      brandId: json["brand_id"],
+      vehicleNameId: json["vehicle_name_id"],
+      variantId: json["variant_id"],
+      engineNo: json["engine_no"],
+      manufactureYear: json["manufacture_year"],
+      color: json["color"],
+      noOfSeats: json["no_of_seats"],
+      purchaseYear: json["purchase_year"],
+      noOfTransfer: json["no_of_transfer"],
+      kilometer: json["kilometer"],
+      vehicleType: json["vehicle_type"],
+      vehicleNo: json["vehicle_no"],
+      majorAccident: json["major_accident"],
+      serviceHistory: json["service_history"],
+      nidType: json["nid_type"],
+      nidNo: json["nid_no"],
+      nidFront: json["nid_front"],
+      nidBack: json["nid_back"],
+      billBookMainPage: json["bill_book_main_page"],
+      billBookRenewalPage: json["bill_book_renewal_page"],
+      billBookTaxRenewedDatePage: json["bill_book_tax_renewed_date_page"],
+      status: json["status"],
+      brand: Brand.fromJson(json["brand"]),
+      vehicleName: VehicleName.fromJson(json["vehicle_name"]),
+    );
+  }
 }
 
 class Brand {

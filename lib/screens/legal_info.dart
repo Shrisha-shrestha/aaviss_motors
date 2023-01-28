@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:aaviss_motors/screens/confirmation.dart';
 import 'package:aaviss_motors/screens/search_detail.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -8,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 import '../models/storevehicleinfo.dart';
+import '../widgets/imageformfield.dart';
 
 class LegalInfo extends StatefulWidget {
   const LegalInfo(
@@ -32,7 +35,7 @@ class _LegalInfoState extends State<LegalInfo> {
   final _picker = ImagePicker();
   Future<File?> getImage() async {
     final pickedFile =
-        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 20);
+        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 10);
     if (pickedFile != null) {
       return File(pickedFile.path);
     } else {
@@ -142,7 +145,7 @@ class _LegalInfoState extends State<LegalInfo> {
                                   onChanged: (value) {
                                     setState(() {
                                       groupval = value;
-                                      widget.store.nid_type = 'citizenship';
+                                      widget.store.nid_type = 'Citizenship';
                                       widget.store.card_type_radio = 1;
                                       _isvisible2 = false;
                                       _isvisible1 = true;
@@ -161,7 +164,7 @@ class _LegalInfoState extends State<LegalInfo> {
                                   onChanged: (value) {
                                     setState(() {
                                       groupval = value;
-                                      widget.store.nid_type = 'pan';
+                                      widget.store.nid_type = 'Pan';
                                       widget.store.card_type_radio = 2;
                                       _isvisible2 = true;
                                       _isvisible1 = false;
@@ -228,177 +231,29 @@ class _LegalInfoState extends State<LegalInfo> {
                             ),
                           ),
                           const SizedBox(
-                            height: 23.0,
+                            height: 45.0,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Column(
-                                children: [
-                                  DottedBorder(
-                                    dashPattern: const [4, 4],
-                                    strokeWidth: 2,
-                                    child: SizedBox(
-                                      height: 130,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.4,
-                                      child: Center(
-                                        child: image1 == null
-                                            ? IconButton(
-                                                onPressed: () async {
-                                                  image1 = await getImage();
-                                                  if (image1 != null) {
-                                                    setState(() {
-                                                      widget.store.img1 =
-                                                          image1;
-                                                    });
-                                                  }
-                                                },
-                                                icon: const Icon(
-                                                  Icons.upload,
-                                                  color: Colors.grey,
-                                                  size: 30.0,
-                                                ),
-                                              )
-                                            : Stack(
-                                                children: <Widget>[
-                                                  Image.file(
-                                                    File(image1!.path).absolute,
-                                                    height: 130,
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.4,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                  Container(
-                                                    height: 130,
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.4,
-                                                    color: Colors.grey
-                                                        .withOpacity(0.5),
-                                                    child: IconButton(
-                                                      onPressed: () async {
-                                                        image1 =
-                                                            await getImage();
-                                                        if (image1 != null) {
-                                                          setState(() {
-                                                            widget.store.img1 =
-                                                                image1;
-                                                          });
-                                                        }
-                                                      },
-                                                      icon: const Icon(
-                                                        Icons.upload,
-                                                        color: Colors.black54,
-                                                        size: 30.0,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 8.0),
-                                    child: Text(
-                                      groupval == 1
-                                          ? 'Citizenship front page'
-                                          : 'Pan front page',
-                                      style:
-                                          Theme.of(context).textTheme.caption,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  DottedBorder(
-                                    dashPattern: const [4, 4],
-                                    strokeWidth: 2,
-                                    child: SizedBox(
-                                      height: 130,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.4,
-                                      child: Center(
-                                        child: image2 == null
-                                            ? IconButton(
-                                                onPressed: () async {
-                                                  image2 = await getImage();
-                                                  if (image2 != null) {
-                                                    setState(() {
-                                                      widget.store.img2 =
-                                                          image2;
-                                                    });
-                                                  }
-                                                },
-                                                icon: const Icon(
-                                                  Icons.upload,
-                                                  color: Colors.grey,
-                                                  size: 30.0,
-                                                ),
-                                              )
-                                            : Stack(
-                                                children: <Widget>[
-                                                  Image.file(
-                                                    File(image2!.path).absolute,
-                                                    height: 130,
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.4,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                  Container(
-                                                    height: 130,
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.4,
-                                                    color: Colors.grey
-                                                        .withOpacity(0.5),
-                                                    child: IconButton(
-                                                      onPressed: () async {
-                                                        image2 =
-                                                            await getImage();
-                                                        if (image2 != null) {
-                                                          setState(() {
-                                                            widget.store.img2 =
-                                                                image2;
-                                                          });
-                                                        }
-                                                      },
-                                                      icon: const Icon(
-                                                        Icons.upload,
-                                                        color: Colors.black54,
-                                                        size: 30.0,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 8.0),
-                                    child: Text(
-                                      groupval == 1
-                                          ? 'Citizenship back page'
-                                          : 'Pan back page',
-                                      style:
-                                          Theme.of(context).textTheme.caption,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              CustomImageFormField(
+                                  formkey: _formkey,
+                                  fieldname:
+                                      '${widget.store.nid_type ?? 'Card'} front page',
+                                  onSaved: ((newValue) {
+                                    setState(() {
+                                      widget.store.img1 = newValue;
+                                    });
+                                  })),
+                              CustomImageFormField(
+                                  formkey: _formkey,
+                                  fieldname:
+                                      '${widget.store.nid_type ?? 'Card'} back page',
+                                  onSaved: ((newValue) {
+                                    setState(() {
+                                      widget.store.img2 = newValue;
+                                    });
+                                  })),
                             ],
                           ),
                           const SizedBox(
@@ -407,250 +262,38 @@ class _LegalInfoState extends State<LegalInfo> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Column(
-                                children: [
-                                  DottedBorder(
-                                    dashPattern: const [4, 4],
-                                    strokeWidth: 2,
-                                    child: SizedBox(
-                                      height: 130,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.4,
-                                      child: Center(
-                                        child: image3 == null
-                                            ? IconButton(
-                                                onPressed: () async {
-                                                  image3 = await getImage();
-                                                  if (image3 != null) {
-                                                    setState(() {
-                                                      widget.store.img3 =
-                                                          image3;
-                                                    });
-                                                  }
-                                                },
-                                                icon: const Icon(
-                                                  Icons.upload,
-                                                  color: Colors.grey,
-                                                  size: 30.0,
-                                                ),
-                                              )
-                                            : Stack(
-                                                children: <Widget>[
-                                                  Image.file(
-                                                    File(image3!.path).absolute,
-                                                    height: 130,
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.4,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                  Container(
-                                                    height: 130,
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.4,
-                                                    color: Colors.grey
-                                                        .withOpacity(0.5),
-                                                    child: IconButton(
-                                                      onPressed: () async {
-                                                        image3 =
-                                                            await getImage();
-                                                        if (image3 != null) {
-                                                          setState(() {
-                                                            widget.store.img3 =
-                                                                image3;
-                                                          });
-                                                        }
-                                                      },
-                                                      icon: const Icon(
-                                                        Icons.upload,
-                                                        color: Colors.black54,
-                                                        size: 30.0,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 8.0),
-                                    child: Text(
-                                      'Billbook main page',
-                                      style:
-                                          Theme.of(context).textTheme.caption,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  DottedBorder(
-                                    dashPattern: const [4, 4],
-                                    strokeWidth: 2,
-                                    child: SizedBox(
-                                      height: 130,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.4,
-                                      child: Center(
-                                        child: image4 == null
-                                            ? IconButton(
-                                                onPressed: () async {
-                                                  image4 = await getImage();
-                                                  if (image4 != null) {
-                                                    setState(() {
-                                                      widget.store.img4 =
-                                                          image4;
-                                                    });
-                                                  }
-                                                },
-                                                icon: const Icon(
-                                                  Icons.upload,
-                                                  color: Colors.grey,
-                                                  size: 30.0,
-                                                ),
-                                              )
-                                            : Stack(
-                                                children: <Widget>[
-                                                  Image.file(
-                                                    File(image4!.path).absolute,
-                                                    height: 130,
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.4,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                  Container(
-                                                    height: 130,
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.4,
-                                                    color: Colors.grey
-                                                        .withOpacity(0.5),
-                                                    child: IconButton(
-                                                      onPressed: () async {
-                                                        image4 =
-                                                            await getImage();
-                                                        if (image4 != null) {
-                                                          setState(() {
-                                                            widget.store.img4 =
-                                                                image4;
-                                                          });
-                                                        }
-                                                      },
-                                                      icon: const Icon(
-                                                        Icons.upload,
-                                                        color: Colors.black54,
-                                                        size: 30.0,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 8.0),
-                                    child: Text(
-                                      'Billbook renewal page',
-                                      style:
-                                          Theme.of(context).textTheme.caption,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              CustomImageFormField(
+                                  formkey: _formkey,
+                                  fieldname: 'Billbook main page',
+                                  onSaved: ((newValue) {
+                                    setState(() {
+                                      widget.store.img3 = newValue;
+                                    });
+                                  })),
+                              CustomImageFormField(
+                                  formkey: _formkey,
+                                  fieldname: 'Billbook renewal page',
+                                  onSaved: ((newValue) {
+                                    setState(() {
+                                      widget.store.img4 = newValue;
+                                    });
+                                  })),
                             ],
                           ),
                           const SizedBox(
                             height: 23.0,
                           ),
-                          Center(
-                            child: Column(
-                              children: [
-                                DottedBorder(
-                                  dashPattern: const [4, 4],
-                                  strokeWidth: 2,
-                                  child: SizedBox(
-                                    height: 130,
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.4,
-                                    child: Center(
-                                      child: image5 == null
-                                          ? IconButton(
-                                              onPressed: () async {
-                                                image5 = await getImage();
-                                                if (image5 != null) {
-                                                  setState(() {
-                                                    widget.store.img5 = image5;
-                                                  });
-                                                }
-                                              },
-                                              icon: const Icon(
-                                                Icons.upload,
-                                                color: Colors.grey,
-                                                size: 30.0,
-                                              ),
-                                            )
-                                          : Stack(
-                                              children: <Widget>[
-                                                Image.file(
-                                                  File(image5!.path).absolute,
-                                                  height: 130,
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.4,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                                Container(
-                                                  height: 130,
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.4,
-                                                  color: Colors.grey
-                                                      .withOpacity(0.5),
-                                                  child: IconButton(
-                                                    onPressed: () async {
-                                                      image5 = await getImage();
-                                                      if (image5 != null) {
-                                                        setState(() {
-                                                          widget.store.img5 =
-                                                              image5;
-                                                        });
-                                                      }
-                                                    },
-                                                    icon: const Icon(
-                                                      Icons.upload,
-                                                      color: Colors.black54,
-                                                      size: 30.0,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 8.0),
-                                  child: Text(
-                                    'Billbook tax last renewal date page',
-                                    style: Theme.of(context).textTheme.caption,
-                                  ),
-                                ),
-                              ],
-                            ),
+                          Align(
+                            alignment: Alignment.center,
+                            child: CustomImageFormField(
+                                formkey: _formkey,
+                                fieldname:
+                                    'BIllbook tax last renewal date page',
+                                onSaved: ((newValue) {
+                                  setState(() {
+                                    widget.store.img5 = newValue;
+                                  });
+                                })),
                           ),
                           const SizedBox(
                             height: 25.0,
@@ -712,35 +355,21 @@ class _LegalInfoState extends State<LegalInfo> {
                                     setState(() {
                                       errortxt = '';
                                     });
+
                                     if (_formkey.currentState!.validate()) {
-                                      if (image1 != null &&
-                                          image2 != null &&
-                                          image3 != null &&
-                                          image4 != null &&
-                                          image5 != null) {
-                                        _formkey.currentState!.save();
-                                        if (kDebugMode) {
-                                          print('Client Side Validated');
-                                        }
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    Confirmation(
-                                                      title: widget.title,
-                                                      store: widget.store,
-                                                      bvinfoAPI:
-                                                          widget.bvinfoAPI,
-                                                    )));
-                                      } else {
-                                        final snackBar = SnackBar(
-                                            backgroundColor: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                            content: Text(
-                                                'Please upload all of the 5 required images.'));
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(snackBar);
+                                      _formkey.currentState!.save();
+                                      if (kDebugMode) {
+                                        print('Client Side Validated');
                                       }
+                                      //print(widget.bvinfoAPI.brandlist![0].id);
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  Confirmation(
+                                                    title: widget.title,
+                                                    store: widget.store,
+                                                    bvinfoAPI: widget.bvinfoAPI,
+                                                  )));
                                     } else {
                                       setState(() {
                                         _autoValidate = AutovalidateMode.always;

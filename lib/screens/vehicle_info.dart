@@ -2,8 +2,10 @@ import 'package:aaviss_motors/screens/legal_info.dart';
 import 'package:aaviss_motors/screens/search_detail.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import '../API/API_connection.dart';
+import '../models/searchvehicle.dart';
 import '../models/storevehicleinfo.dart';
 import '../widgets/dropdown.dart';
 
@@ -36,21 +38,44 @@ class _VehicleInfoState extends State<VehicleInfo> {
   Future<B_V_fromAPI>? getbvv() async {
     dynamic brandlist, vehiclelist, variantlist;
     APIService apiService = APIService();
-
+    int? len1, len2, len3;
+    List<String>? brands = [], vehicles = [], variants = [];
+    List<int>? brandsId = [], vehiclesId = [], variantId = [];
     await apiService.getbrand().then((value) {
       brandlist = value!.outerdata!.brands!.innerdata!;
+      len1 = value.outerdata!.brands!.total;
     });
-
     await apiService.getvehicle().then((value) {
       vehiclelist = value.data!.vehicleNames!.data!;
+      len2 = value.data!.vehicleNames!.total;
     });
     await apiService.getvariant().then((value) {
       variantlist = value.data!.variants!.data!;
+      len3 = value.data!.variants!.total;
     });
 
+    for (int i = 0; i < len1!; i++) {
+      brands.add("${brandlist[i].name}");
+      brandsId.add(brandlist[i].id);
+    }
+    for (int i = 0; i < len2!; i++) {
+      vehicles.add("${vehiclelist[i].vehicleName}");
+      vehiclesId.add(vehiclelist[i].id);
+    }
+    for (int i = 0; i < len3!; i++) {
+      variants.add("${variantlist[i].variantName}");
+      variantId.add(variantlist[i].id);
+    }
+
+    final theMap1 = Map.fromIterables(brandsId, brands);
+    final theMap2 = Map.fromIterables(vehiclesId, vehicles);
+    final theMap3 = Map.fromIterables(variantId, variants);
     bfa.brandlist = brandlist;
     bfa.vehiclelist = vehiclelist;
     bfa.variantlist = variantlist;
+    bfa.blist = theMap1;
+    bfa.velist = theMap2;
+    bfa.valist = theMap3;
     return bfa;
   }
 
@@ -170,11 +195,13 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                         return Column(
                                           children: [
                                             CustomDropdownwidget(
+                                                droplabel: 'Brand Name*',
                                                 validator: (val) => val!.isEmpty
                                                     ? 'Required!'
                                                     : null,
                                                 onChanged: null,
-                                                droplabel: 'Name of Brand',
+                                                dropdownvalue:
+                                                    "Please Wait......",
                                                 list: []),
                                             SizedBox(
                                               height: 10.0,
@@ -184,7 +211,9 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                                     ? 'Required!'
                                                     : null,
                                                 onChanged: null,
-                                                droplabel: 'Name of Vehicle',
+                                                droplabel: 'Vehicle Name*',
+                                                dropdownvalue:
+                                                    "Please Wait......",
                                                 list: []),
                                             SizedBox(
                                               height: 10.0,
@@ -194,7 +223,9 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                                     ? 'Required!'
                                                     : null,
                                                 onChanged: null,
-                                                droplabel: 'Name of Variant',
+                                                droplabel: 'Variant Name*',
+                                                dropdownvalue:
+                                                    "Please Wait......",
                                                 list: []),
                                           ],
                                         );
@@ -247,7 +278,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                                     : null,
                                                 menuMaxHeight: 250.0,
                                                 decoration: InputDecoration(
-                                                  labelText: 'Name of Brand',
+                                                  labelText: 'Brand Name*',
                                                   labelStyle: Theme.of(context)
                                                       .textTheme
                                                       .caption,
@@ -262,6 +293,8 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                                 items: snapshot.data!.brandlist!
                                                     .map((e) {
                                                   return DropdownMenuItem(
+                                                      alignment:
+                                                          Alignment.center,
                                                       value: e.id,
                                                       child: Text(
                                                           style:
@@ -297,7 +330,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                                     : null,
                                                 menuMaxHeight: 250.0,
                                                 decoration: InputDecoration(
-                                                  labelText: 'Name of Vehicle',
+                                                  labelText: 'Vehicle Name*',
                                                   labelStyle: Theme.of(context)
                                                       .textTheme
                                                       .caption,
@@ -316,6 +349,8 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                                     .data!.vehiclelist!
                                                     .map((e) {
                                                   return DropdownMenuItem(
+                                                      alignment:
+                                                          Alignment.center,
                                                       value: e.id,
                                                       child: Text(
                                                           style:
@@ -347,15 +382,14 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                                     : null,
                                                 menuMaxHeight: 250.0,
                                                 decoration: InputDecoration(
-                                                  labelText: 'Name of Variant',
+                                                  labelText: 'Variant Name*',
                                                   labelStyle: Theme.of(context)
                                                       .textTheme
                                                       .caption,
                                                   focusedBorder:
                                                       const UnderlineInputBorder(
                                                     borderSide: BorderSide(
-                                                        color: Colors
-                                                            .grey), //<-- SEE HERE
+                                                        color: Colors.grey),
                                                   ),
                                                 ),
                                                 value: dropdownvalue3,
@@ -409,7 +443,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                       ? 'Enter the engine number please.'
                                       : null,
                                   decoration: InputDecoration(
-                                    labelText: 'Engine Number',
+                                    labelText: 'Engine Number*',
                                     labelStyle:
                                         Theme.of(context).textTheme.caption,
                                     focusedBorder: const UnderlineInputBorder(
@@ -427,7 +461,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                       : null,
                                   menuMaxHeight: 250.0,
                                   decoration: InputDecoration(
-                                    labelText: 'Manufacture Year',
+                                    labelText: 'Manufacture Year*',
                                     labelStyle:
                                         Theme.of(context).textTheme.caption,
                                     focusedBorder: const UnderlineInputBorder(
@@ -475,7 +509,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                       ? 'Enter the color please.'
                                       : null,
                                   decoration: InputDecoration(
-                                    labelText: 'Color',
+                                    labelText: 'Color*',
                                     labelStyle:
                                         Theme.of(context).textTheme.caption,
                                     focusedBorder: const UnderlineInputBorder(
@@ -500,7 +534,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                       ? 'Enter the no. of seat please.'
                                       : null,
                                   decoration: InputDecoration(
-                                    labelText: 'No. of Seat',
+                                    labelText: 'No. of Seat*',
                                     labelStyle:
                                         Theme.of(context).textTheme.caption,
                                     focusedBorder: const UnderlineInputBorder(
@@ -518,7 +552,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                       : null,
                                   menuMaxHeight: 250.0,
                                   decoration: InputDecoration(
-                                    labelText: 'Purchase Year',
+                                    labelText: 'Purchase Year*',
                                     labelStyle:
                                         Theme.of(context).textTheme.caption,
                                     focusedBorder: const UnderlineInputBorder(
@@ -574,7 +608,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                       ? 'Enter the no. of transfers please.'
                                       : null,
                                   decoration: InputDecoration(
-                                    labelText: 'No. of Transfers',
+                                    labelText: 'No. of Transfers*',
                                     labelStyle:
                                         Theme.of(context).textTheme.caption,
                                     focusedBorder: const UnderlineInputBorder(
@@ -599,7 +633,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                       ? 'Enter the mileage please.'
                                       : null,
                                   decoration: InputDecoration(
-                                    labelText: 'Mileage',
+                                    labelText: 'Mileage*',
                                     labelStyle:
                                         Theme.of(context).textTheme.caption,
                                     focusedBorder: const UnderlineInputBorder(
@@ -776,7 +810,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                       .copyWith(color: Colors.red),
                                 )),
                                 Text(
-                                  'Number PLate',
+                                  'Number Plate',
                                   style: Theme.of(context).textTheme.caption,
                                 ),
                                 Row(
@@ -875,6 +909,10 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                           SizedBox(
                                             width: 91.0,
                                             child: TextFormField(
+                                              inputFormatters: [
+                                                LengthLimitingTextInputFormatter(
+                                                    3),
+                                              ],
                                               keyboardType:
                                                   TextInputType.number,
                                               onSaved: (String? value) {
@@ -1039,6 +1077,10 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                           SizedBox(
                                             width: 91.0,
                                             child: TextFormField(
+                                              inputFormatters: [
+                                                LengthLimitingTextInputFormatter(
+                                                    3),
+                                              ],
                                               keyboardType:
                                                   TextInputType.number,
                                               onSaved: (String? value) {
@@ -1176,7 +1218,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                       width: 10.0,
                                     ),
                                     TextButton(
-                                      onPressed: () {
+                                      onPressed: () async {
                                         if (futureresult) {
                                           if (formkey.currentState!
                                               .validate()) {
@@ -1220,16 +1262,49 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                                                 .vehicle_no =
                                                             '${widget.store.province}-${widget.store.office_code}-${widget.store.lot_number} ${widget.store.symbol} ${widget.store.v_no} ';
                                                       }
-
-                                                      Navigator.of(context).push(
-                                                          MaterialPageRoute(
-                                                              builder: (context) => LegalInfo(
-                                                                  title: widget
-                                                                      .title,
-                                                                  store: widget
-                                                                      .store,
-                                                                  bvinfoAPI:
-                                                                      bfa)));
+                                                      dynamic Val;
+                                                      dynamic
+                                                          searchrequestModel =
+                                                          new SearchRequestModel();
+                                                      searchrequestModel
+                                                              .vehicle_number =
+                                                          widget
+                                                              .store.engine_no;
+                                                      APIService apiService =
+                                                          APIService();
+                                                      await apiService
+                                                          .searchvehicle(
+                                                              searchrequestModel)
+                                                          .then((value) {
+                                                        dynamic Val = value!
+                                                            .data!.vehicle;
+                                                        if (Val == null) {
+                                                          Navigator.of(context).push(
+                                                              MaterialPageRoute(
+                                                                  builder: (context) => LegalInfo(
+                                                                      title: widget
+                                                                          .title,
+                                                                      store: widget
+                                                                          .store,
+                                                                      bvinfoAPI:
+                                                                          bfa)));
+                                                        } else {
+                                                          final snackBar = SnackBar(
+                                                              backgroundColor:
+                                                                  Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          226,
+                                                                          114,
+                                                                          107),
+                                                              content: Text(
+                                                                  'The Vehicle with this Engine Number Already exists!'));
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                                  snackBar);
+                                                        }
+                                                      });
                                                     } else {
                                                       setState(() {
                                                         errorinpurchase =

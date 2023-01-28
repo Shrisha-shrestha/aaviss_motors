@@ -170,7 +170,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 .copyWith(fontSize: 18.0),
                             validator: (val) {
                               RegExp regExp = RegExp(
-                                  r'(?:\(?\+977\)?)?[9][6-9]\d{8}|01[-]?[0-9]{7}');
+                                  r'(?:\(?\+977\)?)?[9][6-9]\d{8}| 01[-]?[0-9]{7}');
                               if (val!.isEmpty) {
                                 return 'Enter your contact number please.';
                               } else if (regExp.hasMatch(val)) {
