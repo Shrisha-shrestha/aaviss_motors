@@ -414,7 +414,8 @@ class _ConfirmationState extends State<Confirmation> {
                             activeColor:
                                 Theme.of(context).colorScheme.secondary,
                             onChanged: (int? value) {}),
-                        Text("Old", style: Theme.of(context).textTheme.caption),
+                        Text("Zonal",
+                            style: Theme.of(context).textTheme.caption),
                         const SizedBox(
                           width: 91.0,
                         ),
@@ -425,7 +426,8 @@ class _ConfirmationState extends State<Confirmation> {
                             activeColor:
                                 Theme.of(context).colorScheme.secondary,
                             onChanged: (int? value) {}),
-                        Text("New", style: Theme.of(context).textTheme.caption),
+                        Text("Provincal",
+                            style: Theme.of(context).textTheme.caption),
                       ],
                     ),
                     Visibility(
@@ -815,8 +817,15 @@ class _ConfirmationState extends State<Confirmation> {
                             ),
                           ],
                         ),
-                        const SizedBox(
-                          height: 23.0,
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 45.0),
+                            child: Text(
+                              'Bill Book Information',
+                              style: Theme.of(context).textTheme.bodyText2,
+                            ),
+                          ),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

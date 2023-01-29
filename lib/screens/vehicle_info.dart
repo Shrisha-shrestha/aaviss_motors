@@ -35,6 +35,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
   B_V_fromAPI bfa = B_V_fromAPI();
   bool futureresult = false;
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
+
   Future<B_V_fromAPI>? getbvv() async {
     dynamic brandlist, vehiclelist, variantlist;
     APIService apiService = APIService();
@@ -646,7 +647,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                   height: 35.0,
                                 ),
                                 Text(
-                                  'Major Accident',
+                                  'Major Accident*',
                                   style: Theme.of(context).textTheme.caption,
                                 ),
                                 Row(
@@ -701,7 +702,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                       .copyWith(color: Colors.red),
                                 )),
                                 Text(
-                                  'Service History',
+                                  'Service History*',
                                   style: Theme.of(context).textTheme.caption,
                                 ),
                                 Row(
@@ -755,7 +756,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                       .copyWith(color: Colors.red),
                                 )),
                                 Text(
-                                  'Vehicle Type',
+                                  'Vehicle Type*',
                                   style: Theme.of(context).textTheme.caption,
                                 ),
                                 Row(
@@ -810,7 +811,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                       .copyWith(color: Colors.red),
                                 )),
                                 Text(
-                                  'Number Plate',
+                                  'Number Plate*',
                                   style: Theme.of(context).textTheme.caption,
                                 ),
                                 Row(
@@ -829,7 +830,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                             widget.store.number_plate_radio = 1;
                                           });
                                         }),
-                                    Text("Old",
+                                    Text("Zonal",
                                         style: Theme.of(context)
                                             .textTheme
                                             .caption),
@@ -850,7 +851,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                             widget.store.number_plate_radio = 2;
                                           });
                                         }),
-                                    Text("New",
+                                    Text("Provincal",
                                         style: Theme.of(context)
                                             .textTheme
                                             .caption),
@@ -899,10 +900,13 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                                 'MA',
                                               ],
                                               onSaved: (String? value) {
-                                                widget.store.zonal_code = d1;
+                                                widget.store.zonal_code = value;
                                               },
                                               onChanged: (String? value) {
-                                                d1 = value;
+                                                setState(() {
+                                                  widget.store.zonal_code =
+                                                      value;
+                                                });
                                               },
                                             ),
                                           ),
@@ -917,6 +921,12 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                                   TextInputType.number,
                                               onSaved: (String? value) {
                                                 widget.store.lot_number = value;
+                                              },
+                                              onChanged: (String? value) {
+                                                setState(() {
+                                                  widget.store.lot_number =
+                                                      value;
+                                                });
                                               },
                                               textAlign: TextAlign.center,
                                               style: Theme.of(context)
@@ -965,10 +975,12 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                                 'BA',
                                               ],
                                               onSaved: (String? value) {
-                                                widget.store.v_type = d2;
+                                                widget.store.v_type = value;
                                               },
                                               onChanged: (String? value) {
-                                                d2 = value;
+                                                setState(() {
+                                                  widget.store.v_type = value;
+                                                });
                                               },
                                             ),
                                           ),
@@ -983,6 +995,11 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                           keyboardType: TextInputType.number,
                                           onSaved: (String? value) {
                                             widget.store.v_no = value;
+                                          },
+                                          onChanged: (String? value) {
+                                            setState(() {
+                                              widget.store.v_no = value;
+                                            });
                                           },
                                           textAlign: TextAlign.center,
                                           style: Theme.of(context)
@@ -1005,6 +1022,25 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                           ),
                                         ),
                                       ),
+                                      const SizedBox(
+                                        height: 30.0,
+                                      ),
+                                      Container(
+                                          padding: EdgeInsets.all(8.0),
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          decoration: BoxDecoration(
+                                            border: Border(
+                                              bottom: BorderSide(
+                                                  width: 1, color: Colors.grey),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            '${widget.store.zonal_code ?? ''}-${widget.store.lot_number ?? ''}-${widget.store.v_type ?? ''}-${widget.store.v_no ?? ''}',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .subtitle2,
+                                          )),
                                     ],
                                   ),
                                 ),
@@ -1029,6 +1065,34 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                                       : null,
                                               droplabel: 'Province',
                                               list: const [
+                                                'Province No. 1',
+                                                'Madhesh',
+                                                'Bagmati',
+                                                'Gandaki',
+                                                'Lumbini',
+                                                'Karnali',
+                                                'Sudurpashchim'
+                                              ],
+                                              onSaved: (String? value) {
+                                                widget.store.province = value;
+                                              },
+                                              onChanged: (String? value) {
+                                                setState(() {
+                                                  widget.store.province = value;
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 91.0,
+                                            child: CustomDropdownwidget(
+                                              validator: (val) =>
+                                                  val?.isEmpty == true ||
+                                                          val == null
+                                                      ? 'Required!'
+                                                      : null,
+                                              droplabel: 'Office Code',
+                                              list: const [
                                                 '1',
                                                 '2',
                                                 '3',
@@ -1038,40 +1102,15 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                                 '7'
                                               ],
                                               onSaved: (String? value) {
-                                                widget.store.province = d3;
-                                              },
-                                              onChanged: (String? value) {
-                                                d3 = value;
-                                              },
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 91.0,
-                                            child: TextFormField(
-                                              onSaved: (String? value) {
                                                 widget.store.office_code =
                                                     value;
                                               },
-                                              textAlign: TextAlign.center,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .caption!
-                                                  .copyWith(fontSize: 18.0),
-                                              validator: (val) => val!.isEmpty
-                                                  ? 'Required!'
-                                                  : null,
-                                              decoration: InputDecoration(
-                                                labelText: 'Office Code',
-                                                labelStyle: Theme.of(context)
-                                                    .textTheme
-                                                    .caption,
-                                                focusedBorder:
-                                                    const UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors
-                                                          .grey), //<-- SEE HERE
-                                                ),
-                                              ),
+                                              onChanged: (String? value) {
+                                                setState(() {
+                                                  widget.store.office_code =
+                                                      value;
+                                                });
+                                              },
                                             ),
                                           ),
                                           SizedBox(
@@ -1085,6 +1124,12 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                                   TextInputType.number,
                                               onSaved: (String? value) {
                                                 widget.store.lot_number = value;
+                                              },
+                                              onChanged: (String? value) {
+                                                setState(() {
+                                                  widget.store.lot_number =
+                                                      value;
+                                                });
                                               },
                                               textAlign: TextAlign.center,
                                               style: Theme.of(context)
@@ -1125,25 +1170,35 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                                       : null,
                                               droplabel: 'Symbol',
                                               list: const [
-                                                'KA',
-                                                'KHA',
-                                                'GA',
-                                                'C.D.',
-                                                'YA',
-                                                'GHA',
-                                                'CA',
-                                                'JA',
-                                                'JHA',
-                                                'ÑA',
-                                                'PA',
-                                                'PHA',
-                                                'BA',
+                                                'A',
+                                                'B',
+                                                'C',
+                                                'C1',
+                                                'D',
+                                                'E',
+                                                'F',
+                                                'G',
+                                                'H',
+                                                'H1',
+                                                'H2',
+                                                'I',
+                                                'I1',
+                                                'I2',
+                                                'I3',
+                                                'J1',
+                                                'J2',
+                                                'J3',
+                                                'J4',
+                                                'J5',
+                                                'K'
                                               ],
                                               onSaved: (String? value) {
-                                                widget.store.symbol = d4;
+                                                widget.store.symbol = value;
                                               },
                                               onChanged: (String? value) {
-                                                d4 = value;
+                                                setState(() {
+                                                  widget.store.symbol = value;
+                                                });
                                               },
                                             ),
                                           ),
@@ -1160,6 +1215,11 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                                   TextInputType.number,
                                               onSaved: (String? value) {
                                                 widget.store.v_no = value;
+                                              },
+                                              onChanged: (String? value) {
+                                                setState(() {
+                                                  widget.store.v_no = value;
+                                                });
                                               },
                                               textAlign: TextAlign.center,
                                               style: Theme.of(context)
@@ -1185,6 +1245,25 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                           ),
                                         ],
                                       ),
+                                      const SizedBox(
+                                        height: 30.0,
+                                      ),
+                                      Container(
+                                          padding: EdgeInsets.all(8.0),
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          decoration: BoxDecoration(
+                                            border: Border(
+                                              bottom: BorderSide(
+                                                  width: 1, color: Colors.grey),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            '${widget.store.province ?? ''}-${widget.store.office_code ?? ''}-${widget.store.lot_number ?? ''}-${widget.store.symbol ?? ''}-${widget.store.v_no ?? ''}',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .subtitle2,
+                                          )),
                                     ],
                                   ),
                                 ),

@@ -135,7 +135,7 @@ class _LegalInfoState extends State<LegalInfo> {
                           Padding(
                             padding: const EdgeInsets.only(top: 25.0),
                             child: Text(
-                              'Citizenship / Pan',
+                              'Citizenship / Pan *',
                               style: Theme.of(context).textTheme.bodyText2,
                             ),
                           ),
@@ -201,7 +201,7 @@ class _LegalInfoState extends State<LegalInfo> {
                                   ? 'Enter your Citizenship number please.'
                                   : null,
                               decoration: InputDecoration(
-                                labelText: 'Citizenship Number',
+                                labelText: 'Citizenship Number*',
                                 labelStyle: Theme.of(context).textTheme.caption,
                                 focusedBorder: const UnderlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey),
@@ -224,7 +224,7 @@ class _LegalInfoState extends State<LegalInfo> {
                                   ? 'Enter your Pan number please.'
                                   : null,
                               decoration: InputDecoration(
-                                labelText: 'Pan Number',
+                                labelText: 'Pan Number*',
                                 labelStyle: Theme.of(context).textTheme.caption,
                                 focusedBorder: const UnderlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey),
@@ -243,7 +243,7 @@ class _LegalInfoState extends State<LegalInfo> {
                                   width:
                                       MediaQuery.of(context).size.width * 0.4,
                                   fieldname:
-                                      '${widget.store.nid_type ?? 'Card'} front page',
+                                      '${widget.store.nid_type ?? 'Card'} front page*',
                                   onSaved: ((newValue) {
                                     setState(() {
                                       widget.store.img1 = newValue;
@@ -254,7 +254,7 @@ class _LegalInfoState extends State<LegalInfo> {
                                   width:
                                       MediaQuery.of(context).size.width * 0.4,
                                   fieldname:
-                                      '${widget.store.nid_type ?? 'Card'} back page',
+                                      '${widget.store.nid_type ?? 'Card'} back page*',
                                   onSaved: ((newValue) {
                                     setState(() {
                                       widget.store.img2 = newValue;
@@ -262,8 +262,12 @@ class _LegalInfoState extends State<LegalInfo> {
                                   })),
                             ],
                           ),
-                          const SizedBox(
-                            height: 23.0,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 45.0),
+                            child: Text(
+                              'Bill Book Information',
+                              style: Theme.of(context).textTheme.bodyText2,
+                            ),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -272,7 +276,7 @@ class _LegalInfoState extends State<LegalInfo> {
                                   width:
                                       MediaQuery.of(context).size.width * 0.4,
                                   formkey: _formkey,
-                                  fieldname: 'Billbook main page',
+                                  fieldname: 'Billbook main page*',
                                   onSaved: ((newValue) {
                                     setState(() {
                                       widget.store.img3 = newValue;
@@ -282,7 +286,7 @@ class _LegalInfoState extends State<LegalInfo> {
                                   formkey: _formkey,
                                   width:
                                       MediaQuery.of(context).size.width * 0.4,
-                                  fieldname: 'Billbook renewal page',
+                                  fieldname: 'Billbook renewal page*',
                                   onSaved: ((newValue) {
                                     setState(() {
                                       widget.store.img4 = newValue;
@@ -299,15 +303,21 @@ class _LegalInfoState extends State<LegalInfo> {
                                 width: MediaQuery.of(context).size.width * 0.4,
                                 formkey: _formkey,
                                 fieldname:
-                                    'BIllbook tax last renewal date page',
+                                    'BIllbook tax last renewal date page*',
                                 onSaved: ((newValue) {
                                   setState(() {
                                     widget.store.img5 = newValue;
                                   });
                                 })),
                           ),
-                          const SizedBox(
-                            height: 25.0,
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            // child: Text(
+                            //     'Note: File Size Must be of 2MB or less than 2MB',
+                            //     style: TextStyle(
+                            //         fontSize: 12.0,
+                            //         fontWeight: FontWeight.normal,
+                            //         color: Color.fromARGB(255, 222, 94, 84))),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,

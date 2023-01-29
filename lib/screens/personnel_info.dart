@@ -127,7 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ? 'Enter your full name please.'
                                 : null,
                             decoration: InputDecoration(
-                              labelText: 'Full Name',
+                              labelText: 'Full Name*',
                               labelStyle: Theme.of(context).textTheme.caption,
                               focusedBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(
@@ -150,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ? 'Enter your address please.'
                                 : null,
                             decoration: InputDecoration(
-                                labelText: 'Address',
+                                labelText: 'Address*',
                                 labelStyle: Theme.of(context).textTheme.caption,
                                 focusedBorder: const UnderlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey),
@@ -182,7 +182,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               }
                             },
                             decoration: InputDecoration(
-                              labelText: 'Contact Number',
+                              labelText: 'Contact Number*',
                               labelStyle: Theme.of(context).textTheme.caption,
                               focusedBorder: const UnderlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey)),
