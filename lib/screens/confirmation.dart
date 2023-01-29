@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:aaviss_motors/models/getbrand.dart';
 import 'package:aaviss_motors/models/getvariants.dart';
 import 'package:aaviss_motors/models/getvehiclename.dart';
+import 'package:aaviss_motors/screens/personnel_info.dart';
 import 'package:aaviss_motors/screens/search_detail.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +68,15 @@ class _ConfirmationState extends State<Confirmation> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title, style: Theme.of(context).textTheme.headline5),
+        title: GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => MyHomePage(
+                        title: widget.title,
+                      )));
+            },
+            child: Text(widget.title,
+                style: Theme.of(context).textTheme.headline5)),
         titleSpacing: -30,
         toolbarHeight: 108.0,
         elevation: 0.0,

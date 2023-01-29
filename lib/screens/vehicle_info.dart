@@ -1,4 +1,5 @@
 import 'package:aaviss_motors/screens/legal_info.dart';
+import 'package:aaviss_motors/screens/personnel_info.dart';
 import 'package:aaviss_motors/screens/search_detail.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -98,8 +99,12 @@ class _VehicleInfoState extends State<VehicleInfo> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title:
-              Text(widget.title, style: Theme.of(context).textTheme.headline5),
+          title: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(widget.title,
+                  style: Theme.of(context).textTheme.headline5)),
           // leading: Transform.translate(offset: Offset(-15, 0),),
           titleSpacing: -30,
           centerTitle: false,

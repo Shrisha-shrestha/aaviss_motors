@@ -44,8 +44,15 @@ class _SearchDetailState extends State<SearchDetail> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title:
-              Text(widget.title, style: Theme.of(context).textTheme.headline5),
+          title: GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => MyHomePage(
+                          title: widget.title,
+                        )));
+              },
+              child: Text(widget.title,
+                  style: Theme.of(context).textTheme.headline5)),
           // leading: Transform.translate(offset: Offset(-15, 0),),
           titleSpacing: -30,
           centerTitle: false,

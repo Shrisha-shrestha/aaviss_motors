@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:aaviss_motors/screens/confirmation.dart';
+import 'package:aaviss_motors/screens/personnel_info.dart';
 import 'package:aaviss_motors/screens/search_detail.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/foundation.dart';
@@ -56,8 +57,15 @@ class _LegalInfoState extends State<LegalInfo> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title:
-              Text(widget.title, style: Theme.of(context).textTheme.headline5),
+          title: GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => MyHomePage(
+                          title: widget.title,
+                        )));
+              },
+              child: Text(widget.title,
+                  style: Theme.of(context).textTheme.headline5)),
           titleSpacing: -30,
           toolbarHeight: 108.0,
           elevation: 0.0,
