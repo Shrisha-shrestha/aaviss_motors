@@ -32,19 +32,21 @@ class _LegalInfoState extends State<LegalInfo> {
   File? image1, image2, image3, image4, image5;
   String errortxt = '';
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
-  final _picker = ImagePicker();
-  Future<File?> getImage() async {
-    final pickedFile =
-        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 20);
-    if (pickedFile != null) {
-      return File(pickedFile.path);
-    } else {
-      if (kDebugMode) {
-        print('no image selected');
-      }
-      return null;
-    }
-  }
+  // final _picker = ImagePicker();
+  // Future<File?> getImage() async {
+  //   final pickedFile = await _picker.pickImage(
+  //     source: ImageSource.gallery,
+  //     imageQuality: 1,
+  //   );
+  //   if (pickedFile != null) {
+  //     return File(pickedFile.path);
+  //   } else {
+  //     if (kDebugMode) {
+  //       print('no image selected');
+  //     }
+  //     return null;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -238,6 +240,8 @@ class _LegalInfoState extends State<LegalInfo> {
                             children: <Widget>[
                               CustomImageFormField(
                                   formkey: _formkey,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.4,
                                   fieldname:
                                       '${widget.store.nid_type ?? 'Card'} front page',
                                   onSaved: ((newValue) {
@@ -247,6 +251,8 @@ class _LegalInfoState extends State<LegalInfo> {
                                   })),
                               CustomImageFormField(
                                   formkey: _formkey,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.4,
                                   fieldname:
                                       '${widget.store.nid_type ?? 'Card'} back page',
                                   onSaved: ((newValue) {
@@ -263,6 +269,8 @@ class _LegalInfoState extends State<LegalInfo> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               CustomImageFormField(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.4,
                                   formkey: _formkey,
                                   fieldname: 'Billbook main page',
                                   onSaved: ((newValue) {
@@ -272,6 +280,8 @@ class _LegalInfoState extends State<LegalInfo> {
                                   })),
                               CustomImageFormField(
                                   formkey: _formkey,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.4,
                                   fieldname: 'Billbook renewal page',
                                   onSaved: ((newValue) {
                                     setState(() {
@@ -286,6 +296,7 @@ class _LegalInfoState extends State<LegalInfo> {
                           Align(
                             alignment: Alignment.center,
                             child: CustomImageFormField(
+                                width: MediaQuery.of(context).size.width * 0.4,
                                 formkey: _formkey,
                                 fieldname:
                                     'BIllbook tax last renewal date page',

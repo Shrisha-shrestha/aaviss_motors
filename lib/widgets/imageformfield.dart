@@ -10,6 +10,7 @@ class CustomImageFormField extends FormField<File> {
   CustomImageFormField(
       {Key? key,
       required String? fieldname,
+      double? width,
       required GlobalKey<FormState> formkey,
       FormFieldSetter<File?>? onSaved,
       File? initialValue,
@@ -28,7 +29,7 @@ class CustomImageFormField extends FormField<File> {
                 strokeWidth: 2,
                 child: Container(
                     height: 130,
-                    width: 143,
+                    width: width!,
                     decoration: state.value != null
                         ? BoxDecoration(
                             image: DecorationImage(
@@ -41,8 +42,8 @@ class CustomImageFormField extends FormField<File> {
                       onPressed: () async {
                         final _picker = ImagePicker();
                         var image = await _picker.pickImage(
-                            source: ImageSource.gallery);
-                        dynamic selectedImage = File(image!.path);
+                            source: ImageSource.gallery, imageQuality: 20);
+                        dynamic selectedImage = File(image!.path).absolute;
                         state.didChange(selectedImage);
                         //formkey.currentState!.validate();
                       },

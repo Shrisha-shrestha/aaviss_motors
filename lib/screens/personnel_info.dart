@@ -161,6 +161,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                           TextFormField(
                             keyboardType: TextInputType.number,
+                            maxLength: 10,
+                            //maxLengthEnforcement: true,
                             onSaved: (String? value) {
                               store.phone_no = value;
                             },

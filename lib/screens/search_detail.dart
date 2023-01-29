@@ -187,15 +187,18 @@ class _SearchDetailState extends State<SearchDetail> {
                                     ),
                                     TextButton(
                                         onPressed: () {
-                                          if (_formkey.currentState!
-                                              .validate()) {
-                                            _formkey.currentState!.save();
-                                            future = getvehicledata(
-                                                searchrequestModel);
-                                            setState(() {
-                                              _isVisible = true;
-                                            });
-                                          }
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      MyHomePage(
+                                                          title:
+                                                              widget.title)));
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      MyHomePage(
+                                                          title:
+                                                              widget.title)));
                                         },
                                         style: ButtonStyle(
                                             backgroundColor:
@@ -210,7 +213,7 @@ class _SearchDetailState extends State<SearchDetail> {
                                                         color: Theme.of(context)
                                                             .colorScheme
                                                             .secondary)))),
-                                        child: Text('Retry',
+                                        child: Text('Go home',
                                             style:
                                                 Theme.of(context).textTheme.button)),
                                   ],

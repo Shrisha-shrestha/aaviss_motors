@@ -959,7 +959,7 @@ class _ConfirmationState extends State<Confirmation> {
                                     print(widget.store.service_history);
                                     print(widget.store.major_accident);
                                     print(widget.store.variant_id);
-                                    //print(widget.store.img5);
+                                    print(widget.store.img5);
                                     print(widget.store.nid_no);
                                     print(widget.store.no_of_transfer);
                                     print(widget.store.purchase_year);
@@ -1044,8 +1044,9 @@ class _ConfirmationState extends State<Confirmation> {
                                   final snackBar1 = SnackBar(
                                       backgroundColor:
                                           Theme.of(context).colorScheme.primary,
-                                      content:
-                                          Text('${responseModel.message}'));
+                                      content: Text(responseModel.message == ''
+                                          ? 'Error occured\nPlease try again'
+                                          : responseModel.message.toString()));
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(snackBar1);
 
