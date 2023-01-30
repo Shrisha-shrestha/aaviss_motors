@@ -694,8 +694,28 @@ class _ConfirmationState extends State<Confirmation> {
                         ],
                       ),
                     ),
+                    const SizedBox(
+                      height: 25.0,
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.grey),
+                          ),
+                        ),
+                        child: Text(
+                          widget.store.number_plate_radio == 1
+                              ? '${widget.store.zonal_code ?? ''}-${widget.store.lot_number ?? ''}-${widget.store.v_type ?? ''}-${widget.store.v_no ?? ''}'
+                              : '${widget.store.province ?? ''}-${widget.store.office_code ?? ''}-${widget.store.lot_number ?? ''}-${widget.store.symbol ?? ''}-${widget.store.v_no ?? ''}',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        )),
+                    const SizedBox(
+                      height: 25.0,
+                    ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 25.0),
+                      padding: const EdgeInsets.only(top: 18.0, bottom: 10),
                       child: Text(
                         'Citizenship / Pan',
                         style: Theme.of(context).textTheme.bodyText2,

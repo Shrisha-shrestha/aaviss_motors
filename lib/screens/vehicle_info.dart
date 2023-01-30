@@ -840,7 +840,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                             .textTheme
                                             .caption),
                                     const SizedBox(
-                                      width: 89.0,
+                                      width: 78.0,
                                     ),
                                     Radio<int>(
                                         value: 2,
