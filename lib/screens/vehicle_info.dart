@@ -1071,12 +1071,12 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                               droplabel: 'Province',
                                               list: const [
                                                 'Province No. 1',
-                                                'Madhesh',
-                                                'Bagmati',
-                                                'Gandaki',
-                                                'Lumbini',
-                                                'Karnali',
-                                                'Sudurpashchim'
+                                                'Madhesh province',
+                                                'Bagmati province',
+                                                'Gandaki province',
+                                                'Lumbini province',
+                                                'Karnali province',
+                                                'Sudurpashchim province'
                                               ],
                                               onSaved: (String? value) {
                                                 widget.store.province = value;
