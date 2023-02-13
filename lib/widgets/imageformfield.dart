@@ -11,6 +11,7 @@ class CustomImageFormField extends FormField<File> {
       {Key? key,
       required String? fieldname,
       double? width,
+      required BuildContext ctx,
       required GlobalKey<FormState> formkey,
       FormFieldSetter<File?>? onSaved,
       File? initialValue,
@@ -40,11 +41,51 @@ class CustomImageFormField extends FormField<File> {
                           ),
                     child: IconButton(
                       onPressed: () async {
-                        final _picker = ImagePicker();
-                        var image = await _picker.pickImage(
-                            source: ImageSource.gallery, imageQuality: 20);
-                        dynamic selectedImage = File(image!.path).absolute;
-                        state.didChange(selectedImage);
+                        //dynamic selectedImage = popup(ctx);
+                        File? si;
+
+                        await showDialog(
+                            barrierColor:
+                                Theme.of(ctx).primaryColor.withOpacity(0.2),
+                            context: ctx,
+                            builder: (context) {
+                              return AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(20.0)),
+                                  title: Text(
+                                    'Choose one',
+                                    style: Theme.of(ctx)
+                                        .textTheme
+                                        .headline5!
+                                        .copyWith(fontSize: 20),
+                                  ),
+                                  content: SizedBox(
+                                    height: 120,
+                                    child: Column(
+                                      children: [
+                                        ListTile(
+                                          onTap: () async {
+                                            si = await _openCamera(context);
+
+                                            Navigator.pop(context);
+                                          },
+                                          leading: Icon(Icons.camera),
+                                          title: Text('From camera'),
+                                        ),
+                                        ListTile(
+                                            onTap: () async {
+                                              si = await _openGallery(context);
+                                              Navigator.pop(context);
+                                            },
+                                            leading: Icon(Icons.photo),
+                                            title: Text('From Gallery')),
+                                      ],
+                                    ),
+                                  ));
+                            });
+                        state.didChange(si);
+
                         //formkey.currentState!.validate();
                       },
                       icon: Icon(
@@ -92,4 +133,21 @@ class CustomImageFormField extends FormField<File> {
                 );
               }
             });
+}
+
+Future<File?> _openGallery(BuildContext context) async {
+  final _picker = ImagePicker();
+  var image =
+      await _picker.pickImage(source: ImageSource.gallery, imageQuality: 20);
+  File selectedImage = File(image!.path).absolute;
+  print(selectedImage);
+  return selectedImage;
+}
+
+Future<File?> _openCamera(BuildContext context) async {
+  final _picker = ImagePicker();
+  var image =
+      await _picker.pickImage(source: ImageSource.camera, imageQuality: 20);
+  File selectedImage = File(image!.path).absolute;
+  return selectedImage;
 }

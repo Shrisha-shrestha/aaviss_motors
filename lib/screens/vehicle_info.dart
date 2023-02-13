@@ -20,6 +20,15 @@ class VehicleInfo extends StatefulWidget {
 
 class _VehicleInfoState extends State<VehicleInfo> {
   int? val1, val2, val3, val4;
+  List<String> prov = [
+    'Province No.1',
+    'Madhesh province',
+    'Bagmati province ',
+    'Gandaki province',
+    'Lumbini province',
+    'Karnali province',
+    'Sudurpashchim province'
+  ];
   dynamic val;
   List<String> years = [], test = [''];
   int? dropdownvalue1, dropdownvalue2, dropdownvalue3;
@@ -1060,24 +1069,64 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
+                                          // SizedBox(
+                                          //   width: 100.0,
+                                          //   child: CustomDropdownwidget(
+                                          //     validator: (val) =>
+                                          //         val?.isEmpty == true ||
+                                          //                 val == null
+                                          //             ? 'Required!'
+                                          //             : null,
+                                          //     droplabel: 'Province',
+                                          //     list: const [
+                                          //       'Province No.1',
+                                          //       'Madhesh',
+                                          //       'Bagmati',
+                                          //       'Gandaki',
+                                          //       'Lumbini',
+                                          //       'Karnali',
+                                          //       'Sudurpashchim'
+                                          //     ],
+
+                                          //   ),
+                                          // ),
                                           SizedBox(
-                                            width: 91.0,
-                                            child: CustomDropdownwidget(
-                                              validator: (val) =>
-                                                  val?.isEmpty == true ||
-                                                          val == null
-                                                      ? 'Required!'
-                                                      : null,
-                                              droplabel: 'Province',
-                                              list: const [
-                                                'Province No. 1',
-                                                'Madhesh province',
-                                                'Bagmati province',
-                                                'Gandaki province',
-                                                'Lumbini province',
-                                                'Karnali province',
-                                                'Sudurpashchim province'
-                                              ],
+                                            width: 180,
+                                            child: DropdownButtonFormField(
+                                              validator: (val) => val == null
+                                                  ? 'Province'
+                                                  : null,
+                                              menuMaxHeight: 160.0,
+                                              decoration: InputDecoration(
+                                                labelText: 'Province',
+                                                labelStyle: Theme.of(context)
+                                                    .textTheme
+                                                    .caption,
+                                                focusedBorder:
+                                                    const UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors
+                                                          .grey), //<-- SEE HERE
+                                                ),
+                                              ),
+                                              icon: const Icon(
+                                                Icons.arrow_drop_down,
+                                                color: Colors.grey,
+                                              ),
+                                              items: prov.map((String val) {
+                                                return DropdownMenuItem(
+                                                  alignment: Alignment.center,
+                                                  value: val,
+                                                  child: Text(
+                                                    val,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .subtitle2!
+                                                        .copyWith(
+                                                            fontSize: 15.0),
+                                                  ),
+                                                );
+                                              }).toList(),
                                               onSaved: (String? value) {
                                                 widget.store.province = value;
                                               },
@@ -1118,8 +1167,17 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                               },
                                             ),
                                           ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 10.0,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
                                           SizedBox(
-                                            width: 91.0,
+                                            width: 88.0,
                                             child: TextFormField(
                                               inputFormatters: [
                                                 LengthLimitingTextInputFormatter(
@@ -1158,15 +1216,9 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                               ),
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 10.0,
-                                      ),
-                                      Row(
-                                        children: <Widget>[
                                           SizedBox(
-                                            width: 91.0,
+                                            height: 53.0,
+                                            width: 88.0,
                                             child: CustomDropdownwidget(
                                               validator: (val) =>
                                                   val?.isEmpty == true ||
@@ -1208,13 +1260,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                             ),
                                           ),
                                           SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.1,
-                                          ),
-                                          SizedBox(
-                                            width: 91.0,
+                                            width: 88.0,
                                             child: TextFormField(
                                               keyboardType:
                                                   TextInputType.number,

@@ -398,7 +398,7 @@ class _ConfirmationState extends State<Confirmation> {
                         Text("Private",
                             style: Theme.of(context).textTheme.caption),
                         const SizedBox(
-                          width: 70.0,
+                          width: 72.0,
                         ),
                         Radio<int>(
                             value: 2,
@@ -426,7 +426,7 @@ class _ConfirmationState extends State<Confirmation> {
                         Text("Zonal",
                             style: Theme.of(context).textTheme.caption),
                         const SizedBox(
-                          width: 91.0,
+                          width: 80.0,
                         ),
                         Radio<int>(
                             value: 2,
@@ -557,7 +557,7 @@ class _ConfirmationState extends State<Confirmation> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               SizedBox(
-                                width: 91.0,
+                                width: 180.0,
                                 child: CustomDropdownwidget(
                                     validator: (val) =>
                                         val?.isEmpty == true || val == null
@@ -601,6 +601,14 @@ class _ConfirmationState extends State<Confirmation> {
                                   ],
                                 ),
                               ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
                               Container(
                                 margin: EdgeInsets.only(top: 14.0),
                                 width: 91.0,
@@ -634,13 +642,6 @@ class _ConfirmationState extends State<Confirmation> {
                                   ],
                                 ),
                               ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10.0,
-                          ),
-                          Row(
-                            children: <Widget>[
                               SizedBox(
                                 width: 91.0,
                                 child: CustomDropdownwidget(
@@ -652,9 +653,6 @@ class _ConfirmationState extends State<Confirmation> {
                                     list: const [],
                                     dropdownvalue: widget.store.symbol,
                                     onChanged: null),
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.1,
                               ),
                               Container(
                                 margin: EdgeInsets.only(top: 14.0),

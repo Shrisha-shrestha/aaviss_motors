@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       title: 'Aaviss Motors',
       debugShowCheckedModeBanner: false,
       home: MyHomePage(title: 'Aaviss Motors'),
-      //home: MyWidget(),
+      //home: ExpandableText(),
       theme: ThemeData(
         brightness: Brightness.light,
         fontFamily: 'Inter',

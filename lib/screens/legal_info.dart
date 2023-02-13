@@ -247,6 +247,7 @@ class _LegalInfoState extends State<LegalInfo> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               CustomImageFormField(
+                                  ctx: context,
                                   formkey: _formkey,
                                   width:
                                       MediaQuery.of(context).size.width * 0.4,
@@ -258,6 +259,7 @@ class _LegalInfoState extends State<LegalInfo> {
                                     });
                                   })),
                               CustomImageFormField(
+                                  ctx: context,
                                   formkey: _formkey,
                                   width:
                                       MediaQuery.of(context).size.width * 0.4,
@@ -281,6 +283,7 @@ class _LegalInfoState extends State<LegalInfo> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               CustomImageFormField(
+                                  ctx: context,
                                   width:
                                       MediaQuery.of(context).size.width * 0.4,
                                   formkey: _formkey,
@@ -291,6 +294,7 @@ class _LegalInfoState extends State<LegalInfo> {
                                     });
                                   })),
                               CustomImageFormField(
+                                  ctx: context,
                                   formkey: _formkey,
                                   width:
                                       MediaQuery.of(context).size.width * 0.4,
@@ -308,6 +312,7 @@ class _LegalInfoState extends State<LegalInfo> {
                           Align(
                             alignment: Alignment.center,
                             child: CustomImageFormField(
+                                ctx: context,
                                 width: MediaQuery.of(context).size.width * 0.4,
                                 formkey: _formkey,
                                 fieldname:
