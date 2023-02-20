@@ -1,9 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:aaviss_motors/models/getbrand.dart';
-import 'package:aaviss_motors/models/getvariants.dart';
-import 'package:aaviss_motors/models/getvehiclename.dart';
-import 'package:aaviss_motors/screens/personnel_info.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:aaviss_motors/screens/search_detail.dart';
 import 'package:aaviss_motors/screens/vehicle_info.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -1018,33 +1015,34 @@ class _ConfirmationState extends State<Confirmation> {
                                 child: Text('Submit',
                                     style: Theme.of(context).textTheme.button),
                                 onPressed: () async {
-                                  final snackBar = SnackBar(
-                                      backgroundColor:
-                                          Theme.of(context).colorScheme.primary,
-                                      content: Text('Please Wait.....'));
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
+                                  showDialog(
+                                      context: context,
+                                      barrierColor: Theme.of(context)
+                                          .colorScheme
+                                          .primary
+                                          .withOpacity(0.2),
+                                      builder: (ctx) {
+                                        return Center(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                            height: 80,
+                                            width: 80,
+                                            child: Center(
+                                              child: CircularProgressIndicator(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary),
+                                            ),
+                                          ),
+                                        );
+                                      });
+
                                   // if (kDebugMode) {
                                   //   print(widget.store.kilometer);
-                                  //   print(widget.store.service_history);
-                                  //   print(widget.store.major_accident);
-                                  //   print(widget.store.variant_id);
-                                  //   print(widget.store.img5);
-                                  //   print(widget.store.nid_no);
-                                  //   print(widget.store.no_of_transfer);
-                                  //   print(widget.store.purchase_year);
-                                  //   print(widget.store.no_of_seats);
-                                  //   print(widget.store.manufacture_year);
-                                  //   print(widget.store.engine_no);
-                                  //   print(widget.store.vehicle_name_id);
-                                  //   print(widget.store.brand_id);
-                                  //   print(widget.store.nid_type);
-                                  //   print(widget.store.vehicle_no);
-                                  //   print(widget.store.vehicle_type);
-                                  //   print(widget.store.color);
-                                  //   print(widget.store.phone_no);
-                                  //   print(widget.store.address);
-                                  //   print(widget.store.full_name);
                                   // }
                                   var uri = Uri.parse(
                                       'https://cms.aavissmotors.com/api/v1/save-vehicle');
@@ -1087,37 +1085,51 @@ class _ConfirmationState extends State<Confirmation> {
                                       await http.MultipartFile.fromPath(
                                           "nid_front",
                                           widget.store.img1!.path));
-                                  // request.files.add(
-                                  //     await http.MultipartFile.fromPath(
-                                  //         "nid_back", widget.store.img2!.path));
+
                                   request.files.add(
                                       await http.MultipartFile.fromPath(
                                           "bill_book_main_page",
                                           widget.store.img3!.path));
-                                  // request.files.add(
-                                  //     await http.MultipartFile.fromPath(
-                                  //         "bill_book_renewal_page",
-                                  //         widget.store.img4!.path));
+
                                   request.files.add(
                                       await http.MultipartFile.fromPath(
                                           "bill_book_tax_renewed_date_page",
                                           widget.store.img5!.path));
 
-                                  var response = await request.send();
+                                  // request.files.add(
+                                  //     await http.MultipartFile.fromPath(
+                                  //         "nid_back", widget.store.img2!.path));
+                                  // request.files.add(
+                                  //     await http.MultipartFile.fromPath(
+                                  //         "bill_book_renewal_page",
+                                  //         widget.store.img4!.path));
 
+                                  var response = await request.send();
+                                  Navigator.pop(context);
                                   print(response.statusCode);
                                   Map<String, dynamic> valueMap = json.decode(
                                       await response.stream.bytesToString());
                                   StoreResponseModel responseModel =
                                       StoreResponseModel.fromJson(valueMap);
-                                  final snackBar1 = SnackBar(
-                                      backgroundColor:
-                                          Theme.of(context).colorScheme.primary,
-                                      content: Text(responseModel.message == ''
+                                  Fluttertoast.showToast(
+                                      msg: responseModel.message == ''
                                           ? 'Error occured\nPlease try again'
-                                          : responseModel.message.toString()));
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar1);
+                                          : responseModel.message.toString(),
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.BOTTOM,
+                                      backgroundColor: Theme.of(context)
+                                          .colorScheme
+                                          .primary
+                                          .withOpacity(0.5),
+                                      textColor: Colors.black);
+                                  // final snackBar1 = SnackBar(
+                                  //     backgroundColor:
+                                  //         Theme.of(context).colorScheme.primary,
+                                  //     content: Text(responseModel.message == ''
+                                  //         ? 'Error occured\nPlease try again'
+                                  //         : responseModel.message.toString()));
+                                  // ScaffoldMessenger.of(context)
+                                  //     .showSnackBar(snackBar1);
 
                                   if (response.statusCode == 200) {
                                     print('Sent');
