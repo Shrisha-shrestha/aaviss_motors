@@ -81,15 +81,18 @@ class B_V_fromAPI {
   List<Innerdata>? brandlist;
   List<innerdata>? vehiclelist;
   List<inner_data>? variantlist;
+  String? brand, vehicle, variant;
   Map<int, String>? blist;
   Map<int, String>? velist;
   Map<int, String>? valist;
-
   B_V_fromAPI(
       {this.brandlist,
       this.vehiclelist,
       this.variantlist,
+      this.brand,
+      this.variant,
+      this.vehicle,
       this.blist,
-      this.velist,
-      this.valist});
+      this.valist,
+      this.velist});
 }

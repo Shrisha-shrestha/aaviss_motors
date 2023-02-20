@@ -5,6 +5,7 @@ import 'package:aaviss_motors/models/getvariants.dart';
 import 'package:aaviss_motors/models/getvehiclename.dart';
 import 'package:aaviss_motors/screens/personnel_info.dart';
 import 'package:aaviss_motors/screens/search_detail.dart';
+import 'package:aaviss_motors/screens/vehicle_info.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -35,21 +36,22 @@ class _ConfirmationState extends State<Confirmation> {
   bool _isvisible1 = false,
       _isvisible2 = false,
       _isvisible3 = false,
-      _isvisible4 = false;
+      _isvisible4 = false,
+      _isvisible5 = false;
+
   @override
   Widget build(BuildContext context) {
     val1 = widget.store.major_accident!.toLowerCase() == "yes" ? 1 : 2;
     val2 = widget.store.service_history!.toLowerCase() == "yes" ? 1 : 2;
     val3 = widget.store.vehicle_type!.toLowerCase() == "private" ? 1 : 2;
+    if (widget.store.manufacture_year != null) {
+      _isvisible5 = true;
+    }
 
     if (widget.store.number_plate_radio == 1) {
       _isvisible1 = true;
-      widget.store.vehicle_no =
-          '${widget.store.zonal_code}-${widget.store.lot_number}-${widget.store.v_type} ${widget.store.v_no} ';
     } else if (widget.store.number_plate_radio == 2) {
       _isvisible2 = true;
-      widget.store.vehicle_no =
-          '${widget.store.province}-${widget.store.office_code}-${widget.store.lot_number} ${widget.store.symbol} ${widget.store.v_no} ';
     }
 
     if (widget.store.card_type_radio == 1) {
@@ -71,7 +73,7 @@ class _ConfirmationState extends State<Confirmation> {
         title: GestureDetector(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => MyHomePage(
+                  builder: (context) => VehicleInfo(
                         title: widget.title,
                       )));
             },
@@ -120,7 +122,7 @@ class _ConfirmationState extends State<Confirmation> {
               Padding(
                 padding: const EdgeInsets.only(top: 6.0, bottom: 23.0),
                 child: Text(
-                  'Confirm All the data before submitting',
+                  'Confirm all the data before submitting',
                   style: Theme.of(context).textTheme.subtitle2!,
                 ),
               ),
@@ -129,259 +131,12 @@ class _ConfirmationState extends State<Confirmation> {
                     child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(
-                      'Personnel Data',
-                      style: Theme.of(context).textTheme.bodyText2,
-                    ),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Container(
-                        padding: EdgeInsets.all(8.0),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(width: 1, color: Colors.grey),
-                          ),
-                        ),
-                        child: Text(
-                          'Full Name : ${widget.store.full_name}',
-                          style: Theme.of(context).textTheme.subtitle2,
-                        )),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Container(
-                        padding: EdgeInsets.all(8.0),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(width: 1, color: Colors.grey),
-                          ),
-                        ),
-                        child: Text(
-                          'Address : ${widget.store.address}',
-                          style: Theme.of(context).textTheme.subtitle2,
-                        )),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Container(
-                        padding: EdgeInsets.all(8.0),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(width: 1, color: Colors.grey),
-                          ),
-                        ),
-                        child: Text(
-                          'Contact Number : ${widget.store.phone_no}',
-                          style: Theme.of(context).textTheme.subtitle2,
-                        )),
                     Padding(
-                      padding: const EdgeInsets.only(top: 30.0, bottom: 20.0),
+                      padding: const EdgeInsets.only(bottom: 20.0),
                       child: Text(
                         'Vehicle Information',
                         style: Theme.of(context).textTheme.bodyText2,
                       ),
-                    ),
-                    Container(
-                        padding: EdgeInsets.all(8.0),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(width: 1, color: Colors.grey),
-                          ),
-                        ),
-                        child: Text(
-                          'Name of Brand : $brand',
-                          style: Theme.of(context).textTheme.subtitle2,
-                        )),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Container(
-                        padding: EdgeInsets.all(8.0),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(width: 1, color: Colors.grey),
-                          ),
-                        ),
-                        child: Text(
-                          'Name of Vehicle : $vehicle',
-                          style: Theme.of(context).textTheme.subtitle2,
-                        )),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Container(
-                        padding: EdgeInsets.all(8.0),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(width: 1, color: Colors.grey),
-                          ),
-                        ),
-                        child: Text(
-                          'Name of Variant : $variant',
-                          style: Theme.of(context).textTheme.subtitle2,
-                        )),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Container(
-                        padding: EdgeInsets.all(8.0),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(width: 1, color: Colors.grey),
-                          ),
-                        ),
-                        child: Text(
-                          'Engine No. : ${widget.store.engine_no}',
-                          style: Theme.of(context).textTheme.subtitle2,
-                        )),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Container(
-                        padding: EdgeInsets.all(8.0),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(width: 1, color: Colors.grey),
-                          ),
-                        ),
-                        child: Text(
-                          'Manufacture Year : ${widget.store.manufacture_year}',
-                          style: Theme.of(context).textTheme.subtitle2,
-                        )),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Container(
-                        padding: EdgeInsets.all(8.0),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(width: 1, color: Colors.grey),
-                          ),
-                        ),
-                        child: Text(
-                          'Color : ${widget.store.color}',
-                          style: Theme.of(context).textTheme.subtitle2,
-                        )),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Container(
-                        padding: EdgeInsets.all(8.0),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(width: 1, color: Colors.grey),
-                          ),
-                        ),
-                        child: Text(
-                          'No. of Seat : ${widget.store.no_of_seats}',
-                          style: Theme.of(context).textTheme.subtitle2,
-                        )),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Container(
-                        padding: EdgeInsets.all(8.0),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(width: 1, color: Colors.grey),
-                          ),
-                        ),
-                        child: Text(
-                          'Purchase Year : ${widget.store.purchase_year}',
-                          style: Theme.of(context).textTheme.subtitle2,
-                        )),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Container(
-                        padding: EdgeInsets.all(8.0),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(width: 1, color: Colors.grey),
-                          ),
-                        ),
-                        child: Text(
-                          'No. of Transfers : ${widget.store.no_of_transfer}',
-                          style: Theme.of(context).textTheme.subtitle2,
-                        )),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Container(
-                        padding: EdgeInsets.all(8.0),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(width: 1, color: Colors.grey),
-                          ),
-                        ),
-                        child: Text(
-                          'Mileage : ${widget.store.kilometer}',
-                          style: Theme.of(context).textTheme.subtitle2,
-                        )),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Text(
-                      'Major Accident',
-                      style: Theme.of(context).textTheme.caption,
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Radio<int>(
-                            value: 1,
-                            groupValue: val1,
-                            activeColor:
-                                Theme.of(context).colorScheme.secondary,
-                            onChanged: (int? value) {}),
-                        Text("Yes", style: Theme.of(context).textTheme.caption),
-                        const SizedBox(
-                          width: 88.0,
-                        ),
-                        Radio<int>(
-                            value: 2,
-                            groupValue: val1,
-                            activeColor:
-                                Theme.of(context).colorScheme.secondary,
-                            onChanged: (int? value) {}),
-                        Text("No", style: Theme.of(context).textTheme.caption),
-                      ],
-                    ),
-                    Text(
-                      'Service History',
-                      style: Theme.of(context).textTheme.caption,
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Radio<int>(
-                            value: 1,
-                            groupValue: val2,
-                            activeColor:
-                                Theme.of(context).colorScheme.secondary,
-                            onChanged: (int? value) {}),
-                        Text("Yes", style: Theme.of(context).textTheme.caption),
-                        SizedBox(width: 88.0),
-                        Radio<int>(
-                            value: 2,
-                            groupValue: val2,
-                            activeColor:
-                                Theme.of(context).colorScheme.secondary,
-                            onChanged: (int? value) {}),
-                        Text("No", style: Theme.of(context).textTheme.caption),
-                      ],
                     ),
                     Text(
                       'Vehicle Type',
@@ -448,7 +203,7 @@ class _ConfirmationState extends State<Confirmation> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               SizedBox(
-                                width: 91.0,
+                                width: MediaQuery.of(context).size.width * 0.25,
                                 child: CustomDropdownwidget(
                                   validator: (val) =>
                                       val?.isEmpty == true || val == null
@@ -462,7 +217,7 @@ class _ConfirmationState extends State<Confirmation> {
                               ),
                               Container(
                                 margin: EdgeInsets.only(top: 14.0),
-                                width: 91.0,
+                                width: MediaQuery.of(context).size.width * 0.25,
                                 height: 45.0,
                                 decoration: BoxDecoration(
                                   border: Border(
@@ -494,7 +249,7 @@ class _ConfirmationState extends State<Confirmation> {
                                 ),
                               ),
                               SizedBox(
-                                width: 91.0,
+                                width: MediaQuery.of(context).size.width * 0.25,
                                 child: CustomDropdownwidget(
                                   validator: (val) =>
                                       val?.isEmpty == true || val == null
@@ -513,7 +268,7 @@ class _ConfirmationState extends State<Confirmation> {
                           ),
                           Container(
                             margin: EdgeInsets.only(top: 14.0),
-                            width: 91.0,
+                            width: MediaQuery.of(context).size.width * 0.26,
                             height: 45.0,
                             decoration: BoxDecoration(
                               border: Border(
@@ -557,7 +312,7 @@ class _ConfirmationState extends State<Confirmation> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               SizedBox(
-                                width: 180.0,
+                                width: MediaQuery.of(context).size.width * 0.5,
                                 child: CustomDropdownwidget(
                                     validator: (val) =>
                                         val?.isEmpty == true || val == null
@@ -570,7 +325,7 @@ class _ConfirmationState extends State<Confirmation> {
                               ),
                               Container(
                                 margin: EdgeInsets.only(top: 14.0),
-                                width: 91.0,
+                                width: MediaQuery.of(context).size.width * 0.3,
                                 height: 45.0,
                                 decoration: BoxDecoration(
                                   border: Border(
@@ -611,7 +366,7 @@ class _ConfirmationState extends State<Confirmation> {
                             children: <Widget>[
                               Container(
                                 margin: EdgeInsets.only(top: 14.0),
-                                width: 91.0,
+                                width: MediaQuery.of(context).size.width * 0.26,
                                 height: 45.0,
                                 decoration: BoxDecoration(
                                   border: Border(
@@ -643,7 +398,7 @@ class _ConfirmationState extends State<Confirmation> {
                                 ),
                               ),
                               SizedBox(
-                                width: 91.0,
+                                width: MediaQuery.of(context).size.width * 0.26,
                                 child: CustomDropdownwidget(
                                     validator: (val) =>
                                         val?.isEmpty == true || val == null
@@ -656,7 +411,7 @@ class _ConfirmationState extends State<Confirmation> {
                               ),
                               Container(
                                 margin: EdgeInsets.only(top: 14.0),
-                                width: 91.0,
+                                width: MediaQuery.of(context).size.width * 0.26,
                                 height: 45.0,
                                 decoration: BoxDecoration(
                                   border: Border(
@@ -692,7 +447,7 @@ class _ConfirmationState extends State<Confirmation> {
                         ],
                       ),
                     ),
-                    const SizedBox(
+                    SizedBox(
                       height: 25.0,
                     ),
                     Container(
@@ -704,16 +459,275 @@ class _ConfirmationState extends State<Confirmation> {
                           ),
                         ),
                         child: Text(
+                          textAlign: TextAlign.center,
                           widget.store.number_plate_radio == 1
                               ? '${widget.store.zonal_code ?? ''}-${widget.store.lot_number ?? ''}-${widget.store.v_type ?? ''}-${widget.store.v_no ?? ''}'
                               : '${widget.store.province ?? ''}-${widget.store.office_code ?? ''}-${widget.store.lot_number ?? ''}-${widget.store.symbol ?? ''}-${widget.store.v_no ?? ''}',
                           style: Theme.of(context).textTheme.subtitle2,
                         )),
+                    SizedBox(
+                      height: 25.0,
+                    ),
+                    Text(
+                      'Major Accident',
+                      style: Theme.of(context).textTheme.caption,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Radio<int>(
+                            value: 1,
+                            groupValue: val1,
+                            activeColor:
+                                Theme.of(context).colorScheme.secondary,
+                            onChanged: (int? value) {}),
+                        Text("Yes", style: Theme.of(context).textTheme.caption),
+                        const SizedBox(
+                          width: 88.0,
+                        ),
+                        Radio<int>(
+                            value: 2,
+                            groupValue: val1,
+                            activeColor:
+                                Theme.of(context).colorScheme.secondary,
+                            onChanged: (int? value) {}),
+                        Text("No", style: Theme.of(context).textTheme.caption),
+                      ],
+                    ),
+                    Text(
+                      'Service History',
+                      style: Theme.of(context).textTheme.caption,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Radio<int>(
+                            value: 1,
+                            groupValue: val2,
+                            activeColor:
+                                Theme.of(context).colorScheme.secondary,
+                            onChanged: (int? value) {}),
+                        Text("Yes", style: Theme.of(context).textTheme.caption),
+                        SizedBox(width: 88.0),
+                        Radio<int>(
+                            value: 2,
+                            groupValue: val2,
+                            activeColor:
+                                Theme.of(context).colorScheme.secondary,
+                            onChanged: (int? value) {}),
+                        Text("No", style: Theme.of(context).textTheme.caption),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 8.0,
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.grey),
+                          ),
+                        ),
+                        child: Text(
+                          'Name of Brand : $brand',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        )),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.grey),
+                          ),
+                        ),
+                        child: Text(
+                          'Name of Vehicle : $vehicle',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        )),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.grey),
+                          ),
+                        ),
+                        child: Text(
+                          'Name of Variant : $variant',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        )),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.grey),
+                          ),
+                        ),
+                        child: Text(
+                          'Engine No. : ${widget.store.engine_no}',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        )),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Visibility(
+                      visible: _isvisible5,
+                      child: Column(
+                        children: [
+                          Container(
+                              padding: EdgeInsets.all(8.0),
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom:
+                                      BorderSide(width: 1, color: Colors.grey),
+                                ),
+                              ),
+                              child: Text(
+                                'Manufacture Year : ${widget.store.manufacture_year}',
+                                style: Theme.of(context).textTheme.subtitle2,
+                              )),
+                          const SizedBox(
+                            height: 20.0,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.grey),
+                          ),
+                        ),
+                        child: Text(
+                          'Color : ${widget.store.color}',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        )),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.grey),
+                          ),
+                        ),
+                        child: Text(
+                          'No. of Seat : ${widget.store.no_of_seats}',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        )),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.grey),
+                          ),
+                        ),
+                        child: Text(
+                          'Purchase Year : ${widget.store.purchase_year}',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        )),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.grey),
+                          ),
+                        ),
+                        child: Text(
+                          'No. of Past owners : ${widget.store.no_of_transfer}',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        )),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.grey),
+                          ),
+                        ),
+                        child: Text(
+                          'Mileage : ${widget.store.kilometer}',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        )),
                     const SizedBox(
                       height: 25.0,
                     ),
+                    Text(
+                      'Personnel Data',
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.grey),
+                          ),
+                        ),
+                        child: Text(
+                          'Full Name : ${widget.store.full_name}',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        )),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.grey),
+                          ),
+                        ),
+                        child: Text(
+                          'Address : ${widget.store.address}',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        )),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.grey),
+                          ),
+                        ),
+                        child: Text(
+                          'Contact Number : ${widget.store.phone_no}',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        )),
                     Padding(
-                      padding: const EdgeInsets.only(top: 18.0, bottom: 10),
+                      padding: const EdgeInsets.only(top: 25.0, bottom: 10),
                       child: Text(
                         'Citizenship / Pan',
                         style: Theme.of(context).textTheme.bodyText2,
@@ -779,10 +793,10 @@ class _ConfirmationState extends State<Confirmation> {
                               )),
                         ),
                         const SizedBox(
-                          height: 23.0,
+                          height: 30.0,
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Column(
                               children: [
@@ -791,13 +805,10 @@ class _ConfirmationState extends State<Confirmation> {
                                   strokeWidth: 2,
                                   child: SizedBox(
                                     height: 130,
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.4,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.38,
                                     child: Image.file(
                                       File(widget.store.img1!.path).absolute,
-                                      height: 130,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.4,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -806,48 +817,48 @@ class _ConfirmationState extends State<Confirmation> {
                                   padding: const EdgeInsets.only(top: 8.0),
                                   child: Text(
                                     widget.store.card_type_radio == 1
-                                        ? 'Citizenship front page'
-                                        : 'Pan front page',
+                                        ? 'Citizenship card '
+                                        : 'Pan card ',
                                     style: Theme.of(context).textTheme.caption,
                                   ),
                                 ),
                               ],
                             ),
-                            Column(
-                              children: [
-                                DottedBorder(
-                                  dashPattern: const [4, 4],
-                                  strokeWidth: 2,
-                                  child: SizedBox(
-                                    height: 130,
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.4,
-                                    child: Image.file(
-                                      File(widget.store.img2!.path).absolute,
-                                      height: 130,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.4,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 8.0),
-                                  child: Text(
-                                    widget.store.card_type_radio == 1
-                                        ? 'Citizenship back page'
-                                        : 'Pan back page',
-                                    style: Theme.of(context).textTheme.caption,
-                                  ),
-                                ),
-                              ],
-                            ),
+                            // Column(
+                            //   children: [
+                            // DottedBorder(
+                            //   dashPattern: const [4, 4],
+                            //   strokeWidth: 2,
+                            //   child: SizedBox(
+                            //     height: 130,
+                            //     width:
+                            //         MediaQuery.of(context).size.width * 0.4,
+                            //     child: Image.file(
+                            //       File(widget.store.img2!.path).absolute,
+                            //       height: 130,
+                            //       width: MediaQuery.of(context).size.width *
+                            //           0.4,
+                            //       fit: BoxFit.cover,
+                            //     ),
+                            //   ),
+                            // ),
+                            // Padding(
+                            //   padding: const EdgeInsets.only(top: 8.0),
+                            //   child: Text(
+                            //     widget.store.card_type_radio == 1
+                            //         ? 'Citizenship back page'
+                            //         : 'Pan back page',
+                            //     style: Theme.of(context).textTheme.caption,
+                            //   ),
+                            // ),
+                            //   ],
+                            // ),
                           ],
                         ),
                         Align(
                           alignment: Alignment.topLeft,
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 45.0),
+                            padding: const EdgeInsets.symmetric(vertical: 25.0),
                             child: Text(
                               'Bill Book Information',
                               style: Theme.of(context).textTheme.bodyText2,
@@ -856,6 +867,7 @@ class _ConfirmationState extends State<Confirmation> {
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             Column(
                               children: [
@@ -864,13 +876,10 @@ class _ConfirmationState extends State<Confirmation> {
                                   strokeWidth: 2,
                                   child: SizedBox(
                                     height: 130,
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.4,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.38,
                                     child: Image.file(
                                       File(widget.store.img3!.path).absolute,
-                                      height: 130,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.4,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -878,7 +887,7 @@ class _ConfirmationState extends State<Confirmation> {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 8.0),
                                   child: Text(
-                                    'Billbook main page',
+                                    'Billbook photo page\n',
                                     style: Theme.of(context).textTheme.caption,
                                   ),
                                 ),
@@ -891,13 +900,10 @@ class _ConfirmationState extends State<Confirmation> {
                                   strokeWidth: 2,
                                   child: SizedBox(
                                     height: 130,
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.4,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.38,
                                     child: Image.file(
-                                      File(widget.store.img4!.path).absolute,
-                                      height: 130,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.4,
+                                      File(widget.store.img5!.path).absolute,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -905,45 +911,73 @@ class _ConfirmationState extends State<Confirmation> {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 8.0),
                                   child: Text(
-                                    'Billbook renewal page',
+                                    textAlign: TextAlign.center,
+                                    'Billbook tax last \nrenewal date page',
                                     style: Theme.of(context).textTheme.caption,
                                   ),
                                 ),
                               ],
                             ),
+                            // Column(
+                            //   children: [
+                            // DottedBorder(
+                            //   dashPattern: const [4, 4],
+                            //   strokeWidth: 2,
+                            //   child: SizedBox(
+                            //     height: 130,
+                            //     width:
+                            //         MediaQuery.of(context).size.width * 0.4,
+                            //     child: Image.file(
+                            //       File(widget.store.img4!.path).absolute,
+                            //       height: 130,
+                            //       width: MediaQuery.of(context).size.width *
+                            //           0.4,
+                            //       fit: BoxFit.cover,
+                            //     ),
+                            //   ),
+                            // ),
+                            // Padding(
+                            //   padding: const EdgeInsets.only(top: 8.0),
+                            //   child: Text(
+                            //     'Billbook renewal page',
+                            //     style: Theme.of(context).textTheme.caption,
+                            //   ),
+                            // ),
+                            //   ],
+                            // ),
                           ],
                         ),
+                        // const SizedBox(
+                        //   height: 23.0,
+                        // ),
+                        // Column(
+                        //   children: [
+                        //     DottedBorder(
+                        //       dashPattern: const [4, 4],
+                        //       strokeWidth: 2,
+                        //       child: SizedBox(
+                        //         height: 130,
+                        //         width: MediaQuery.of(context).size.width * 0.4,
+                        //         child: Image.file(
+                        //           File(widget.store.img5!.path).absolute,
+                        //           height: 130,
+                        //           width:
+                        //               MediaQuery.of(context).size.width * 0.4,
+                        //           fit: BoxFit.cover,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //     Padding(
+                        //       padding: const EdgeInsets.only(top: 8.0),
+                        //       child: Text(
+                        //         'Billbook tax last renewal date page',
+                        //         style: Theme.of(context).textTheme.caption,
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                         const SizedBox(
-                          height: 23.0,
-                        ),
-                        Column(
-                          children: [
-                            DottedBorder(
-                              dashPattern: const [4, 4],
-                              strokeWidth: 2,
-                              child: SizedBox(
-                                height: 130,
-                                width: MediaQuery.of(context).size.width * 0.4,
-                                child: Image.file(
-                                  File(widget.store.img5!.path).absolute,
-                                  height: 130,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.4,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: Text(
-                                'Billbook tax last renewal date page',
-                                style: Theme.of(context).textTheme.caption,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 25.0,
+                          height: 30.0,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -990,30 +1024,30 @@ class _ConfirmationState extends State<Confirmation> {
                                       content: Text('Please Wait.....'));
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(snackBar);
-                                  if (kDebugMode) {
-                                    print(widget.store.kilometer);
-                                    print(widget.store.service_history);
-                                    print(widget.store.major_accident);
-                                    print(widget.store.variant_id);
-                                    print(widget.store.img5);
-                                    print(widget.store.nid_no);
-                                    print(widget.store.no_of_transfer);
-                                    print(widget.store.purchase_year);
-                                    print(widget.store.no_of_seats);
-                                    print(widget.store.manufacture_year);
-                                    print(widget.store.engine_no);
-                                    print(widget.store.vehicle_name_id);
-                                    print(widget.store.brand_id);
-                                    print(widget.store.nid_type);
-                                    print(widget.store.vehicle_no);
-                                    print(widget.store.vehicle_type);
-                                    print(widget.store.color);
-                                    print(widget.store.phone_no);
-                                    print(widget.store.address);
-                                    print(widget.store.full_name);
-                                  }
+                                  // if (kDebugMode) {
+                                  //   print(widget.store.kilometer);
+                                  //   print(widget.store.service_history);
+                                  //   print(widget.store.major_accident);
+                                  //   print(widget.store.variant_id);
+                                  //   print(widget.store.img5);
+                                  //   print(widget.store.nid_no);
+                                  //   print(widget.store.no_of_transfer);
+                                  //   print(widget.store.purchase_year);
+                                  //   print(widget.store.no_of_seats);
+                                  //   print(widget.store.manufacture_year);
+                                  //   print(widget.store.engine_no);
+                                  //   print(widget.store.vehicle_name_id);
+                                  //   print(widget.store.brand_id);
+                                  //   print(widget.store.nid_type);
+                                  //   print(widget.store.vehicle_no);
+                                  //   print(widget.store.vehicle_type);
+                                  //   print(widget.store.color);
+                                  //   print(widget.store.phone_no);
+                                  //   print(widget.store.address);
+                                  //   print(widget.store.full_name);
+                                  // }
                                   var uri = Uri.parse(
-                                      'https://aavissmotors.creatudevelopers.com.np/api/v1/save-vehicle');
+                                      'https://cms.aavissmotors.com/api/v1/save-vehicle');
                                   var request =
                                       http.MultipartRequest('POST', uri);
                                   request.headers.addAll({
@@ -1029,7 +1063,7 @@ class _ConfirmationState extends State<Confirmation> {
                                         '${widget.store.vehicle_name_id}',
                                     'engine_no': '${widget.store.engine_no}',
                                     'manufacture_year':
-                                        '${widget.store.manufacture_year}',
+                                        '${widget.store.manufacture_year ?? ''}',
                                     'color': '${widget.store.color}',
                                     'no_of_seats':
                                         '${widget.store.no_of_seats}',
@@ -1053,17 +1087,17 @@ class _ConfirmationState extends State<Confirmation> {
                                       await http.MultipartFile.fromPath(
                                           "nid_front",
                                           widget.store.img1!.path));
-                                  request.files.add(
-                                      await http.MultipartFile.fromPath(
-                                          "nid_back", widget.store.img2!.path));
+                                  // request.files.add(
+                                  //     await http.MultipartFile.fromPath(
+                                  //         "nid_back", widget.store.img2!.path));
                                   request.files.add(
                                       await http.MultipartFile.fromPath(
                                           "bill_book_main_page",
                                           widget.store.img3!.path));
-                                  request.files.add(
-                                      await http.MultipartFile.fromPath(
-                                          "bill_book_renewal_page",
-                                          widget.store.img4!.path));
+                                  // request.files.add(
+                                  //     await http.MultipartFile.fromPath(
+                                  //         "bill_book_renewal_page",
+                                  //         widget.store.img4!.path));
                                   request.files.add(
                                       await http.MultipartFile.fromPath(
                                           "bill_book_tax_renewed_date_page",
@@ -1076,7 +1110,6 @@ class _ConfirmationState extends State<Confirmation> {
                                       await response.stream.bytesToString());
                                   StoreResponseModel responseModel =
                                       StoreResponseModel.fromJson(valueMap);
-
                                   final snackBar1 = SnackBar(
                                       backgroundColor:
                                           Theme.of(context).colorScheme.primary,

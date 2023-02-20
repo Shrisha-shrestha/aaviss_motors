@@ -52,7 +52,7 @@ class inner_data {
   });
 
   int? id;
-  int? vehicleNameId;
+  String? vehicleNameId;
   String? variantName;
 
   factory inner_data.fromJson(Map<String, dynamic> json) => inner_data(

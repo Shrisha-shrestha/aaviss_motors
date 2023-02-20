@@ -1,5 +1,6 @@
 import 'package:aaviss_motors/screens/personnel_info.dart';
 import 'package:aaviss_motors/screens/search_detail.dart';
+import 'package:aaviss_motors/screens/vehicle_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -20,7 +21,7 @@ class _FinishScreenState extends State<FinishScreen> {
         title: GestureDetector(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => MyHomePage(
+                  builder: (context) => VehicleInfo(
                         title: widget.title,
                       )));
             },
@@ -67,45 +68,64 @@ class _FinishScreenState extends State<FinishScreen> {
               Expanded(
                 child: SingleChildScrollView(
                   child: Center(
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding:
-                              const EdgeInsets.only(top: 35.0, bottom: 35.0),
-                          child: SvgPicture.asset('assets/finish.svg',
-                              semanticsLabel: 'Finished'),
-                        ),
-                        Text(
-                          'Thank you very much for\nyour inquiry. You will receive\nyour valuation in 3 working days.\nIf you want to receive\nyour valuation within 24 hours,\nplease pay Rs.100 at\nesewa account 9800000000.',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .copyWith(fontSize: 16.0),
-                        ),
-                        const SizedBox(
-                          height: 35.0,
-                        ),
-                        TextButton(
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) =>
-                                      MyHomePage(title: widget.title)));
-                            },
-                            style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all(Colors.white),
-                                shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.zero,
-                                        side: BorderSide(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .secondary)))),
-                            child: Text('Go Home',
-                                style: Theme.of(context).textTheme.button)),
-                      ],
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      child: Column(
+                        children: [
+                          Text(
+                            'Thank you very much for your inquiry.',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText1!
+                                .copyWith(fontSize: 16.0),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(top: 35.0, bottom: 35.0),
+                            child: SvgPicture.asset('assets/finish.svg',
+                                semanticsLabel: 'Finished'),
+                          ),
+                          Text(
+                            'You will receive your valuation in 24 hours.\n',
+                            textAlign: TextAlign.justify,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText1!
+                                .copyWith(fontSize: 16.0),
+                          ),
+                          Text(
+                            'If you want to receive your valuation within 24 hours,please pay Rs.100 at esewa account 9800000000.',
+                            textAlign: TextAlign.justify,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText1!
+                                .copyWith(fontSize: 16.0),
+                          ),
+                          const SizedBox(
+                            height: 35.0,
+                          ),
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        VehicleInfo(title: widget.title)));
+                              },
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all(Colors.white),
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.zero,
+                                          side: BorderSide(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary)))),
+                              child: Text('Go Home',
+                                  style: Theme.of(context).textTheme.button)),
+                        ],
+                      ),
                     ),
                   ),
                 ),

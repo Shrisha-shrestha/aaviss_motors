@@ -32,7 +32,7 @@ class VehicleNames {
 
 class innerdata {
   int? id;
-  int? brandId;
+  String? brandId;
   String? vehicleName;
   innerdata({this.id,this.brandId,this.vehicleName,});
   factory innerdata.fromJson(Map<String, dynamic> json) => innerdata(

@@ -4,6 +4,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CustomImageFormField extends FormField<File> {
@@ -123,6 +124,7 @@ class CustomImageFormField extends FormField<File> {
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Text(
                         fieldname!,
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Colors.black87,
                             fontSize: 12.0,
@@ -138,16 +140,45 @@ class CustomImageFormField extends FormField<File> {
 Future<File?> _openGallery(BuildContext context) async {
   final _picker = ImagePicker();
   var image =
-      await _picker.pickImage(source: ImageSource.gallery, imageQuality: 20);
+      await _picker.pickImage(source: ImageSource.gallery, imageQuality: 90);
   File selectedImage = File(image!.path).absolute;
-  print(selectedImage);
-  return selectedImage;
+  var s = selectedImage.lengthSync();
+  var fileSizeInKB = s / 1024;
+  var fileSizeInMB = fileSizeInKB / 1024;
+  print(fileSizeInMB);
+
+  if (fileSizeInMB > 2) {
+    print("File size greater than the 2MB limit");
+    Fluttertoast.showToast(
+      msg: 'File size greater than the 2MB limit',
+      backgroundColor: Colors.grey,
+    );
+    return null;
+  } else {
+    print("file can be selected");
+    return selectedImage;
+  }
 }
 
 Future<File?> _openCamera(BuildContext context) async {
   final _picker = ImagePicker();
   var image =
-      await _picker.pickImage(source: ImageSource.camera, imageQuality: 20);
+      await _picker.pickImage(source: ImageSource.camera, imageQuality: 80);
   File selectedImage = File(image!.path).absolute;
-  return selectedImage;
+  var s = selectedImage.lengthSync();
+  var fileSizeInKB = s / 1024;
+  var fileSizeInMB = fileSizeInKB / 1024;
+  print(fileSizeInMB);
+
+  if (fileSizeInMB > 2) {
+    print("File size greater than the 2MB limit");
+    Fluttertoast.showToast(
+      msg: 'File size greater than the 2MB limit',
+      backgroundColor: Colors.grey,
+    );
+    return null;
+  } else {
+    print("file can be selected");
+    return selectedImage;
+  }
 }

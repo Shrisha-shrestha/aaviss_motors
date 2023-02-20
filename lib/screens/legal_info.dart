@@ -3,6 +3,7 @@
 import 'package:aaviss_motors/screens/confirmation.dart';
 import 'package:aaviss_motors/screens/personnel_info.dart';
 import 'package:aaviss_motors/screens/search_detail.dart';
+import 'package:aaviss_motors/screens/vehicle_info.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +14,8 @@ import 'dart:io';
 import '../models/storevehicleinfo.dart';
 import '../widgets/imageformfield.dart';
 
-class LegalInfo extends StatefulWidget {
-  const LegalInfo(
+class DocumentInfo extends StatefulWidget {
+  const DocumentInfo(
       {super.key,
       required this.title,
       required this.store,
@@ -23,10 +24,10 @@ class LegalInfo extends StatefulWidget {
   final Store store;
   final B_V_fromAPI bvinfoAPI;
   @override
-  State<LegalInfo> createState() => _LegalInfoState();
+  State<DocumentInfo> createState() => _DocumentInfoState();
 }
 
-class _LegalInfoState extends State<LegalInfo> {
+class _DocumentInfoState extends State<DocumentInfo> {
   int? groupval;
   bool _isvisible1 = false, _isvisible2 = false;
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
@@ -60,7 +61,7 @@ class _LegalInfoState extends State<LegalInfo> {
           title: GestureDetector(
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => MyHomePage(
+                    builder: (context) => VehicleInfo(
                           title: widget.title,
                         )));
               },
@@ -135,7 +136,7 @@ class _LegalInfoState extends State<LegalInfo> {
                                 width: 6.0,
                               ),
                               Text(
-                                'Legal Information',
+                                'Document Information',
                                 style: Theme.of(context).textTheme.bodyText1,
                               )
                             ],
@@ -244,36 +245,36 @@ class _LegalInfoState extends State<LegalInfo> {
                             height: 45.0,
                           ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               CustomImageFormField(
                                   ctx: context,
                                   formkey: _formkey,
                                   width:
-                                      MediaQuery.of(context).size.width * 0.4,
+                                      MediaQuery.of(context).size.width * 0.38,
                                   fieldname:
-                                      '${widget.store.nid_type ?? 'Card'} front page*',
+                                      '${widget.store.nid_type ?? '- Card'} Card*',
                                   onSaved: ((newValue) {
                                     setState(() {
                                       widget.store.img1 = newValue;
                                     });
                                   })),
-                              CustomImageFormField(
-                                  ctx: context,
-                                  formkey: _formkey,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.4,
-                                  fieldname:
-                                      '${widget.store.nid_type ?? 'Card'} back page*',
-                                  onSaved: ((newValue) {
-                                    setState(() {
-                                      widget.store.img2 = newValue;
-                                    });
-                                  })),
+                              // CustomImageFormField(
+                              //     ctx: context,
+                              //     formkey: _formkey,
+                              //     width:
+                              //         MediaQuery.of(context).size.width * 0.4,
+                              //     fieldname:
+                              //         '${widget.store.nid_type ?? 'Card'} back page*',
+                              //     onSaved: ((newValue) {
+                              //       setState(() {
+                              //         widget.store.img2 = newValue;
+                              //       });
+                              //     })),
                             ],
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 45.0),
+                            padding: const EdgeInsets.symmetric(vertical: 30.0),
                             child: Text(
                               'Bill Book Information',
                               style: Theme.of(context).textTheme.bodyText2,
@@ -285,9 +286,9 @@ class _LegalInfoState extends State<LegalInfo> {
                               CustomImageFormField(
                                   ctx: context,
                                   width:
-                                      MediaQuery.of(context).size.width * 0.4,
+                                      MediaQuery.of(context).size.width * 0.38,
                                   formkey: _formkey,
-                                  fieldname: 'Billbook main page*',
+                                  fieldname: 'Billbook photo page*\n',
                                   onSaved: ((newValue) {
                                     setState(() {
                                       widget.store.img3 = newValue;
@@ -295,34 +296,46 @@ class _LegalInfoState extends State<LegalInfo> {
                                   })),
                               CustomImageFormField(
                                   ctx: context,
-                                  formkey: _formkey,
                                   width:
-                                      MediaQuery.of(context).size.width * 0.4,
-                                  fieldname: 'Billbook renewal page*',
+                                      MediaQuery.of(context).size.width * 0.38,
+                                  formkey: _formkey,
+                                  fieldname:
+                                      'Billbook tax last \nrenewal date page*',
                                   onSaved: ((newValue) {
                                     setState(() {
-                                      widget.store.img4 = newValue;
+                                      widget.store.img5 = newValue;
                                     });
                                   })),
+                              // CustomImageFormField(
+                              //     ctx: context,
+                              //     formkey: _formkey,
+                              //     width:
+                              //         MediaQuery.of(context).size.width * 0.4,
+                              //     fieldname: 'Billbook renewal page*',
+                              //     onSaved: ((newValue) {
+                              //       setState(() {
+                              //         widget.store.img4 = newValue;
+                              //       });
+                              //     })),
                             ],
                           ),
-                          const SizedBox(
-                            height: 23.0,
-                          ),
-                          Align(
-                            alignment: Alignment.center,
-                            child: CustomImageFormField(
-                                ctx: context,
-                                width: MediaQuery.of(context).size.width * 0.4,
-                                formkey: _formkey,
-                                fieldname:
-                                    'BIllbook tax last renewal date page*',
-                                onSaved: ((newValue) {
-                                  setState(() {
-                                    widget.store.img5 = newValue;
-                                  });
-                                })),
-                          ),
+                          // const SizedBox(
+                          //   height: 23.0,
+                          // ),
+                          // Align(
+                          //   alignment: Alignment.center,
+                          //   child: CustomImageFormField(
+                          //       ctx: context,
+                          //       width: MediaQuery.of(context).size.width * 0.4,
+                          //       formkey: _formkey,
+                          //       fieldname:
+                          //           'BIllbook tax last renewal date page*',
+                          //       onSaved: ((newValue) {
+                          //         setState(() {
+                          //           widget.store.img5 = newValue;
+                          //         });
+                          //       })),
+                          // ),
                           Padding(
                             padding: const EdgeInsets.all(15.0),
                             // child: Text(

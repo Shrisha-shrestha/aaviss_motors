@@ -1,6 +1,6 @@
 import 'package:aaviss_motors/API/API_connection.dart';
 import 'package:aaviss_motors/models/searchvehicle.dart';
-import 'package:aaviss_motors/screens/personnel_info.dart';
+import 'package:aaviss_motors/screens/vehicle_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -47,7 +47,7 @@ class _SearchDetailState extends State<SearchDetail> {
           title: GestureDetector(
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => MyHomePage(
+                    builder: (context) => VehicleInfo(
                           title: widget.title,
                         )));
               },
@@ -91,7 +91,7 @@ class _SearchDetailState extends State<SearchDetail> {
                       key: _formkey,
                       child: TextFormField(
                         onSaved: (String? value) {
-                          searchrequestModel.vehicle_number = value;
+                          searchrequestModel.vehicle_number = value!;
                         },
                         keyboardType: TextInputType.number,
                         style: Theme.of(context)
@@ -153,7 +153,7 @@ class _SearchDetailState extends State<SearchDetail> {
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) =>
-                                    MyHomePage(title: widget.title)));
+                                    VehicleInfo(title: widget.title)));
                           },
                           style: ButtonStyle(
                               backgroundColor:
@@ -197,13 +197,13 @@ class _SearchDetailState extends State<SearchDetail> {
                                           Navigator.of(context).push(
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      MyHomePage(
+                                                      VehicleInfo(
                                                           title:
                                                               widget.title)));
                                           Navigator.of(context).push(
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      MyHomePage(
+                                                      VehicleInfo(
                                                           title:
                                                               widget.title)));
                                         },
@@ -301,7 +301,7 @@ class _SearchDetailState extends State<SearchDetail> {
                                       ),
                                     ),
                                     child: Text(
-                                      'Name of Variant : ${snapshot.data!.variantId}',
+                                      'Name of Variant : ${snapshot.data!.variantName!.variantName}',
                                       style:
                                           Theme.of(context).textTheme.subtitle2,
                                     )),
@@ -337,7 +337,7 @@ class _SearchDetailState extends State<SearchDetail> {
                                     ),
                                     //child:Text('${Val!.fullName}',style: Theme.of(context).textTheme.caption,)
                                     child: Text(
-                                      'Manufacture Year : ${snapshot.data!.manufactureYear}',
+                                      'Manufacture Year : ${snapshot.data!.manufactureYear ?? ' - '}',
                                       style:
                                           Theme.of(context).textTheme.subtitle2,
                                     )),
@@ -599,7 +599,7 @@ class _SearchDetailState extends State<SearchDetail> {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    MyHomePage(
+                                                    VehicleInfo(
                                                         title: widget.title)));
                                       },
                                       style: ButtonStyle(

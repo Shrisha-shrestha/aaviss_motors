@@ -1,3 +1,4 @@
+import 'package:aaviss_motors/screens/legal_info.dart';
 import 'package:aaviss_motors/screens/search_detail.dart';
 import 'package:aaviss_motors/screens/vehicle_info.dart';
 import 'package:flutter/foundation.dart';
@@ -5,21 +6,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:aaviss_motors/models/storevehicleinfo.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class PersonalInfo extends StatefulWidget {
+  const PersonalInfo(
+      {super.key,
+      required this.title,
+      required this.store,
+      required this.bvinfoAPI});
   final String title;
+  final Store store;
+  final B_V_fromAPI bvinfoAPI;
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<PersonalInfo> createState() => _PersonalInfoState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _PersonalInfoState extends State<PersonalInfo> {
   String? fullname;
   String? address;
   int? contact;
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
 
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-  Store store = Store();
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -28,11 +35,12 @@ class _MyHomePageState extends State<MyHomePage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title:
-              Text(widget.title, style: Theme.of(context).textTheme.headline5),
-          leading: Transform.translate(
-            offset: const Offset(-15, 0),
-          ),
+        title: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(widget.title,
+                  style: Theme.of(context).textTheme.headline5)),
           titleSpacing: -30,
           centerTitle: false,
           toolbarHeight: 108.0,
@@ -92,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           BorderRadius.circular(15.0)),
                                   child: const Center(
                                     child: Text(
-                                      '1',
+                                      '2',
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700,
                                           color: Colors.white,
@@ -109,7 +117,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             ],
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 30.0),
+                            padding:
+                                const EdgeInsets.only(top: 30.0, bottom: 15.0),
                             child: Text(
                               'Personnel data',
                               style: Theme.of(context).textTheme.bodyText2,
@@ -117,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                           TextFormField(
                             onSaved: (String? value) {
-                              store.full_name = value;
+                              widget.store.full_name = value;
                             },
                             style: Theme.of(context)
                                 .textTheme
@@ -140,7 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                           TextFormField(
                             onSaved: (String? value) {
-                              store.address = value;
+                              widget.store.address = value;
                             },
                             style: Theme.of(context)
                                 .textTheme
@@ -164,18 +173,20 @@ class _MyHomePageState extends State<MyHomePage> {
                             maxLength: 10,
                             //maxLengthEnforcement: true,
                             onSaved: (String? value) {
-                              store.phone_no = value;
+                              widget.store.phone_no = value;
                             },
                             style: Theme.of(context)
                                 .textTheme
                                 .caption!
                                 .copyWith(fontSize: 18.0),
                             validator: (val) {
-                              RegExp regExp = RegExp(
-                                  r'(?:\(?\+977\)?)?[9][6-9]\d{8}| 01[-]?[0-9]{7}');
+                              RegExp regExp1 = RegExp(
+                                  r'(?:\(?\+977\)?)?[9][6-9]\d{8}'); // 01[-]?[0-9]{7}
+                              RegExp regExp2 = RegExp(r'01[-]?[0-9]{7}');
                               if (val!.isEmpty) {
                                 return 'Enter your contact number please.';
-                              } else if (regExp.hasMatch(val)) {
+                              } else if (regExp1.hasMatch(val) ||
+                                  regExp2.hasMatch(val)) {
                                 return null;
                               } else {
                                 return 'Phone No. is not valid';
@@ -191,38 +202,67 @@ class _MyHomePageState extends State<MyHomePage> {
                           const SizedBox(
                             height: 15.0,
                           ),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: TextButton(
-                                onPressed: () async {
-                                  if (_formkey.currentState!.validate()) {
-                                    _formkey.currentState!.save();
-                                    if (kDebugMode) {
-                                      print('Client Side Validated');
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Colors.white),
+                                      shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                          const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.zero,
+                                              side: BorderSide(
+                                                  color: Colors.grey)))),
+                                  child: Text('Back',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .button!
+                                          .copyWith(color: Colors.grey))),
+                              const SizedBox(
+                                width: 10.0,
+                              ),
+                              TextButton(
+                                  onPressed: () async {
+                                    if (_formkey.currentState!.validate()) {
+                                      _formkey.currentState!.save();
+                                      if (kDebugMode) {
+                                        print('Client Side Validated');
+                                      }
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  DocumentInfo(
+                                                    title: widget.title,
+                                                    store: widget.store,
+                                                    bvinfoAPI: widget.bvinfoAPI,
+                                                  )));
+                                    } else {
+                                      setState(() => _autoValidate =
+                                          AutovalidateMode.always);
                                     }
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) => VehicleInfo(
-                                                title: widget.title,
-                                                store: store)));
-                                  } else {
-                                    setState(() => _autoValidate =
-                                        AutovalidateMode.always);
-                                  }
-                                },
-                                style: ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStateProperty.all(Colors.white),
-                                    shape: MaterialStateProperty.all<
-                                            RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.zero,
-                                            side: BorderSide(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .secondary)))),
-                                child: Text('Next',
-                                    style: Theme.of(context).textTheme.button)),
+                                  },
+                                  style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Colors.white),
+                                      shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.zero,
+                                              side: BorderSide(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .secondary)))),
+                                  child: Text('Next',
+                                      style:
+                                          Theme.of(context).textTheme.button)),
+                            ],
                           ),
                         ],
                       ),

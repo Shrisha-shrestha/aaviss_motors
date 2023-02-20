@@ -1,7 +1,6 @@
 import 'dart:io';
-
-import 'package:aaviss_motors/screens/personnel_info.dart';
-import 'package:aaviss_motors/widgets/imageformfield.dart';
+import 'package:aaviss_motors/screens/finish_screen.dart';
+import 'package:aaviss_motors/screens/vehicle_info.dart';
 import 'package:flutter/material.dart';
 
 class MyHttpOverrides extends HttpOverrides {
@@ -25,8 +24,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Aaviss Motors',
       debugShowCheckedModeBanner: false,
-      home: MyHomePage(title: 'Aaviss Motors'),
-      //home: ExpandableText(),
+      home: VehicleInfo(title: 'Aaviss Motors'),
+      //home: FinishScreen(title: 'Aaviss Motors'),
       theme: ThemeData(
         brightness: Brightness.light,
         fontFamily: 'Inter',

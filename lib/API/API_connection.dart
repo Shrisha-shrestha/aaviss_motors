@@ -7,8 +7,7 @@ import '../models/searchvehicle.dart';
 
 class APIService {
   Future<BrandResponseModel?> getbrand() async {
-    const String url1 =
-        'https://aavissmotors.creatudevelopers.com.np/api/v1/get-brands';
+    const String url1 = 'https://cms.aavissmotors.com/api/v1/get-brands';
     final response = await http.get(
       Uri.parse(url1),
     );
@@ -23,8 +22,7 @@ class APIService {
   }
 
   Future<VehicleResponseModel> getvehicle() async {
-    const String url =
-        'https://aavissmotors.creatudevelopers.com.np/api/v1/get-vehicle-names';
+    const String url = 'https://cms.aavissmotors.com/api/v1/get-vehicle-names';
     final response = await http.get(
       Uri.parse(url),
     );
@@ -38,8 +36,7 @@ class APIService {
   }
 
   Future<VariantResponseModel> getvariant() async {
-    const String url =
-        'https://aavissmotors.creatudevelopers.com.np/api/v1/get-variants';
+    const String url = 'https://cms.aavissmotors.com/api/v1/get-variants';
     final response = await http.get(
       Uri.parse(url),
     );
@@ -55,8 +52,9 @@ class APIService {
   Future<SearchResponseModel?> searchvehicle(
       SearchRequestModel requestModel) async {
     final String url =
-        'https://aavissmotors.creatudevelopers.com.np/api/v1/search-vehicle?engine_no=${requestModel.vehicle_number}';
+        'https://cms.aavissmotors.com/api/v1/search-vehicle?engine_no=${requestModel.vehicle_number}';
     final response = await http.get(Uri.parse(url));
+    print(response.body);
     if (response.statusCode == 200) {
       SearchResponseModel responseModel =
           SearchResponseModel.fromJson(json.decode(response.body));

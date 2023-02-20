@@ -59,22 +59,23 @@ class Vehicle {
     this.status,
     this.brand,
     this.vehicleName,
+    this.variantName,
   });
 
   int? id;
   String? fullName;
   String? address;
-  int? phoneNo;
-  int? brandId;
-  int? vehicleNameId;
-  int? variantId;
+  String? phoneNo;
+  String? brandId;
+  String? vehicleNameId;
+  String? variantId;
   String? engineNo;
   String? manufactureYear;
   String? color;
-  int? noOfSeats;
+  String? noOfSeats;
   String? purchaseYear;
-  int? noOfTransfer;
-  int? kilometer;
+  String? noOfTransfer;
+  String? kilometer;
   String? vehicleType;
   String? vehicleNo;
   String? majorAccident;
@@ -89,6 +90,7 @@ class Vehicle {
   String? status;
   Brand? brand;
   VehicleName? vehicleName;
+  VariantName? variantName;
 
   factory Vehicle.fromJson(Map<String, dynamic> json) {
     return Vehicle(
@@ -120,6 +122,7 @@ class Vehicle {
       status: json["status"],
       brand: Brand.fromJson(json["brand"]),
       vehicleName: VehicleName.fromJson(json["vehicle_name"]),
+      variantName: VariantName.fromJson(json["variant"]),
     );
   }
 }
@@ -147,12 +150,30 @@ class VehicleName {
   });
 
   int? id;
-  int? brandId;
+  String? brandId;
   String? vehicleName;
 
   factory VehicleName.fromJson(Map<String, dynamic> json) => VehicleName(
         id: json["id"],
         brandId: json["brand_id"],
         vehicleName: json["vehicle_name"],
+      );
+}
+
+class VariantName {
+  VariantName({
+    this.id,
+    this.vehiclenameid,
+    this.variantName,
+  });
+
+  int? id;
+  String? vehiclenameid;
+  String? variantName;
+
+  factory VariantName.fromJson(Map<String, dynamic> json) => VariantName(
+        id: json["id"],
+        vehiclenameid: json["vehicle_name_id"],
+        variantName: json["variant_name"],
       );
 }
