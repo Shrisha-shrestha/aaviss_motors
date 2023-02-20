@@ -151,7 +151,7 @@ Future<File?> _openGallery(BuildContext context) async {
     print("File size greater than the 2MB limit");
     Fluttertoast.showToast(
       msg: 'File size greater than the 2MB limit',
-      backgroundColor: Colors.grey,
+      backgroundColor: Colors.red.withOpacity(0.3),
     );
     return null;
   } else {
@@ -174,7 +174,7 @@ Future<File?> _openCamera(BuildContext context) async {
     print("File size greater than the 2MB limit");
     Fluttertoast.showToast(
       msg: 'File size greater than the 2MB limit',
-      backgroundColor: Colors.grey,
+      backgroundColor: Colors.red.withOpacity(0.3),
     );
     return null;
   } else {
