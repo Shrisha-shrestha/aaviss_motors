@@ -58,8 +58,8 @@ class _VehicleInfoState extends State<VehicleInfo> {
 
   Future<B_V_fromAPI>? getb() async {
     dynamic brandlist;
-      APIService apiService = APIService();
-     int? len;
+    APIService apiService = APIService();
+    int? len;
     List<String>? brands = [];
     List<int>? brandsId = [];
     await apiService.getbrand().then((value) {
@@ -90,9 +90,8 @@ class _VehicleInfoState extends State<VehicleInfo> {
       len = value.data!.vehicleNames!.total!;
     });
 
-
     for (int i = 0; i < len!; i++) {
-            vehicles.add("${vehiclelist[i].vehicleName}");
+      vehicles.add("${vehiclelist[i].vehicleName}");
       vehiclesId.add(vehiclelist[i].id);
       if (vehiclelist[i].brandId.toString() == brand_id) {
         //print('index = ${vehiclelist[i].id}');
@@ -113,7 +112,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
     dynamic variantlist;
     List<inner_data> newvariantlist = [];
     int? len;
-        List<String>? variants = [];
+    List<String>? variants = [];
     List<int>? variantId = [];
     APIService apiService = APIService();
     await apiService.getvariant().then((value) {
@@ -121,16 +120,15 @@ class _VehicleInfoState extends State<VehicleInfo> {
       len = value.data!.variants!.total!;
     });
     for (int i = 0; i < len!; i++) {
-            variants.add("${variantlist[i].variantName}");
+      variants.add("${variantlist[i].variantName}");
       variantId.add(variantlist[i].id);
       if (variantlist[i].vehicleNameId.toString() == vehicle_id) {
         //print('index = ${variantlist[i].id}');
         newvariantlist.add(variantlist[i]);
       }
     }
-        final theMap3 = Map.fromIterables(variantId, variants);
+    final theMap3 = Map.fromIterables(variantId, variants);
     bfa.valist = theMap3;
-
 
     if (newvariantlist.isEmpty) {
       bfa.variantlist = variantlist;
@@ -1064,7 +1062,8 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                                   onPressed: () {
                                                     setState(() {
                                                       future2 = getve(
-                                                          store.brand_id ?? '1');
+                                                          store.brand_id ??
+                                                              '1');
                                                     });
                                                   },
                                                   style: ButtonStyle(
@@ -1492,7 +1491,9 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                                 setState(() {
                                                   errorinhistory = '';
                                                 });
-                                                if (futureresult1 == true) {
+                                                if (futureresult1 == true &&
+                                                    futureresult2 == true &&
+                                                    futureresult3 == true) {
                                                   if (formkey1.currentState!
                                                           .validate() &&
                                                       formkey2.currentState!
