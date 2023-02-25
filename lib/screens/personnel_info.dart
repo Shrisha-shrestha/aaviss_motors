@@ -36,7 +36,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
       },
       child: Scaffold(
         appBar: AppBar(
-        title: GestureDetector(
+          title: GestureDetector(
               onTap: () {
                 Navigator.of(context).pop();
               },
@@ -245,15 +245,14 @@ class _PersonalInfoState extends State<PersonalInfo> {
                                                   )));
                                     } else {
                                       Fluttertoast.showToast(
-                                                msg: 'Please fill out the form properly',
-                                                toastLength: Toast.LENGTH_SHORT,
-                                                gravity: ToastGravity.BOTTOM,
-                                                backgroundColor:
-                                                    Theme.of(context)
-                                                        .colorScheme
-                                                        .primary
-                                                        .withOpacity(0.5),
-                                                textColor: Colors.black);
+                                          msg:
+                                              'Please fill out the form properly',
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          backgroundColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          textColor: Colors.black);
                                       setState(() => _autoValidate =
                                           AutovalidateMode.always);
                                     }

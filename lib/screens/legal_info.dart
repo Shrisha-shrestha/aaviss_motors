@@ -160,7 +160,7 @@ class _DocumentInfoState extends State<DocumentInfo> {
                               setState(() {
                                 groupval = value;
                                 widget.store.nid_type =
-                                    groupval == 1 ? 'Citizenship' : 'Pan';
+                                    groupval == 1 ? 'citizenship' : 'pan';
                                 widget.store.card_type_radio = groupval;
                                 _isvisible2 = groupval == 2 ? true : false;
                                 _isvisible1 = groupval == 1 ? true : false;
@@ -402,7 +402,7 @@ class _DocumentInfoState extends State<DocumentInfo> {
                                   //   print(widget.store.img3);
                                   //   print(widget.store.img4);
                                   //   print(widget.store.img5);
-                                  //   print(widget.store.nid_no);
+                                  //print('lol  ${widget.store.nid_type}');
                                   //   print(widget.store.no_of_transfer);
                                   //   print(widget.store.purchase_year);
                                   //   print(widget.store.no_of_seats);
@@ -441,8 +441,7 @@ class _DocumentInfoState extends State<DocumentInfo> {
                                           gravity: ToastGravity.BOTTOM,
                                           backgroundColor: Theme.of(context)
                                               .colorScheme
-                                              .primary
-                                              .withOpacity(0.5),
+                                              .primary,
                                           textColor: Colors.black);
                                       _autoValidate = AutovalidateMode.always;
                                     });

@@ -1652,7 +1652,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                                     Theme.of(context)
                                                         .colorScheme
                                                         .primary
-                                                        .withOpacity(0.5),
+                                                        ,
                                                 textColor: Colors.black);
                                             setState(() => _autoValidate =
                                                 AutovalidateMode.always);

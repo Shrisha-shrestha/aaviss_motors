@@ -1016,6 +1016,7 @@ class _ConfirmationState extends State<Confirmation> {
                                     style: Theme.of(context).textTheme.button),
                                 onPressed: () async {
                                   showDialog(
+                                      barrierDismissible: false,
                                       context: context,
                                       barrierColor: Theme.of(context)
                                           .colorScheme
@@ -1117,10 +1118,8 @@ class _ConfirmationState extends State<Confirmation> {
                                           : responseModel.message.toString(),
                                       toastLength: Toast.LENGTH_SHORT,
                                       gravity: ToastGravity.BOTTOM,
-                                      backgroundColor: Theme.of(context)
-                                          .colorScheme
-                                          .primary
-                                          .withOpacity(0.5),
+                                      backgroundColor:
+                                          Theme.of(context).colorScheme.primary,
                                       textColor: Colors.black);
                                   // final snackBar1 = SnackBar(
                                   //     backgroundColor:
