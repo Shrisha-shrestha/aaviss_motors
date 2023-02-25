@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:aaviss_motors/models/storevehicleinfo.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class PersonalInfo extends StatefulWidget {
   const PersonalInfo(
@@ -243,6 +244,16 @@ class _PersonalInfoState extends State<PersonalInfo> {
                                                     bvinfoAPI: widget.bvinfoAPI,
                                                   )));
                                     } else {
+                                      Fluttertoast.showToast(
+                                                msg: 'Please fill out the form properly',
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.BOTTOM,
+                                                backgroundColor:
+                                                    Theme.of(context)
+                                                        .colorScheme
+                                                        .primary
+                                                        .withOpacity(0.5),
+                                                textColor: Colors.black);
                                       setState(() => _autoValidate =
                                           AutovalidateMode.always);
                                     }

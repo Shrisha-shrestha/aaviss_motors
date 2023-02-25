@@ -46,10 +46,7 @@ class _SearchDetailState extends State<SearchDetail> {
         appBar: AppBar(
           title: GestureDetector(
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => VehicleInfo(
-                          title: widget.title,
-                        )));
+                Navigator.of(context).pop();
               },
               child: Text(widget.title,
                   style: Theme.of(context).textTheme.headline5)),
@@ -146,30 +143,40 @@ class _SearchDetailState extends State<SearchDetail> {
                 ),
                 Visibility(
                   visible: !_isVisible,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                  child: Column(
                     children: [
-                      TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    VehicleInfo(title: widget.title)));
-                          },
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.white),
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.zero,
-                                      side: BorderSide(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondary)))),
-                          child: Text('Go Home',
-                              style: Theme.of(context).textTheme.button)),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        VehicleInfo(title: widget.title)));
+                              },
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all(Colors.white),
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.zero,
+                                          side: BorderSide(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary)))),
+                              child: Text('Go Home',
+                                  style: Theme.of(context).textTheme.button)),
+                        ],
+                      ),
                     ],
                   ),
+                ),
+                SizedBox(
+                  height: 10.0,
                 ),
                 FutureBuilder(
                   future: future,
@@ -468,7 +475,7 @@ class _SearchDetailState extends State<SearchDetail> {
                                   ],
                                 ),
                                 const SizedBox(
-                                  height: 20.0,
+                                  height: 10.0,
                                 ),
                                 Text(
                                   'Service History',
@@ -505,7 +512,7 @@ class _SearchDetailState extends State<SearchDetail> {
                                   ],
                                 ),
                                 const SizedBox(
-                                  height: 20.0,
+                                  height: 10.0,
                                 ),
                                 Text(
                                   'Vehicle Type',
@@ -540,6 +547,9 @@ class _SearchDetailState extends State<SearchDetail> {
                                             .textTheme
                                             .caption),
                                   ],
+                                ),
+                                SizedBox(
+                                  height: 10.0,
                                 ),
                                 Text(
                                   'Number Plate',

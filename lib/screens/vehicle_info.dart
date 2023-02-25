@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../API/API_connection.dart';
 import '../models/getbrand.dart';
 import '../models/getvehiclename.dart';
@@ -1643,6 +1644,16 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                               });
                                             }
                                           } else {
+                                            Fluttertoast.showToast(
+                                                msg: 'Please fill out the form properly',
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.BOTTOM,
+                                                backgroundColor:
+                                                    Theme.of(context)
+                                                        .colorScheme
+                                                        .primary
+                                                        .withOpacity(0.5),
+                                                textColor: Colors.black);
                                             setState(() => _autoValidate =
                                                 AutovalidateMode.always);
                                           } //validator

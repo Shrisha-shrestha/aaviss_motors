@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:aaviss_motors/screens/finish_screen.dart';
-import 'package:aaviss_motors/screens/test.dart';
 import 'package:aaviss_motors/screens/vehicle_info.dart';
 import 'package:flutter/material.dart';
 

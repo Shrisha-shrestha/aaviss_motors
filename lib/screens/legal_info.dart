@@ -8,6 +8,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
@@ -359,12 +360,14 @@ class _DocumentInfoState extends State<DocumentInfo> {
                           // ),
                           Padding(
                             padding: const EdgeInsets.all(15.0),
-                            // child: Text(
-                            //     'Note: File Size Must be of 2MB or less than 2MB',
-                            //     style: TextStyle(
-                            //         fontSize: 12.0,
-                            //         fontWeight: FontWeight.normal,
-                            //         color: Color.fromARGB(255, 222, 94, 84))),
+                            child: Text(
+                                'Note: File Size Must be of 2MB or less than 2MB',
+                                style: TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.normal,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .secondary)),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
@@ -431,6 +434,16 @@ class _DocumentInfoState extends State<DocumentInfo> {
                                                 )));
                                   } else {
                                     setState(() {
+                                      Fluttertoast.showToast(
+                                          msg:
+                                              'Please fill out the form properly',
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          backgroundColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                              .withOpacity(0.5),
+                                          textColor: Colors.black);
                                       _autoValidate = AutovalidateMode.always;
                                     });
                                   }
