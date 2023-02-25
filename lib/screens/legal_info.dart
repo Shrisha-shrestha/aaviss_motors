@@ -13,6 +13,7 @@ import 'dart:io';
 
 import '../models/storevehicleinfo.dart';
 import '../widgets/imageformfield.dart';
+import '../widgets/radioformfield.dart';
 
 class DocumentInfo extends StatefulWidget {
   const DocumentInfo(
@@ -148,53 +149,73 @@ class _DocumentInfoState extends State<DocumentInfo> {
                               style: Theme.of(context).textTheme.bodyText2,
                             ),
                           ),
-                          Row(
-                            children: <Widget>[
-                              Radio(
-                                  value: 1,
-                                  groupValue: groupval,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      groupval = value;
-                                      widget.store.nid_type = 'Citizenship';
-                                      widget.store.card_type_radio = 1;
-                                      _isvisible2 = false;
-                                      _isvisible1 = true;
-                                    });
-                                  }),
-                              Text(
-                                'Citizenship',
-                                style: Theme.of(context).textTheme.caption,
-                              ),
-                              const SizedBox(
-                                width: 40.0,
-                              ),
-                              Radio(
-                                  value: 2,
-                                  groupValue: groupval,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      groupval = value;
-                                      widget.store.nid_type = 'Pan';
-                                      widget.store.card_type_radio = 2;
-                                      _isvisible2 = true;
-                                      _isvisible1 = false;
-                                    });
-                                  }),
-                              Text(
-                                'Pan',
-                                style: Theme.of(context).textTheme.caption,
-                              ),
-                            ],
+                          CustomRadioFormField(
+                            fieldname1: 'Citizenship',
+                            fieldname2: 'Pan',
+                            formkey: _formkey,
+                            grpvalue: groupval,
+                            ctx: context,
+                            onChanged: (value) {
+                              setState(() {
+                                groupval = value;
+                                widget.store.nid_type =
+                                    groupval == 1 ? 'Citizenship' : 'Pan';
+                                widget.store.card_type_radio = groupval;
+                                _isvisible2 = groupval == 2 ? true : false;
+                                _isvisible1 = groupval == 1 ? true : false;
+                              });
+                            },
+                            onSaved: (Finalvalue) {
+                              print('value: $groupval');
+                            },
                           ),
-                          SizedBox(
-                              child: Text(
-                            errortxt,
-                            style: Theme.of(context)
-                                .textTheme
-                                .caption!
-                                .copyWith(color: Colors.red),
-                          )),
+                          // Row(
+                          //   children: <Widget>[
+                          //     Radio(
+                          //         value: 1,
+                          //         groupValue: groupval,
+                          //         onChanged: (value) {
+                          //           setState(() {
+                          //             groupval = value;
+                          //             widget.store.nid_type = 'Citizenship';
+                          //             widget.store.card_type_radio = 1;
+                          //             _isvisible2 = false;
+                          //             _isvisible1 = true;
+                          //           });
+                          //         }),
+                          //     Text(
+                          //       'Citizenship',
+                          //       style: Theme.of(context).textTheme.caption,
+                          //     ),
+                          //     const SizedBox(
+                          //       width: 40.0,
+                          //     ),
+                          //     Radio(
+                          //         value: 2,
+                          //         groupValue: groupval,
+                          //         onChanged: (value) {
+                          //           setState(() {
+                          //             groupval = value;
+                          //             widget.store.nid_type = 'Pan';
+                          //             widget.store.card_type_radio = 2;
+                          //             _isvisible2 = true;
+                          //             _isvisible1 = false;
+                          //           });
+                          //         }),
+                          //     Text(
+                          //       'Pan',
+                          //       style: Theme.of(context).textTheme.caption,
+                          //     ),
+                          //   ],
+                          // ),
+                          // SizedBox(
+                          //     child: Text(
+                          //   errortxt,
+                          //   style: Theme.of(context)
+                          //       .textTheme
+                          //       .caption!
+                          //       .copyWith(color: Colors.red),
+                          // )),
                           Visibility(
                             visible: _isvisible1,
                             child: TextFormField(
@@ -394,34 +415,24 @@ class _DocumentInfoState extends State<DocumentInfo> {
                                   //   print(widget.store.address);
                                   //   print(widget.store.full_name);
                                   // }
-                                  if (groupval == null) {
-                                    setState(() {
-                                      errortxt = 'Please Select one';
-                                    });
+
+                                  if (_formkey.currentState!.validate()) {
+                                    _formkey.currentState!.save();
+                                    if (kDebugMode) {
+                                      print('Client Side Validated');
+                                    }
+                                    //print(widget.bvinfoAPI.brandlist![0].id);
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                            builder: (context) => Confirmation(
+                                                  title: widget.title,
+                                                  store: widget.store,
+                                                  bvinfoAPI: widget.bvinfoAPI,
+                                                )));
                                   } else {
                                     setState(() {
-                                      errortxt = '';
+                                      _autoValidate = AutovalidateMode.always;
                                     });
-
-                                    if (_formkey.currentState!.validate()) {
-                                      _formkey.currentState!.save();
-                                      if (kDebugMode) {
-                                        print('Client Side Validated');
-                                      }
-                                      //print(widget.bvinfoAPI.brandlist![0].id);
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  Confirmation(
-                                                    title: widget.title,
-                                                    store: widget.store,
-                                                    bvinfoAPI: widget.bvinfoAPI,
-                                                  )));
-                                    } else {
-                                      setState(() {
-                                        _autoValidate = AutovalidateMode.always;
-                                      });
-                                    }
                                   }
                                 },
                                 style: ButtonStyle(

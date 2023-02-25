@@ -16,6 +16,34 @@ class FinishScreen extends StatefulWidget {
 class _FinishScreenState extends State<FinishScreen> {
   @override
   Widget build(BuildContext context) {
+    // return Scaffold(
+    //   body: Center(
+    //     child: Container(
+    //       height: 15.0,
+    //       width: 15.0,
+    //       child: Padding(
+    //         padding: EdgeInsets.all(2.0),
+    //         child: Container(
+    //           decoration: BoxDecoration(
+    //             color: Colors.white,
+    //             borderRadius: BorderRadius.circular(10.0),
+    //           ),
+    //           padding: EdgeInsets.all(1.0),
+    //           child: Container(
+    //             decoration: BoxDecoration(
+    //               color: Colors.blue,
+    //               borderRadius: BorderRadius.circular(10.0),
+    //             ),
+    //           ),
+    //         ),
+    //       ),
+    //       decoration: BoxDecoration(
+    //         color: Colors.blue,
+    //         borderRadius: BorderRadius.circular(20.0),
+    //       ),
+    //     ),
+    //   ),
+    // );
     return Scaffold(
       appBar: AppBar(
         title: GestureDetector(
@@ -72,6 +100,9 @@ class _FinishScreenState extends State<FinishScreen> {
                       width: MediaQuery.of(context).size.width * 0.7,
                       child: Column(
                         children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.04,
+                          ),
                           Text(
                             'Thank you very much for your inquiry.',
                             textAlign: TextAlign.center,
@@ -95,7 +126,7 @@ class _FinishScreenState extends State<FinishScreen> {
                                 .copyWith(fontSize: 16.0),
                           ),
                           Text(
-                            'If you want to receive your valuation within 24 hours,please pay Rs.100 at esewa account 9800000000.',
+                            'If you want to receive your valuation within instantly, please pay Rs.100 at esewa account 9800000000.',
                             textAlign: TextAlign.justify,
                             style: Theme.of(context)
                                 .textTheme

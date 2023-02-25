@@ -12,6 +12,7 @@ import '../models/getvehiclename.dart';
 import '../models/searchvehicle.dart';
 import '../models/storevehicleinfo.dart';
 import '../widgets/dropdown.dart';
+import '../widgets/radioformfield.dart';
 
 class VehicleInfo extends StatefulWidget {
   const VehicleInfo({
@@ -255,110 +256,153 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                   'Vehicle Type*',
                                   style: Theme.of(context).textTheme.caption,
                                 ),
-                                Row(
-                                  children: <Widget>[
-                                    Radio<int>(
-                                        value: 1,
-                                        groupValue: val3,
-                                        activeColor: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                        onChanged: (int? value) {
-                                          setState(() {
-                                            val3 = value;
-                                            store.vehicle_type = 'private';
-                                            store.vehicle_type_radio = 1;
-                                          });
-                                        }),
-                                    Text("Private",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .caption),
-                                    const SizedBox(
-                                      width: 72.0,
-                                    ),
-                                    Radio<int>(
-                                        value: 2,
-                                        groupValue: val3,
-                                        activeColor: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                        onChanged: (int? value) {
-                                          setState(() {
-                                            val3 = value;
-                                            store.vehicle_type = 'public';
-                                            store.vehicle_type_radio = 2;
-                                          });
-                                        }),
-                                    Text("Public",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .caption),
-                                  ],
+                                CustomRadioFormField(
+                                  fieldname1: 'Private',
+                                  fieldname2: 'Public',
+                                  formkey: formkey1,
+                                  grpvalue: val3,
+                                  ctx: context,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      val3 = newValue;
+                                      store.vehicle_type =
+                                          val3 == 1 ? 'private' : 'public';
+                                      store.vehicle_type_radio = val3;
+                                    });
+                                  },
+                                  onSaved: (Finalvalue) {
+                                    print('value: $val3');
+                                  },
                                 ),
                                 SizedBox(
-                                    child: Text(
-                                  '$errorinvehicletype',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .caption!
-                                      .copyWith(color: Colors.red),
-                                )),
+                                  height: 10.0,
+                                ),
+                                // Row(
+                                //   children: <Widget>[
+                                //     Radio<int>(
+                                //         value: 1,
+                                //         groupValue: val3,
+                                //         activeColor: Theme.of(context)
+                                //             .colorScheme
+                                //             .secondary,
+                                //         onChanged: (int? value) {
+                                //           setState(() {
+                                //             val3 = value;
+                                //             store.vehicle_type = 'private';
+                                //             store.vehicle_type_radio = 1;
+                                //           });
+                                //         }),
+                                //     Text("Private",
+                                //         style: Theme.of(context)
+                                //             .textTheme
+                                //             .caption),
+                                //     const SizedBox(
+                                //       width: 72.0,
+                                //     ),
+                                //     Radio<int>(
+                                //         value: 2,
+                                //         groupValue: val3,
+                                //         activeColor: Theme.of(context)
+                                //             .colorScheme
+                                //             .secondary,
+                                //         onChanged: (int? value) {
+                                //           setState(() {
+                                //             val3 = value;
+                                //             store.vehicle_type = 'public';
+                                //             store.vehicle_type_radio = 2;
+                                //           });
+                                //         }),
+                                //     Text("Public",
+                                //         style: Theme.of(context)
+                                //             .textTheme
+                                //             .caption),
+                                //   ],
+                                // ),
+                                // SizedBox(
+                                //     child: Text(
+                                //   '$errorinvehicletype',
+                                //   style: Theme.of(context)
+                                //       .textTheme
+                                //       .caption!
+                                //       .copyWith(color: Colors.red),
+                                // )),
                                 Text(
                                   'Number Plate*',
                                   style: Theme.of(context).textTheme.caption,
                                 ),
-                                Row(
-                                  children: <Widget>[
-                                    Radio<int>(
-                                        value: 1,
-                                        groupValue: val4,
-                                        activeColor: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                        onChanged: (int? value) {
-                                          setState(() {
-                                            val4 = value;
-                                            _isvisible2 = false;
-                                            _isvisible1 = true;
-                                            store.number_plate_radio = 1;
-                                          });
-                                        }),
-                                    Text("Zonal",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .caption),
-                                    const SizedBox(
-                                      width: 78.0,
-                                    ),
-                                    Radio<int>(
-                                        value: 2,
-                                        groupValue: val4,
-                                        activeColor: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                        onChanged: (int? value) {
-                                          setState(() {
-                                            val4 = value;
-                                            _isvisible2 = true;
-                                            _isvisible1 = false;
-                                            store.number_plate_radio = 2;
-                                          });
-                                        }),
-                                    Text("Provincal",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .caption),
-                                  ],
+                                CustomRadioFormField(
+                                  fieldname1: 'Zonal',
+                                  fieldname2: 'Provincal',
+                                  formkey: formkey1,
+                                  grpvalue: val4,
+                                  ctx: context,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      val4 = newValue;
+                                      _isvisible2 = val4 == 2 ? true : false;
+                                      _isvisible1 = val4 == 1 ? true : false;
+                                      store.number_plate_radio = val4;
+                                    });
+                                  },
+                                  onSaved: (Finalvalue) {
+                                    print('value: $val4');
+                                  },
                                 ),
                                 SizedBox(
-                                    child: Text(
-                                  '$errorinnumbreplate',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .caption!
-                                      .copyWith(color: Colors.red),
-                                )),
+                                  height: 10.0,
+                                ),
+
+                                // Row(
+                                //   children: <Widget>[
+                                //     Radio<int>(
+                                //         value: 1,
+                                //         groupValue: val4,
+                                //         activeColor: Theme.of(context)
+                                //             .colorScheme
+                                //             .secondary,
+                                //         onChanged: (int? value) {
+                                //           setState(() {
+                                //             val4 = value;
+                                //             _isvisible2 = false;
+                                //             _isvisible1 = true;
+                                //             store.number_plate_radio = 1;
+                                //           });
+                                //         }),
+                                //     Text("Zonal",
+                                //         style: Theme.of(context)
+                                //             .textTheme
+                                //             .caption),
+                                //     const SizedBox(
+                                //       width: 78.0,
+                                //     ),
+                                //     Radio<int>(
+                                //         value: 2,
+                                //         groupValue: val4,
+                                //         activeColor: Theme.of(context)
+                                //             .colorScheme
+                                //             .secondary,
+                                //         onChanged: (int? value) {
+                                //           setState(() {
+                                //             val4 = value;
+                                //             _isvisible2 = true;
+                                //             _isvisible1 = false;
+                                //             store.number_plate_radio = 2;
+                                //           });
+                                //         }),
+                                //     Text("Provincal",
+                                //         style: Theme.of(context)
+                                //             .textTheme
+                                //             .caption),
+                                //   ],
+                                // ),
+                                // SizedBox(
+                                //     child: Text(
+                                //   '$errorinnumbreplate',
+                                //   style: Theme.of(context)
+                                //       .textTheme
+                                //       .caption!
+                                //       .copyWith(color: Colors.red),
+                                // )),
                                 Visibility(
                                   visible: _isvisible1,
                                   child: Column(
@@ -495,6 +539,9 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                             MediaQuery.of(context).size.width *
                                                 0.25,
                                         child: TextFormField(
+                                          inputFormatters: [
+                                            LengthLimitingTextInputFormatter(4),
+                                          ],
                                           keyboardType: TextInputType.number,
                                           onSaved: (String? value) {
                                             store.v_no = value;
@@ -740,6 +787,10 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                                     .width *
                                                 0.26,
                                             child: TextFormField(
+                                              inputFormatters: [
+                                                LengthLimitingTextInputFormatter(
+                                                    4),
+                                              ],
                                               keyboardType:
                                                   TextInputType.number,
                                               onSaved: (String? value) {
@@ -804,106 +855,151 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                   'Major Accident*',
                                   style: Theme.of(context).textTheme.caption,
                                 ),
-                                Row(
-                                  children: <Widget>[
-                                    Radio<int>(
-                                        value: 1,
-                                        groupValue: val1,
-                                        activeColor: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                        onChanged: (int? value) {
-                                          setState(() {
-                                            val1 = value;
-                                            store.major_accident = 'Yes';
-                                            store.major_accident_radio = 1;
-                                          });
-                                        }),
-                                    Text("Yes",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .caption),
-                                    const SizedBox(
-                                      width: 88.0,
-                                    ),
-                                    Radio<int>(
-                                        value: 2,
-                                        groupValue: val1,
-                                        activeColor: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                        onChanged: (int? value) {
-                                          setState(() {
-                                            val1 = value;
-                                            store.major_accident = 'no';
-                                            store.major_accident_radio = 2;
-                                          });
-                                        }),
-                                    Text("No",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .caption),
-                                  ],
+                                CustomRadioFormField(
+                                  fieldname1: 'Yes',
+                                  fieldname2: 'No',
+                                  formkey: formkey1,
+                                  grpvalue: val1,
+                                  ctx: context,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      val1 = newValue;
+                                      store.major_accident =
+                                          val1 == 1 ? 'Yes' : 'No';
+                                      store.major_accident_radio = val1;
+                                    });
+                                  },
+                                  onSaved: (Finalvalue) {
+                                    print('value: $val1');
+                                  },
                                 ),
                                 SizedBox(
-                                    child: Text(
-                                  '$errorinaccident',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .caption!
-                                      .copyWith(color: Colors.red),
-                                )),
+                                  height: 10.0,
+                                ),
+
+                                // Row(
+                                //   children: <Widget>[
+                                //     Radio<int>(
+                                //         value: 1,
+                                //         groupValue: val1,
+                                //         activeColor: Theme.of(context)
+                                //             .colorScheme
+                                //             .secondary,
+                                //         onChanged: (int? value) {
+                                //           setState(() {
+                                //             val1 = value;
+                                //             store.major_accident = 'Yes';
+                                //             store.major_accident_radio = 1;
+                                //           });
+                                //         }),
+                                //     Text("Yes",
+                                //         style: Theme.of(context)
+                                //             .textTheme
+                                //             .caption),
+                                //     const SizedBox(
+                                //       width: 88.0,
+                                //     ),
+                                //     Radio<int>(
+                                //         value: 2,
+                                //         groupValue: val1,
+                                //         activeColor: Theme.of(context)
+                                //             .colorScheme
+                                //             .secondary,
+                                //         onChanged: (int? value) {
+                                //           setState(() {
+                                //             val1 = value;
+                                //             store.major_accident = 'no';
+                                //             store.major_accident_radio = 2;
+                                //           });
+                                //         }),
+                                //     Text("No",
+                                //         style: Theme.of(context)
+                                //             .textTheme
+                                //             .caption),
+                                //   ],
+                                // ),
+                                // SizedBox(
+                                //     child: Text(
+                                //   '$errorinaccident',
+                                //   style: Theme.of(context)
+                                //       .textTheme
+                                //       .caption!
+                                //       .copyWith(color: Colors.red),
+                                // )),
                                 Text(
                                   'Service History*',
                                   style: Theme.of(context).textTheme.caption,
                                 ),
-                                Row(
-                                  children: <Widget>[
-                                    Radio<int>(
-                                        value: 1,
-                                        groupValue: val2,
-                                        activeColor: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                        onChanged: (int? value) {
-                                          setState(() {
-                                            val2 = value;
-                                            store.service_history = 'Yes';
-                                            store.service_history_radio = 1;
-                                          });
-                                        }),
-                                    Text("Yes",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .caption),
-                                    const SizedBox(width: 88.0),
-                                    Radio<int>(
-                                        value: 2,
-                                        groupValue: val2,
-                                        activeColor: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                        onChanged: (int? value) {
-                                          setState(() {
-                                            val2 = value;
-                                            store.service_history = 'no';
-                                            store.service_history_radio = 2;
-                                          });
-                                        }),
-                                    Text("No",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .caption),
-                                  ],
+                                CustomRadioFormField(
+                                  fieldname1: 'Yes',
+                                  fieldname2: 'No',
+                                  formkey: formkey1,
+                                  grpvalue: val2,
+                                  ctx: context,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      val2 = newValue;
+
+                                      store.service_history =
+                                          val2 == 1 ? 'Yes' : 'No';
+                                      store.service_history_radio = val2;
+                                    });
+                                  },
+                                  onSaved: (Finalvalue) {
+                                    print('value: $val2');
+                                  },
                                 ),
                                 SizedBox(
-                                    child: Text(
-                                  '$errorinhistory',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .caption!
-                                      .copyWith(color: Colors.red),
-                                )),
+                                  height: 10.0,
+                                ),
+
+                                // Row(
+                                //   children: <Widget>[
+                                //     Radio<int>(
+                                //         value: 1,
+                                //         groupValue: val2,
+                                //         activeColor: Theme.of(context)
+                                //             .colorScheme
+                                //             .secondary,
+                                //         onChanged: (int? value) {
+                                //           setState(() {
+                                //             val2 = value;
+                                //             store.service_history = 'Yes';
+                                //             store.service_history_radio = 1;
+                                //           });
+                                //         }),
+                                //     Text("Yes",
+                                //         style: Theme.of(context)
+                                //             .textTheme
+                                //             .caption),
+                                //     const SizedBox(width: 88.0),
+                                //     Radio<int>(
+                                //         value: 2,
+                                //         groupValue: val2,
+                                //         activeColor: Theme.of(context)
+                                //             .colorScheme
+                                //             .secondary,
+                                //         onChanged: (int? value) {
+                                //           setState(() {
+                                //             val2 = value;
+                                //             store.service_history = 'no';
+                                //             store.service_history_radio = 2;
+                                //           });
+                                //         }),
+                                //     Text("No",
+                                //         style: Theme.of(context)
+                                //             .textTheme
+                                //             .caption),
+                                //   ],
+                                // ),
+                                // SizedBox(
+                                //     child: Text(
+                                //   '$errorinhistory',
+                                //   style: Theme.of(context)
+                                //       .textTheme
+                                //       .caption!
+                                //       .copyWith(color: Colors.red),
+                                // )),
                                 FutureBuilder(
                                     future: future1,
                                     builder: (BuildContext ctx,
@@ -1041,7 +1137,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                                 ? 'Required!'
                                                 : null,
                                             onChanged: null,
-                                            droplabel: 'Vehicle Name*',
+                                            droplabel: 'Model Name*',
                                             dropdownvalue: "Please wait..",
                                             list: []);
                                       } else if (snapshot.connectionState ==
@@ -1089,11 +1185,11 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                           futureresult2 = true;
                                           return DropdownButtonFormField(
                                             validator: (val) => val == null
-                                                ? 'Select a vehicle name please'
+                                                ? 'Select a model name please'
                                                 : null,
                                             menuMaxHeight: 250.0,
                                             decoration: InputDecoration(
-                                              labelText: 'Vehicle Name*',
+                                              labelText: 'Model Name*',
                                               labelStyle: Theme.of(context)
                                                   .textTheme
                                                   .caption,
@@ -1179,7 +1275,8 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                                   onPressed: () {
                                                     setState(() {
                                                       future3 = getva(store
-                                                          .vehicle_name_id!);
+                                                              .vehicle_name_id ??
+                                                          '1');
                                                     });
                                                   },
                                                   style: ButtonStyle(
@@ -1475,143 +1572,87 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                     alignment: Alignment.bottomRight,
                                     child: TextButton(
                                       onPressed: () async {
-                                        if (val3 != null) {
-                                          setState(() {
-                                            errorinvehicletype = '';
-                                          });
-                                          if (val4 != null) {
-                                            setState(() {
-                                              errorinnumbreplate = '';
-                                            });
-                                            if (val1 != null) {
-                                              setState(() {
-                                                errorinaccident = '';
-                                              });
-                                              if (val2 != null) {
-                                                setState(() {
-                                                  errorinhistory = '';
-                                                });
-                                                if (futureresult1 == true &&
-                                                    futureresult2 == true &&
-                                                    futureresult3 == true) {
-                                                  if (formkey1.currentState!
-                                                          .validate() &&
-                                                      formkey2.currentState!
-                                                          .validate()) {
-                                                    if (dropdownvalue4 ==
-                                                            null ||
-                                                        int.parse(
-                                                                dropdownvalue4!) <=
-                                                            int.parse(
-                                                                dropdownvalue5!)) {
-                                                      errorinpurchase = '';
+                                        if (futureresult1 == true &&
+                                            futureresult2 == true &&
+                                            futureresult3 == true) {
+                                          if (formkey1.currentState!
+                                                  .validate() &&
+                                              formkey2.currentState!
+                                                  .validate()) {
+                                            if (dropdownvalue4 == null ||
+                                                int.parse(dropdownvalue4!) <=
+                                                    int.parse(
+                                                        dropdownvalue5!)) {
+                                              errorinpurchase = '';
 
-                                                      formkey1.currentState!
-                                                          .save();
-                                                      formkey2.currentState!
-                                                          .save();
-                                                      if (kDebugMode) {
-                                                        print(
-                                                            'Client Side Validated ${store.manufacture_year} ');
-                                                      }
-                                                      if (store
-                                                              .number_plate_radio ==
-                                                          1) {
-                                                        store.vehicle_no =
-                                                            '${store.zonal_code}-${store.lot_number}-${store.v_type} ${store.v_no} ';
-                                                      } else if (store
-                                                              .number_plate_radio ==
-                                                          2) {
-                                                        store.vehicle_no =
-                                                            '${store.province}-${store.office_code}-${store.lot_number} ${store.symbol} ${store.v_no} ';
-                                                      }
-                                                      dynamic Val;
-                                                      dynamic
-                                                          searchrequestModel =
-                                                          new SearchRequestModel();
-                                                      searchrequestModel
-                                                              .vehicle_number =
-                                                          store.engine_no;
-                                                      APIService apiService =
-                                                          APIService();
-                                                      await apiService
-                                                          .searchvehicle(
-                                                              searchrequestModel)
-                                                          .then((value) {
-                                                        dynamic Val = value!
-                                                            .data!.vehicle;
-                                                        if (Val == null) {
-                                                          Navigator.of(context).push(MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  PersonalInfo(
-                                                                      title: widget
-                                                                          .title,
-                                                                      store:
-                                                                          store,
-                                                                      bvinfoAPI:
-                                                                          bfa)));
-                                                        } else {
-                                                          final snackBar = SnackBar(
-                                                              backgroundColor:
-                                                                  Color
-                                                                      .fromARGB(
-                                                                          255,
-                                                                          226,
-                                                                          114,
-                                                                          107),
-                                                              content: Text(
-                                                                  'The Vehicle with this Engine Number Already exists!'));
-                                                          ScaffoldMessenger.of(
-                                                                  context)
-                                                              .showSnackBar(
-                                                                  snackBar);
-                                                        }
-                                                      });
-                                                    } else {
-                                                      setState(() {
-                                                        errorinpurchase =
-                                                            'Purchase Year cannot be before Manufacture Year';
-                                                      });
-                                                    }
-                                                  } else {
-                                                    setState(() =>
-                                                        _autoValidate =
-                                                            AutovalidateMode
-                                                                .always);
-                                                  } //validator
+                                              formkey1.currentState!.save();
+                                              formkey2.currentState!.save();
+                                              if (kDebugMode) {
+                                                print(
+                                                    'Client Side Validated ${store.manufacture_year} ');
+                                              }
+                                              if (store.number_plate_radio ==
+                                                  1) {
+                                                store.vehicle_no =
+                                                    '${store.zonal_code}-${store.lot_number}-${store.v_type} ${store.v_no} ';
+                                              } else if (store
+                                                      .number_plate_radio ==
+                                                  2) {
+                                                store.vehicle_no =
+                                                    '${store.province}-${store.office_code}-${store.lot_number} ${store.symbol} ${store.v_no} ';
+                                              }
+                                              dynamic Val;
+                                              dynamic searchrequestModel =
+                                                  new SearchRequestModel();
+                                              searchrequestModel
+                                                      .vehicle_number =
+                                                  store.engine_no;
+                                              APIService apiService =
+                                                  APIService();
+                                              await apiService
+                                                  .searchvehicle(
+                                                      searchrequestModel)
+                                                  .then((value) {
+                                                dynamic Val =
+                                                    value!.data!.vehicle;
+                                                if (Val == null) {
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              PersonalInfo(
+                                                                  title: widget
+                                                                      .title,
+                                                                  store: store,
+                                                                  bvinfoAPI:
+                                                                      bfa)));
                                                 } else {
                                                   final snackBar = SnackBar(
                                                       backgroundColor:
                                                           Color.fromARGB(255,
                                                               226, 114, 107),
                                                       content: Text(
-                                                          'Reload please'));
+                                                          'The Vehicle with this Engine Number Already exists!'));
                                                   ScaffoldMessenger.of(context)
                                                       .showSnackBar(snackBar);
-                                                } //future
-                                              } else {
-                                                setState(() {
-                                                  errorinhistory =
-                                                      'Please Select One';
-                                                });
-                                              }
+                                                }
+                                              });
                                             } else {
                                               setState(() {
-                                                errorinaccident =
-                                                    'Please Select One\n';
+                                                errorinpurchase =
+                                                    'Purchase Year cannot be before Manufacture Year';
                                               });
                                             }
                                           } else {
-                                            setState(() {
-                                              errorinnumbreplate =
-                                                  'Please select one\n';
-                                            });
-                                          }
+                                            setState(() => _autoValidate =
+                                                AutovalidateMode.always);
+                                          } //validator
                                         } else {
-                                          setState(() {
-                                            errorinvehicletype =
-                                                'Please select one\n';
-                                          });
+                                          final snackBar = SnackBar(
+                                              backgroundColor: Color.fromARGB(
+                                                  255, 226, 114, 107),
+                                              content: Text('Reload please'));
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(snackBar);
                                         }
                                       },
                                       style: ButtonStyle(
