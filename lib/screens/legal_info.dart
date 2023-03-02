@@ -182,6 +182,7 @@ class _DocumentInfoState extends State<DocumentInfo> {
                               });
                             },
                             onSaved: (Finalvalue) {
+                              
                               widget.store.card_type_radio = Finalvalue;
                               //print('value: $groupval');
                             },

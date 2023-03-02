@@ -15,18 +15,16 @@ class CustomRadioFormField extends FormField<int> {
   }) : super(
             key: key,
             validator: (value) {
-              if (grpvalue != null) {
-                return null;
-              }
-              else{
-                  if (value == null) {
-                return 'Please Choose One ';
-              } else {
-                return null;
-              }
-              }
+            
+                if (value == null) {
+                  return 'Please Choose One ';
+                } else {
+                  return null;
+                }
+              
             },
             onSaved: onSaved,
+            initialValue: grpvalue,
             builder: (FormFieldState<int> state) {
               Widget content = Row(
                 children: [
