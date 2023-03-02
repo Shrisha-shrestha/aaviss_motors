@@ -45,7 +45,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
   String? d1, d2, d3, d4;
   final GlobalKey<FormState> formkey1 = GlobalKey<FormState>();
   final GlobalKey<FormState> formkey2 = GlobalKey<FormState>();
-
+  final Store store = Store();
   bool _isvisible1 = false, _isvisible2 = false;
   String? errorinaccident = '',
       errorinhistory = '',
@@ -56,7 +56,6 @@ class _VehicleInfoState extends State<VehicleInfo> {
   Future<B_V_fromAPI>? future1, future2, future3;
   B_V_fromAPI bfa = B_V_fromAPI();
   bool futureresult1 = false, futureresult2 = false, futureresult3 = false;
-  final Store store = Store();
 
   Future<B_V_fromAPI>? getb() async {
     dynamic brandlist;
@@ -1645,14 +1644,14 @@ class _VehicleInfoState extends State<VehicleInfo> {
                                             }
                                           } else {
                                             Fluttertoast.showToast(
-                                                msg: 'Please fill out the form properly',
+                                                msg:
+                                                    'Please fill out the form properly',
                                                 toastLength: Toast.LENGTH_SHORT,
                                                 gravity: ToastGravity.BOTTOM,
                                                 backgroundColor:
                                                     Theme.of(context)
                                                         .colorScheme
-                                                        .primary
-                                                        ,
+                                                        .primary,
                                                 textColor: Colors.black);
                                             setState(() => _autoValidate =
                                                 AutovalidateMode.always);

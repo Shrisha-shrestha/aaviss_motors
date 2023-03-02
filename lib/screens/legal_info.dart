@@ -54,6 +54,15 @@ class _DocumentInfoState extends State<DocumentInfo> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.store.card_type_radio == 1) {
+      _isvisible1 = true;
+      // widget.store.citizenship_no = widget.store.nid_no;
+    } else if (widget.store.card_type_radio == 2) {
+      _isvisible2 = true;
+      // widget.store.pan_no = widget.store.nid_no;
+    }
+    // print(_isvisible1);
+    // print(_isvisible2);
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -154,20 +163,27 @@ class _DocumentInfoState extends State<DocumentInfo> {
                             fieldname1: 'Citizenship',
                             fieldname2: 'Pan',
                             formkey: _formkey,
-                            grpvalue: groupval,
+                            grpvalue: widget.store.card_type_radio,
                             ctx: context,
                             onChanged: (value) {
                               setState(() {
-                                groupval = value;
+                                widget.store.card_type_radio = value;
                                 widget.store.nid_type =
-                                    groupval == 1 ? 'citizenship' : 'pan';
-                                widget.store.card_type_radio = groupval;
-                                _isvisible2 = groupval == 2 ? true : false;
-                                _isvisible1 = groupval == 1 ? true : false;
+                                    widget.store.card_type_radio == 1
+                                        ? 'citizenship'
+                                        : 'pan';
+                                // widget.store.card_type_radio = groupval;
+                                _isvisible2 = widget.store.card_type_radio == 2
+                                    ? true
+                                    : false;
+                                _isvisible1 = widget.store.card_type_radio == 1
+                                    ? true
+                                    : false;
                               });
                             },
                             onSaved: (Finalvalue) {
-                              print('value: $groupval');
+                              widget.store.card_type_radio = Finalvalue;
+                              //print('value: $groupval');
                             },
                           ),
                           // Row(
@@ -220,8 +236,12 @@ class _DocumentInfoState extends State<DocumentInfo> {
                           Visibility(
                             visible: _isvisible1,
                             child: TextFormField(
+                              initialValue: widget.store.citizenship_no ?? '',
                               keyboardType: TextInputType.number,
                               onSaved: (String? value) {
+                                widget.store.citizenship_no = value;
+                              },
+                              onChanged: (String? value) {
                                 widget.store.citizenship_no = value;
                               },
                               style: Theme.of(context)
@@ -243,8 +263,12 @@ class _DocumentInfoState extends State<DocumentInfo> {
                           Visibility(
                             visible: _isvisible2,
                             child: TextFormField(
+                              initialValue: widget.store.pan_no ?? '',
                               keyboardType: TextInputType.number,
                               onSaved: (String? value) {
+                                widget.store.pan_no = value;
+                              },
+                              onChanged: (String? value) {
                                 widget.store.pan_no = value;
                               },
                               style: Theme.of(context)
@@ -270,12 +294,19 @@ class _DocumentInfoState extends State<DocumentInfo> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               CustomImageFormField(
+                                  initialValue: widget.store.img1,
+                                  onChanged: ((newValue) {
+                                    setState(() {
+                                      widget.store.img1 = newValue;
+                                    });
+                                  }),
                                   ctx: context,
                                   formkey: _formkey,
                                   width:
                                       MediaQuery.of(context).size.width * 0.38,
-                                  fieldname:
-                                      '${widget.store.nid_type ?? '- Card'} Card*',
+                                  fieldname: widget.store.nid_type != null
+                                      ? '${widget.store.nid_type![0].toUpperCase() + widget.store.nid_type!.substring(1)} Card*'
+                                      : ' - Card*',
                                   onSaved: ((newValue) {
                                     setState(() {
                                       widget.store.img1 = newValue;
@@ -306,6 +337,12 @@ class _DocumentInfoState extends State<DocumentInfo> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               CustomImageFormField(
+                                  initialValue: widget.store.img3,
+                                  onChanged: ((newValue) {
+                                    setState(() {
+                                      widget.store.img3 = newValue;
+                                    });
+                                  }),
                                   ctx: context,
                                   width:
                                       MediaQuery.of(context).size.width * 0.38,
@@ -317,7 +354,13 @@ class _DocumentInfoState extends State<DocumentInfo> {
                                     });
                                   })),
                               CustomImageFormField(
+                                  initialValue: widget.store.img5,
                                   ctx: context,
+                                  onChanged: ((newValue) {
+                                    setState(() {
+                                      widget.store.img5 = newValue;
+                                    });
+                                  }),
                                   width:
                                       MediaQuery.of(context).size.width * 0.38,
                                   formkey: _formkey,

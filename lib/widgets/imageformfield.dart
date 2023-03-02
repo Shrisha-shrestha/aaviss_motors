@@ -15,6 +15,7 @@ class CustomImageFormField extends FormField<File> {
       required BuildContext ctx,
       required GlobalKey<FormState> formkey,
       FormFieldSetter<File?>? onSaved,
+      FormFieldSetter<File?>? onChanged,
       File? initialValue,
       bool autoValidate = true,
       bool enabled = true})
@@ -25,6 +26,7 @@ class CustomImageFormField extends FormField<File> {
             onSaved: onSaved,
             initialValue: initialValue,
             builder: (FormFieldState<File> state) {
+              print('jj  $initialValue');
               Widget content = DottedBorder(
                 color: state.hasError ? Colors.red : Colors.grey,
                 dashPattern: const [4, 4],
@@ -86,7 +88,7 @@ class CustomImageFormField extends FormField<File> {
                                   ));
                             });
                         state.didChange(si);
-
+                        onChanged!(si);
                         //formkey.currentState!.validate();
                       },
                       icon: Icon(

@@ -15,10 +15,15 @@ class CustomRadioFormField extends FormField<int> {
   }) : super(
             key: key,
             validator: (value) {
-              if (value == null) {
+              if (grpvalue != null) {
+                return null;
+              }
+              else{
+                  if (value == null) {
                 return 'Please Choose One ';
               } else {
                 return null;
+              }
               }
             },
             onSaved: onSaved,

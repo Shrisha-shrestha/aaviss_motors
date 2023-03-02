@@ -126,7 +126,11 @@ class _PersonalInfoState extends State<PersonalInfo> {
                             ),
                           ),
                           TextFormField(
+                            initialValue: widget.store.full_name ?? '',
                             onSaved: (String? value) {
+                              widget.store.full_name = value;
+                            },
+                            onChanged: (String? value) {
                               widget.store.full_name = value;
                             },
                             style: Theme.of(context)
@@ -149,7 +153,11 @@ class _PersonalInfoState extends State<PersonalInfo> {
                             height: 15.0,
                           ),
                           TextFormField(
+                            initialValue: widget.store.address ?? '',
                             onSaved: (String? value) {
+                              widget.store.address = value;
+                            },
+                            onChanged: (String? value) {
                               widget.store.address = value;
                             },
                             style: Theme.of(context)
@@ -170,10 +178,14 @@ class _PersonalInfoState extends State<PersonalInfo> {
                             height: 15.0,
                           ),
                           TextFormField(
+                            initialValue: widget.store.phone_no ?? '',
                             keyboardType: TextInputType.number,
                             maxLength: 10,
                             //maxLengthEnforcement: true,
                             onSaved: (String? value) {
+                              widget.store.phone_no = value;
+                            },
+                            onChanged: (String? value) {
                               widget.store.phone_no = value;
                             },
                             style: Theme.of(context)
